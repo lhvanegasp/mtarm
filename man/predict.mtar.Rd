@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecasting.R
 \name{predict.mtar}
 \alias{predict.mtar}
-\title{Forecasting for a multivariate TAR model.}
+\title{Forecasting for multivariate TAR models}
 \usage{
 \method{predict}{mtar}(
   object,
@@ -15,26 +15,28 @@
 )
 }
 \arguments{
-\item{object}{an object of the class \emph{mtar}.}
+\item{object}{An object of class \code{mtar} obtained from a call to \code{mtar()}.}
 
-\item{...}{additional arguments affecting the predictions produced}
+\item{...}{Additional arguments that may affect the prediction method.}
 
-\item{newdata}{an (optional) data frame containing the future values of the
-threshold series, if any in the fitted model; the exogenous
-series, if any in the fitted model; and the output series
-provided that \code{out.of.sample=TRUE}.}
+\item{newdata}{An optional \code{data.frame} containing future values of the threshold
+series (if included in the fitted model), the exogenous series (if included in the fitted
+model), and, when \code{out.of.sample = TRUE}, the realized values of the output series.}
 
-\item{n.ahead}{an integer value specifying the number of forecast steps.}
+\item{n.ahead}{A positive integer specifying the number of steps ahead to forecast.}
 
-\item{row.names}{an (optional) vector that allows the user to name the time point to
-which each row in \code{newdata} corresponds}
+\item{row.names}{An optional variable in \code{newdata} specifying labels for the time}
 
-\item{credible}{an (optional) value for the level of the credible intervals. By default, \code{credible} is set to 0.95.}
+\item{credible}{An optional numeric value in \eqn{(0,1)} specifying the level of the
+required credible intervals. By default, \code{credible} is set to \code{0.95}.}
 
-\item{out.of.sample}{an (optional) logical variable. If \code{TRUE}, then the log-score is computed, which is a measurement to assess density forecasts. Therefore, the data.frame specified in the argument \code{data} must to include the true values of the output series.}
+\item{out.of.sample}{An optional logical indicator. If \code{TRUE} then the log-score,
+Absolute Error (AE), Absolute Percentage Error (APE) and Squared Error (SE) are computed
+as measures of predictive accuracy. In this case, \code{newdata} must include the observed
+values of the output series.}
 }
 \value{
-a list with the following component
+A list containing the forecast summaries and, when requested, measures of predictive accuracy.
 
 \tabular{ll}{
 \code{ypred}   \tab a matrix with the results of the forecasting,\cr
@@ -43,25 +45,35 @@ a list with the following component
 }
 }
 \description{
-This function computes forecasting from a fitted multivariate TAR model.
+Computes forecasts from a fitted multivariate Threshold Autoregressive (TAR) model.
 }
 \examples{
 \donttest{
 ###### Example 1: Returns of the closing prices of three financial indexes
 data(returns)
-fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, subset={Date<="2016-03-14"},
-             row.names=Date, dist="Gaussian", ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100,
-             n.sim=3000, n.thin=2)
+fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
+             subset={Date<="2016-03-14"}, dist="Student-t",
+             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=2000, n.sim=3000,
+             n.thin=2, ssvs=TRUE)
 out1 <- predict(fit1, newdata=subset(returns,Date>"2016-03-14"), n.ahead=10)
 out1$summary
 
 ###### Example 2: Rainfall and two river flows in Colombia
 data(riverflows)
-fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, subset={Date<="2009-04-04"},
-             row.names=Date, dist="Gaussian", ars=ars(nregim=3,p=5), n.burnin=2000,
-             n.sim=3000, n.thin=2)
+fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
+             subset={Date<="2009-04-04"}, dist="Laplace",
+             ars=ars(nregim=3,p=5), n.burnin=2000, n.sim=3000, n.thin=2)
 out2 <- predict(fit2, newdata=subset(riverflows,Date>"2009-04-04"), n.ahead=10)
 out2$summary
+
+###### Example 3: Temperature, precipitation, and two river flows in Iceland
+data(iceland.rf)
+fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
+             data=iceland.rf, subset={Date<="1974-12-21"}, row.names=Date,
+             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=2000, n.sim=3000,
+             n.thin=2)
+out3 <- predict(fit3, newdata=subset(iceland.rf,Date>"1974-12-21"), n.ahead=10)
+out3$summary
 }
 }
 \references{

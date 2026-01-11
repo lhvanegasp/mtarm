@@ -7,13 +7,15 @@
 out.of.sample(..., newdata, n.ahead)
 }
 \arguments{
-\item{...}{one or several objects of the same class.}
+\item{...}{one or more fitted model objects of the same class.}
 
-\item{newdata}{a data frame containing the future values of the threshold series, if any in the
-fitted model; the exogenous series, if any in the fitted model; and the output series.}
+\item{newdata}{a data frame containing the future values of the output series required to evaluate
+predictive performance.}
 
-\item{n.ahead}{an integer value specifying the number of forecast steps}
+\item{n.ahead}{a positive integer specifying the number of forecast steps ahead to use in the
+predictive performance evaluation.}
 }
 \description{
-Out-of-sample predictive accuracy measures
+Computes out-of-sample predictive accuracy measures for one or more fitted models
+of the same class, based on their predictive distributions.
 }

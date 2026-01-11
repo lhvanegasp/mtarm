@@ -7,13 +7,14 @@
 WAIC(...)
 }
 \arguments{
-\item{...}{one or several objects of the same class.}
+\item{...}{one or more fitted model objects of the same class.}
 }
 \value{
-A matrix with the values of the WAIC for each object in the input.
+A numeric matrix containing the WAIC values corresponding to each fitted object supplied in \code{...}.
 }
 \description{
-This function computes the Watanabe-Akaike or Widely Available Information Criterion (WAIC), which is an adjusted within-sample predictive accuracy measure.
+Computes Watanabe-Akaike or Widely Available Information Criterion (WAIC), an adjusted
+within-sample measure of predictive accuracy, for models estimated using Bayesian methods.
 }
 \references{
 Watanabe S. (2010). Asymptotic Equivalence of Bayes Cross Validation and Widely Applicable Information Criterion in

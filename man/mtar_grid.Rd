@@ -2,21 +2,23 @@
 % Please edit documentation in R/wrapperfunctions.R
 \name{mtar_grid}
 \alias{mtar_grid}
-\title{Bayesian estimation of a multivariate TAR model}
+\title{Bayesian Estimation of Multivariate TAR Models}
 \usage{
 mtar_grid(
   formula,
   data,
   subset,
   Intercept = TRUE,
-  trend = c("none", "linear", "quad"),
+  trend = c("none", "linear", "quadratic"),
   nseason = NULL,
   nregim.min = 1,
   nregim.max = NULL,
   p.min = 1,
   p.max = NULL,
-  q = FALSE,
-  d = FALSE,
+  q.min = 0,
+  q.max = 0,
+  d.min = 0,
+  d.max = 0,
   row.names,
   dist = "Gaussian",
   prior = list(),
@@ -25,102 +27,105 @@ mtar_grid(
   n.thin = 1,
   ssvs = FALSE,
   setar = NULL,
-  log = FALSE
+  plan_strategy = c("sequential", "multisession"),
+  progress = TRUE
 )
 }
 \arguments{
-\item{formula}{a three-part expression of type \code{Formula} describing the TAR model
-to be fitted to the data. In the first part, the variables in the
-multivariate output series are listed; in the second part, the threshold
-series is specified, and in the third part, the variables in the
-multivariate exogenous series are specified.}
+\item{formula}{A three-part expression of class \code{Formula} describing the TAR model to be fitted.
+The first part specifies the variables in the multivariate output series, the second part
+defines the threshold series, and the third part specifies the variables in the multivariate
+exogenous series.}
 
-\item{data}{a data frame containing the variables in the model.
-If not found in data, the variables are taken from \code{environment(formula)},
-typically the environment from which \code{mtar_grid()} is called.}
+\item{data}{A data frame containing the variables in the model. If not found in \code{data}, the
+variables are taken from \code{environment(formula)}, typically the environment from
+which \code{mtar_grid()} is called.}
 
-\item{subset}{an (optional) vector specifying a subset of observations to be used in the
-fitting process.}
+\item{subset}{An optional vector specifying a subset of observations to be used in the fitting process.}
 
-\item{Intercept}{an (optional) logical variable. If \code{TRUE} then the model
-includes an intercept.}
+\item{Intercept}{An optional logical indicating whether an intercept should be included within each regime.}
 
-\item{trend}{an (optional) character string that allows the user to specify the
-degree of deterministic time trend to be included in each regime. The available
-options are: linear trend ("linear"), quadratic trend ("quad"), and no time
-trend ("none"). By default, \code{trend} is set to "none".}
+\item{trend}{An optional character string specifying the degree of deterministic time trend to be
+included in each regime. Available options are \code{"linear"}, \code{"quadratic"}, and
+\code{"none"}. By default, \code{trend} is set to \code{"none"}.}
 
-\item{nseason}{an (optional) integer value that allows the user to specify the number
-of seasonal periods. When the \code{nseason} is specified, \code{nseason}-1
-seasonal dummies are added to the regressors within each regime.}
+\item{nseason}{An optional integer, greater than or equal to 2, specifying the number of seasonal periods.
+When provided, \code{nseason - 1} seasonal dummy variables are added to the regressors within each regime.
+By default, \code{nseason} is set to \code{NULL}, thereby indicating that the TAR model has no seasonal effects.}
 
-\item{nregim.min}{an (optional) integer that represents the minimum value for the number
-of regimes. By default, \code{nregim.min} is set to 1.}
+\item{nregim.min}{An optional integer specifying the minimum number of regimes. By default,
+\code{nregim.min} is set to \code{1}.}
 
-\item{nregim.max}{an integer that represents the maximum value for the number
-of regimes.}
+\item{nregim.max}{An integer specifying the maximum number of regimes.}
 
-\item{p.min}{an (optional) integer that represents the minimum value for the autoregressive
-order within each regime. By default, \code{p.min} is set to 1.}
+\item{p.min}{An optional integer specifying the minimum autoregressive order within each regime.
+By default, \code{p.min} is set to \code{1}.}
 
-\item{p.max}{an integer that represents the maximum value for the autoregressive
-order within each regime.}
+\item{p.max}{An integer specifying the maximum autoregressive order within each regime.}
 
-\item{q}{an (optional) logical variable. If \code{TRUE} then the maximum lag for the exogenous
-series within each regime is set to be equal to the autoregressive order. By default,
-\code{q} is set to FALSE.}
+\item{q.min}{An optional integer specifying the minimum value of the maximum lag of the exogenous
+series within each regime. By default, \code{q.min} is set to \code{0}.}
 
-\item{d}{an (optional) logical variable. If \code{TRUE} then the maximum lag for the threshold
-series within each regime is set to be equal to the autoregressive order. By default,
-\code{d} is set to FALSE.}
+\item{q.max}{An optional integer specifying the maximum value of the maximum lag of the exogenous
+series within each regime. By default, \code{q.max} is set to \code{0}.}
 
-\item{row.names}{an (optional) vector that allows the user to name the time point to
-which each row in the data set corresponds.}
+\item{d.min}{An optional integer specifying the minimum value of the maximum lag of the threshold
+series within each regime. By default, \code{d.min} is set to \code{0}.}
 
-\item{dist}{Specifies the multivariate distributions to be used to describe the noise process
-behavior as a character string vector. The available options are: Gaussian
-("Gaussian"), Student-\eqn{t} ("Student-t"), Slash ("Slash"), Symmetric Hyperbolic ("Hyperbolic"),
-Laplace ("Laplace"), Contaminated normal ("Contaminated normal"),
-Skew-normal ("Skew-normal") and Skew-Student-\eqn{t} ("Skew-Student-t").
-By default, \code{dist} is set to "Gaussian".}
+\item{d.max}{An optional integer specifying the maximum value of the maximum lag of the threshold
+series within each regime. By default, \code{d.max} is set to \code{0}.}
 
-\item{prior}{an (optional) list that allows the user to specify the values of the
-hyperparameters, that is, allows to specify the values of the parameters
-of the prior distributions. It can be validated using the \code{priors()} routine.}
+\item{row.names}{An optional variable in \code{data} labelling the time points corresponding to each row of the data set.}
 
-\item{n.sim}{an (optional) positive integer specifying the required number of iterations
-for the simulation after the burn-in period. By default, \code{n.sim} is set
-to 500.}
+\item{dist}{A character vector specifying the multivariate distributions used to model the noise
+process. Available options are \code{"Gaussian"}, \code{"Student-t"}, \code{"Slash"},
+\code{"Hyperbolic"}, \code{"Laplace"}, \code{"Contaminated normal"},
+\code{"Skew-normal"}, and \code{"Skew-Student-t"}. By default, \code{dist} is set to
+\code{"Gaussian"}.}
 
-\item{n.burnin}{an (optional) positive integer specifying the required number of burn-in
-iterations for the simulation. By default, \code{n.burnin} is set to 100.}
+\item{prior}{An optional list specifying the hyperparameter values that define the prior
+distribution. This list can be validated using the \code{priors()} function. By default,
+\code{prior} is set to an empty list, thereby indicating that the hyperparameter values
+should be set so that a non-informative prior distribution is obtained.}
 
-\item{n.thin}{an (optional) positive integer specifying the required thinning interval
-for the simulation. By default, \code{n.thin} is set to 1.}
+\item{n.sim}{An optional positive integer specifying the number of simulation iterations after the
+burn-in period. By default, \code{n.sim} is set to \code{500}.}
 
-\item{ssvs}{an (optional) logical variable. If \code{ssvs=TRUE} then the Stochastic Search
-Variable Selection (SSVS) procedure is applied to identify relevant lags of the
-output, exogenous and threhold series. By default, \code{ssvs} is set to \code{FALSE}.}
+\item{n.burnin}{An optional positive integer specifying the number of burn-in iterations. By default,
+\code{n.burnin} is set to \code{100}.}
 
-\item{setar}{an (optional) positive integer indicating the component of the output series which is
-the threshold variable. By default,\code{setar} is set to \code{NULL}, which
-indicates that the fitted model is not SETAR.}
+\item{n.thin}{An optional positive integer specifying the thinning interval. By default,
+\code{n.thin} is set to \code{1}.}
 
-\item{log}{an (optional) logical variable. If \code{TRUE} then the behaviour of the output
-series is described using the exponentiated version of \code{dist}.}
+\item{ssvs}{An optional logical indicating whether the Stochastic Search Variable Selection (SSVS)
+procedure should be applied to identify relevant lags of the output, exogenous, and threshold
+series. By default, \code{ssvs} is set to \code{FALSE}.}
+
+\item{setar}{An optional positive integer indicating the component of the output series used as the
+threshold variable. By default, \code{setar} is set to \code{NULL}, indicating that the
+fitted model is not a SETAR model.}
+
+\item{plan_strategy}{An optional character string specifying the execution strategy for parallel
+computation. Available options are \code{"sequential"} and \code{"multisession"}. By default,
+\code{plan_strategy} is set to \code{"sequential"}.}
+
+\item{progress}{An optional logical indicating whether a progress bar should be displayed during
+execution. By default, \code{progress} is set to \code{TRUE}.}
 }
 \value{
-a list-type object comprising objects of class \code{mtar}, which correspond to the
-results of a call to the routine \code{mtar()} for each combination of the noise process distribution
- (\code{dist}), the number of regimes (\code{nregim.min} to \code{nregim.max}) and the autoregressive
- order within each regime (\code{p.min} to \code{p.max}).
+A list whose elements are objects of class \code{mtar}, each corresponding to a distinct
+model specification considered in the grid.
 }
 \description{
-This is a wrapper function that applies the routine \code{mtar()} for each combination
-of the noise process distribution (\code{dist}), the number of regimes (\code{nregim.min} to \code{nregim.max})
-and the autoregressive order within each regime (\code{p.min} to \code{p.max}). In all calls to \code{mtar()},
-the time points employed in the fitting process are the same, which is accomplished by managing the
-argument \code{subset} of \code{mtar()}.
+This function is a wrapper that applies \code{mtar()} over a grid of model specifications
+defined by all combinations of the noise distribution (\code{dist}), the number of regimes
+(from \code{nregim.min} to \code{nregim.max}), the autoregressive order within each regime
+(from \code{p.min} to \code{p.max}), the maximum lag of the exogenous series within each regime
+(from \code{q.min} to \code{q.max}), and the maximum lag of the threshold series within each
+regime (from \code{d.min} to \code{d.max}).
+In all calls to \code{mtar()}, the same set of time points is used for model fitting. This is
+achieved by appropriately adjusting the \code{subset} argument of \code{mtar()} for each model
+specification, thereby ensuring comparability across models.
 }
 \seealso{
 mtar

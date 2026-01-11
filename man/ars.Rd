@@ -2,19 +2,27 @@
 % Please edit documentation in R/helperfunctions.R
 \name{ars}
 \alias{ars}
-\title{Auxiliary function to set number of regimes and autoregressive orders}
+\title{Auxiliary function to specify the number of regimes and lag orders}
 \usage{
 ars(nregim = 1, p = 1, q = 0, d = 0)
 }
 \arguments{
-\item{nregim}{positive integer value indicating the number of regimes.}
+\item{nregim}{A positive integer indicating the total number of regimes.}
 
-\item{p}{a list with integer values indicating the autoregressive order within each regime}
+\item{p}{A list of positive integers specifying the autoregressive order of the output series
+within each regime.}
 
-\item{q}{a list with integer values indicating the maximum lags for the exogenous series within each regime}
+\item{q}{A list of non-negative integers specifying the maximum lag of the exogenous series
+within each regime.}
 
-\item{d}{a list with integer values indicating the maximum lags for the threshold series within each regime}
+\item{d}{A list of non-negative integers specifying the maximum lag of the threshold series
+within each regime.}
+}
+\value{
+A list containing the number of regimes and the regime-specific lag-order specifications.
 }
 \description{
-Auxiliary function to set number of regimes and autoregressive orders
+This auxiliary function defines the regime structure of a multivariate TAR model by
+specifying the number of regimes and the corresponding lag orders for the endogenous,
+exogenous, and threshold series in each regime.
 }

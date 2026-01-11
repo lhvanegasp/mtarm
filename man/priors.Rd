@@ -2,28 +2,34 @@
 % Please edit documentation in R/helperfunctions.R
 \name{priors}
 \alias{priors}
-\title{Auxiliary function to set hyperparameter values}
+\title{Auxiliary function for setting hyperparameter values}
 \usage{
 priors(prior, regim, k, dist, setar, ssvs)
 }
 \arguments{
-\item{prior}{list of values for the hyperparameters. Hyperparameters not included in this list take
-their default values.}
+\item{prior}{A list specifying user-defined values for the hyperparameters. Any
+hyperparameters not included in this list are set to their default values.}
 
-\item{regim}{positive integer value indicating the number of regimes.}
+\item{regim}{A positive integer indicating the number of regimes in the model.}
 
-\item{k}{positive integer value indicating the dimension of the output series.}
+\item{k}{A positive integer indicating the dimension of the multivariate output series.}
 
-\item{dist}{character string specifying the distribution used to describe the noise process behavior.}
+\item{dist}{A character string specifying the distribution chosen to model the noise process.}
 
-\item{setar}{NULL if the model is SETAR, and a positive integer indicating the component of the output
-series that acts as the threshold variable, otherwise.}
+\item{setar}{A positive integer indicating the component of the output series that acts as the
+threshold variable in a SETAR specification. If \code{NULL} is specified then the
+model is not a SETAR.}
 
-\item{ssvs}{a logical variable indicating if Stochastic Search Variable Selection (SSVS) is performed.}
+\item{ssvs}{A logical indicating whether the Stochastic Search Variable Selection (SSVS)
+procedure should be applied.}
 }
 \value{
-a list composed of the hyperparameter values for the a priori distribution of all the model parameters.
+A list containing the hyperparameter values defining the prior distributions of
+all model parameters.
 }
 \description{
-Auxiliary function to set hyperparameter values
+This function constructs and validates the list of hyperparameter values
+used to define the prior distributions of the model parameters. Hyperparameters not
+explicitly provided by the user are assigned their default values, which define
+non-informative prior distributions.
 }

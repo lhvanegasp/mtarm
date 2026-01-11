@@ -1,57 +1,70 @@
 #'
 #' @title Bayesian estimation of a multivariate Threshold Autoregressive (TAR) model.
-#' @description This function uses Gibbs sampling to generate a sample from the posterior
-#'              distribution of the parameters of a multivariate TAR model when the noise
-#'              process follows Gaussian, Student-\eqn{t}, Slash, Symmetric Hyperbolic,
-#'              Contaminated normal, Laplace, Skew-normal, or skew-\eqn{t} distribution.
-#' @param formula a three-part expression of type \code{Formula} describing the TAR model
-#'                to be fitted to the data. In the first part, the variables in the
-#'                multivariate output series are listed; in the second part, the threshold
-#'                series is specified, and in the third part, the variables in the
-#'                multivariate exogenous series are specified.
-#' @param ars a list composed of four objects, namely: the number of regimes (\code{nregim}),
-#'            the autoregressive order (\code{p}), and the maximum lags for the exogenous (\code{q})
-#'            and the threshold (\code{d}) series within each regime. It can be validated using the
-#'            routine \code{ars()}. Only \code{nregim} and \code{p} are required.
-#' @param Intercept an (optional) logical variable. If \code{TRUE}, then the model
-#'                  includes an intercept.
-#' @param trend an (optional) character string that allows the user to specify the
-#'              degree of deterministic time trend to be included in each regime. The available
-#'              options are: linear trend ("linear"), quadratic trend ("quad"), and no time
-#'              trend ("none"). By default, \code{trend} is set to "none".
-#' @param nseason an (optional) integer value that allows the user to specify the number
-#'                of seasonal periods. When the \code{nseason} is specified, \code{nseason}-1
-#'                seasonal dummies are added to the regressors within each regime.
-#' @param data a data frame containing the variables in the model.
-#'             If not found in data, the variables are taken from \code{environment(formula)},
-#'             typically the environment from which \code{mtar} is called.
-#' @param subset an (optional) vector specifying a subset of observations to be used in the
-#'               fitting process.
-#' @param dist an (optional) character string that allows the user to specify the
-#'             multivariate distribution to be used to describe the noise process
-#'             behavior. The available options are: Gaussian ("Gaussian"), Student-\eqn{t}
-#'             ("Student-t"), Slash ("Slash"), Symmetric Hyperbolic ("Hyperbolic"),
-#'             Laplace ("Laplace"), Contaminated normal ("Contaminated normal"),
-#'             Skew-normal ("Skew-normal") and Skew-Student-\eqn{t} ("Skew-Student-t").
-#'             By default, \code{dist} is set to "Gaussian".
-#' @param n.sim an (optional) positive integer specifying the required number of iterations
-#'              for the simulation after the burn-in period. By default, \code{n.sim} is set
-#'              to 500.
-#' @param n.burnin an (optional) positive integer specifying the required number of burn-in
-#'                 iterations for the simulation. By default, \code{n.burnin} is set to 100.
-#' @param n.thin an (optional) positive integer specifying the required thinning interval
-#'               for the simulation. By default, \code{n.thin} is set to 1.
-#' @param row.names an (optional) vector that allows the user to name the time point to
-#'                  which each row in the data set corresponds.
-#' @param prior an (optional) list that allows the user to specify the values of the
-#'              hyperparameters, that is, allows to specify the values of the parameters
-#'              of the prior distributions. It can be validated using the \code{priors()} routine.
-#' @param ssvs  an (optional) logical variable. If \code{ssvs=TRUE} then the Stochastic Search
-#'              Variable Selection (SSVS) procedure is applied to identify relevant lags of the
-#'              output, exogenous and threhold series. By default, \code{ssvs} is set to \code{FALSE}.
-#' @param setar an (optional) positive integer indicating the component of the output series which is
-#'              the threshold variable. By default,\code{setar} is set to \code{NULL}, which
-#'              indicates that the fitted model is not SETAR.
+#' @description This function implements a Gibbs sampling algorithm to draw samples from the
+#' posterior distribution of the parameters of a multivariate Threshold Autoregressive (TAR)
+#' model and its special cases as SETAR and VAR models. The procedure accommodates a wide
+#' range of noise process distributions, including Gaussian, Student-\eqn{t}, Slash, Symmetric
+#' Hyperbolic, Contaminated normal, Laplace, Skew-normal, and Skew-Student-\eqn{t}.
+#'
+#' @param formula A three-part expression of class \code{Formula} describing the TAR model to be fitted.
+#' The first part specifies the variables in the multivariate output series, the second part
+#' defines the threshold series, and the third part specifies the variables in the multivariate
+#' exogenous series.
+#'
+#' @param ars A list defining the autoregressive structure of the model. It contains four
+#' components: the number of regimes (\code{nregim}), the autoregressive order within each
+#' regime (\code{p}), and the maximum lags for the exogenous (\code{q}) and threshold
+#' (\code{d}) series in each regime. The object can be validated using the helper
+#' function \code{ars()}.
+#'
+#' @param Intercept An optional logical indicating whether an intercept should be included within each regime.
+#'
+#' @param trend	An optional character string specifying the degree of deterministic time trend to be
+#' included in each regime. Available options are \code{"linear"}, \code{"quadratic"}, and
+#' \code{"none"}. By default, \code{trend} is set to \code{"none"}.
+#'
+#' @param nseason An optional integer, greater than or equal to 2, specifying the number of seasonal periods.
+#' When provided, \code{nseason - 1} seasonal dummy variables are added to the regressors within each regime.
+#' By default, \code{nseason} is set to \code{NULL}, thereby indicating that the TAR model has no seasonal effects.
+#'
+#' @param data A data frame containing the variables in the model. If not found in \code{data}, the
+#' variables are taken from \code{environment(formula)}, typically the environment from
+#' which \code{mtar_grid()} is called.
+#'
+#' @param subset An optional vector specifying a subset of observations to be used in the fitting process.
+#'
+#' @param dist A character string specifying the multivariate distributions used to model the noise
+#' process. Available options are \code{"Gaussian"}, \code{"Student-t"}, \code{"Slash"},
+#' \code{"Hyperbolic"}, \code{"Laplace"}, \code{"Contaminated normal"},
+#' \code{"Skew-normal"}, and \code{"Skew-Student-t"}. By default, \code{dist} is set to
+#' \code{"Gaussian"}.
+#'
+#' @param n.sim	An optional positive integer specifying the number of simulation iterations after the
+#' burn-in period. By default, \code{n.sim} is set to \code{500}.
+#'
+#' @param n.burnin An optional positive integer specifying the number of burn-in iterations. By default,
+#' \code{n.burnin} is set to \code{100}.
+#'
+#' @param n.thin An optional positive integer specifying the thinning interval. By default,
+#' \code{n.thin} is set to \code{1}.
+#'
+#' @param row.names An optional variable in \code{data} labelling the time points corresponding to each row of the data set.
+#'
+#' @param prior	An optional list specifying the hyperparameter values that define the prior
+#' distribution. This list can be validated using the \code{priors()} function. By default,
+#' \code{prior} is set to an empty list, thereby indicating that the hyperparameter values
+#' should be set so that a non-informative prior distribution is obtained.
+#'
+#' @param ssvs An optional logical indicating whether the Stochastic Search Variable Selection (SSVS)
+#' procedure should be applied to identify relevant lags of the output, exogenous, and threshold
+#' series. By default, \code{ssvs} is set to \code{FALSE}.
+#'
+#' @param setar An optional positive integer indicating the component of the output series used as the
+#' threshold variable. By default, \code{setar} is set to \code{NULL}, indicating that the
+#' fitted model is not a SETAR model.
+#'
+#' @param progress An optional logical indicating whether a progress bar should be displayed during
+#' execution. By default, \code{progress} is set to \code{TRUE}.
 #' @param ... further arguments passed to or from other methods.
 #'
 #' @return an object of class \emph{mtar} in which the main results of the model fitted to the data are stored, i.e., a
@@ -104,30 +117,48 @@
 #' ###### Example 1: Returns of the closing prices of three financial indexes
 #' data(returns)
 #' fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
-#'              dist="Gaussian", ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100,
-#'              n.sim=3000, n.thin=2)
+#'              subset={Date<="2016-03-14"}, dist="Student-t",
+#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=2000, n.sim=3000,
+#'              n.thin=2, ssvs=TRUE)
 #' summary(fit1)
 #'
 #' ###### Example 2: Rainfall and two river flows in Colombia
 #' data(riverflows)
 #' fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
-#'              dist="Gaussian", ars=ars(nregim=3,p=5), n.burnin=2000,
-#'              n.sim=3000, n.thin=2)
+#'              subset={Date<="2009-04-04"}, dist="Laplace", ssvs=TRUE,
+#'              ars=ars(nregim=3,p=5), n.burnin=2000, n.sim=3000, n.thin=2)
 #' summary(fit2)
+#'
+#' ###### Example 3: Temperature, precipitation, and two river flows in Iceland
+#' data(iceland.rf)
+#' fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
+#'              data=iceland.rf, subset={Date<="1974-12-21"}, row.names=Date,
+#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=2000, n.sim=3000,
+#'              n.thin=2, dist="Slash")
+#' summary(fit3)
 #' }
 #'
 #'
-mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear","quad"), nseason=NULL, ars=ars(), row.names,
+mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear","quadratic"), nseason=NULL, ars=ars(), row.names,
                  dist=c("Gaussian","Student-t","Hyperbolic","Laplace","Slash","Contaminated normal","Skew-Student-t","Skew-normal"),
-                 prior=list(), n.sim=500, n.burnin=100, n.thin=1, ssvs=FALSE, setar=NULL, ...){
+                 prior=list(), n.sim=500, n.burnin=100, n.thin=1, ssvs=FALSE, setar=NULL, progress=TRUE, ...){
+  # Match selected distribution and trend options
   dist <- match.arg(dist)
   trend <- match.arg(trend)
+  if(!is.logical(Intercept) | length(Intercept)!= 1) stop("'Intercept' must be a single logical value",call.=FALSE)
+  if(!is.logical(ssvs) | length(ssvs)!=1) stop("'ssvs' must be a single logical value",call.=FALSE)
+  if(!is.logical(progress) | length(progress)!=1) stop("'progress' must be a single logical value",call.=FALSE)
+  # Flag for log-transformation (currently disabled)
   log <- FALSE
+  # Validate seasonal component
   if(!is.null(nseason)){
      if(nseason!=floor(nseason) | nseason<2) stop("The value of the argument 'nseason' must be an integer higher than 1",call.=FALSE)
   }
+  # If data is missing, take it from the formula environment
   if(missing(data)) data <- environment(formula)
+  # Number of regimes
   regim <- ars$nregim
+  # Build model frame
   mmf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data", "subset", "na.action", "row.names"), names(mmf), 0)
   mmf <- mmf[c(1,m)]
@@ -135,31 +166,37 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
   mmf[[1]] <- as.name("model.frame")
   mmf$formula <- Formula(formula)
   mmf <- eval(mmf, parent.frame())
+  # Extract row names if provided
   if(!missingArg(row.names)) row.names <- as.vector(as.character(model.extract(mmf,row.names)))
+  # Construct response and design matrix
   mx <- model.part(Formula(formula), data = mmf, rhs = 1, terms = TRUE)
   D <- model.matrix(mx, data = mmf)
+  # Remove intercept if present
   if(attr(terms(mx),"intercept")){
      Dnames <- colnames(D)
      D <- matrix(D[,-1],ncol=length(Dnames)-1)
      colnames(D) <- Dnames[-1]
   }
+  # Apply log-transform if requested
   if(log){
      if(any(D<0)) stop(paste0("There are non-positive values in the output series, so it cannot be described using the log-",tolower(dist)," distribution."),call.=FALSE)
      D <- log(D)
   }
+  # Number of components of the output series
   k <- ncol(D)
+  # Capture additional arguments
   nano_ <- list(...)
-  if(!is.null(nano_$stop)){
-     if(!missingArg(row.names)) return(list(data=mmf,k=k,mynames=row.names))
-     else return(list(data=mmf,k=k))
-     stop(call.=FALSE)
-  }
+  # Validate SETAR option
   if(!is.null(setar)){
      if(floor(setar)!=setar | setar<1 | setar>k) stop(paste("The value of the argument SETAR should be an integer greater than or equal to 1, but less than or equal to",k),call.=FALSE)
   }
+  # Build threshold (regime-switching) variables if needed
   if(regim > 1){
      if(is.null(setar)){
+        options(warn=-1)
         mz <- model.part(Formula(formula), data = mmf, rhs = 2, terms = TRUE)
+        options(warn=0)
+        if(ncol(mz)==0) stop("Fitting a TAR model requires specifying a threshold series (i.e., the input series used to determine the regimes)",call.=FALSE)
         Z <- model.matrix(mz, data = mmf)
         if(attr(terms(mz),"intercept")){
            Znames <- colnames(Z)
@@ -173,8 +210,15 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
      }
      ta <- vector()
   }
+  # Build exogenous regressors if requested
   if(max(ars$q) > 0){
+     options(warn=-1)
      mx2 <- model.part(Formula(formula), data = mmf, rhs = 3, terms = TRUE)
+     options(warn=0)
+     if(ncol(mx2)==0){
+        if(length(ars$q)==1) pez <- paste0(ars$q,collapse=",") else pez <- paste0("(",paste0(ars$q,collapse=","),")")
+        stop(paste0("An exogenous time series was not provided, yet q=",pez," was requested."),call.=FALSE)
+     }
      X2 <- model.matrix(mx2, data = mmf)
      if(attr(terms(mx2),"intercept")){
         X2names <- colnames(X2)
@@ -183,64 +227,97 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
      }
      r <- ncol(X2)
   }
+  # Early stopping option (used internally)
+  if(!is.null(nano_$stop)){
+     if(!missingArg(row.names)) return(list(data=mmf,k=k,mynames=row.names))
+     else return(list(data=mmf,k=k))
+     stop(call.=FALSE)
+  }
+  # Build prior specifications
   prior <- priors(prior,regim=regim,k=k,dist=dist,setar=setar,ssvs=ssvs)
+  # Initialize storage objects
   data <- list()
   chains <- list()
+  # Ensure simulation parameters are positive integers
   n.sim <- ceiling(abs(n.sim))
   n.thin <- ceiling(abs(n.thin))
   n.burnin <- ceiling(abs(n.burnin))
+  # Total MCMC iterations
   rep <- n.sim*n.thin + n.burnin
+  # Indices for thinning and storage
   ids0 <- matrix(seq(1,n.sim*n.thin*k,k))
   ids0 <- ids0[seq(1,n.sim*n.thin,n.thin)]
   ids <- (n.burnin+1)*k + as.vector(apply(matrix(ids0),1,function(x) x + c(0:(k-1))))
   ids1 <- n.burnin + seq(1,n.sim*n.thin,n.thin)
+  # Initialize inverses of scale parameters and naming containers
   Sigmanew2 <- list()
   name <- list()
+  # Truncated normal sampler (used for skewed distributions)
   tn1 <- function(mu,var){
          temp <- pnorm(0,mean=mu,sd=sqrt(var))
          temp <- temp + runif(1)*(1 - temp)
          return(ifelse(temp>0.9999999999999999,-mu*0.001,qnorm(temp)*sqrt(var) + mu))
   }
   if(regim > 1){
+     # Determine the number of initial observations to drop
      ps <- max(ars$p,ars$q,ars$d,prior$hmax)
+     # Truncated threshold series used to initialize regimes
      Zs <- Z[(ps+1-prior$hmin):(nrow(D)-prior$hmin),]
+     # Lower and upper bounds for thresholds
      t1 <- quantile(Zs,probs=prior$alpha1)
      t0 <- quantile(Zs,probs=prior$alpha0)
      probs <- prior$alpha0 + (prior$alpha1-prior$alpha0)*seq(1,regim-1,1)/regim
      thresholds <- quantile(Zs,probs=probs)
+     # Assign initial regimes
      regs <- cut(Zs,breaks=c(-Inf,sort(thresholds),Inf),labels=FALSE)
+     # Initialize thresholds chain
      thresholds.chains <- matrix(thresholds,regim-1,1)
+     # Initialize delay parameter chain
      hs.chains <- matrix(prior$hmin,1,1)
   }else{
+       # Single-regime model
        ps <- max(ars$p,ars$q,ars$d)
        regs <- matrix(1,nrow(D)-ps,1)
   }
+  # Time indices after removing lags
+  t.ids <- matrix(seq(ps+1,nrow(D)),nrow(D)-ps,1)
+  # Build deterministic component depending on trend specification
   switch(trend,
          "none"={Xd <- matrix(1,nrow(D)-ps,1)
                  namedeter="(Intercept)"
                  deterministic <- 1},
-         "linear"={Xd <- matrix(cbind(1,seq(1,nrow(D)-ps,1)),nrow(D)-ps,2)
+         "linear"={Xd <- matrix(cbind(1,t.ids),nrow(D)-ps,2)
                    namedeter=c("(Intercept)","Time")
                    deterministic <- 2},
-         "quad"={Xd <- matrix(cbind(1,seq(1,nrow(D)-ps,1),seq(1,nrow(D)-ps,1)^2),nrow(D)-ps,3)
+         "quadratic"={Xd <- matrix(cbind(1,t.ids,t.ids^2),nrow(D)-ps,3)
                  namedeter=c("(Intercept)","Time","Time^2")
                  deterministic <- 3})
+  # Add seasonal dummies if requested
   if(!is.null(nseason)){
      if(!Intercept) stop("The argument 'nseason' is not applicable when 'Intercept=FALSE'!",call.=FALSE)
-     Xd <- cbind(Xd,matrix(rep(diag(nseason),ceiling((nrow(D)-ps)/nseason)),ceiling((nrow(D)-ps)/nseason)*nseason,nseason,byrow=TRUE)[1:(nrow(D)-ps),-1])
+     Itil <- matrix(diag(nseason)[,-1],nseason,nseason-1)
+     Xd <- cbind(Xd,t(matrix(apply(t.ids,1,function(x) Itil[x%%nseason + 1,]),nseason-1,nrow(D)-ps)))
      namedeter <- c(namedeter,paste0("Season.",2:nseason))
      deterministic <- deterministic + nseason - 1
   }
+  # Remove intercept if requested
   if(!Intercept){
      Xd <- Xd[,-1]
      namedeter <- namedeter[-1]
      deterministic <- deterministic - 1
   }
+  # Set row names after lag truncation
   if(!missingArg(row.names)) row.names2 <- row.names[(ps+1):nrow(D)] else row.names2 <- 1:(nrow(D)-ps)
+  # Loop over regimes to initialize regression structures
   for(i in 1:regim){
-      y <- matrix(D[(ps+1):nrow(D),1:k],ncol=k); X <- Xd
+      # Response matrix
+      y <- matrix(D[(ps+1):nrow(D),1:k],ncol=k)
+      # Start design matrix with deterministic terms
+      X <- Xd
+      # Add autoregressive terms
       if(ars$p[i] > 0){
          for(j in 1:ars$p[i]) X <- cbind(X,D[((ps+1)-j):(nrow(D)-j),])
+         # Build coefficient names
          name0 <- rep(1:ars$p[i],k)
          if(any(nchar(name0)>1)){
             name1 <- nchar(name0); name1 <- max(name1) - name1
@@ -248,6 +325,7 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
          }
          name[[i]] <- c(namedeter,paste0(rep(colnames(D)[1:k],ars$p[i]),sort(paste0(".lag(",name0)),")"))
       }
+      # Add terms corresponding to the exogenous series lags
       if(ars$q[i]>0){
          for(j in 1:ars$q[i]) X <- cbind(X,X2[((ps+1)-j):(nrow(D)-j),])
          name0 <- rep(1:ars$q[i],r)
@@ -257,6 +335,7 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
          }
          name[[i]] <- c(name[[i]],paste0(rep(colnames(X2),ars$q[i]),sort(paste0(".lag(",name0)),")"))
       }
+      # Add terms corresponding to the threshold series lags
       if(ars$d[i]>0){
          for(j in 1:ars$d[i]) X <- cbind(X,Z[((ps+1)-j):(nrow(D)-j),])
          name0 <- 1:ars$d[i]
@@ -266,30 +345,41 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
          }
          name[[i]] <- c(name[[i]],paste0(rep(colnames(Z),ars$d[i]),sort(paste0(".lag(",name0)),")"))
       }
+      # Assign names and store data
       colnames(X) <- name[[i]]
       rownames(X) <- rownames(y) <- row.names2
       colnames(y) <- colnames(D)
       data[[i]] <- list()
       data[[i]]$y <- y
       data[[i]]$X <- X
+      # Subset observations belonging to this regime
       places <- regs == i
       X <- matrix(X[places,],sum(places),ncol(X))
       y <- matrix(y[places,],nrow(X),ncol(y))
+      # Oidinary Least Squares initialization
       betanew <- solve(crossprod(X),crossprod(X,y),symmetric=TRUE)
       Sigmanew <- crossprod(y-X%*%betanew)/nrow(X)
+      # Precision matrices initialization
       Sigmanew2[[i]] <- chol2inv(chol(Sigmanew))
+      # Initialize chains
       chains[[i]] <- list()
       chains[[i]]$location <- betanew
       chains[[i]]$scale <- Sigmanew
       chains[[i]]$zeta <- matrix(1,nrow(betanew),1)
   }
+  # Tolerance used to avoid empty regimes when updating thresholds
   tol <- unlist(lapply(data,function(x) ncol(x$X)))*k*1.2
+  # Latent scale variables
   us <- matrix(1,nrow(data[[1]]$X),1)
+  # Auxiliary variable for contaminated normal
   ss <- matrix(0,nrow(data[[1]]$X),1)
+  # Latent skewness variables
   zs <- matrix(0,nrow(data[[1]]$y),k)
+  # Skewness parameter chain
   chains$delta <- matrix(0,k,1)
-
+  # Prior scale matrix
   Omega0 <- diag(k)*prior$omega0
+  # Initialize extra parameters depending on the distribution
   switch(dist,
          "Hyperbolic"={chains$extra <- matrix((prior$gamma0+prior$eta0)/2,1,1)
                        nus <- matrix(seq(prior$gamma0,prior$eta0,length=10001),10001,1)
@@ -304,6 +394,7 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
                       resto <- (nus/2)*log(nus/2) - lgamma(nus/2)},
          "Slash"={chains$extra <- matrix(100,1,1)},
          "Contaminated normal"={chains$extra <- matrix(c(0.01,0.99),2,1)})
+  # Stochastic Search Variable Selection (SSVS) step
   lsm <- function(aq0,aq1){
       delta1 <- prior$delta0^(s/sum(aq1))
       delta0 <- prior$delta0^(s/sum(aq0))
@@ -322,6 +413,7 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
       if(aa <= log(1/runif(1) - 1)) aq <- aq1 else aq <- aq0
       return(aq)
   }
+  # Log-likelihood function used for threshold and delay updates
   Loglik <- function(h,thresholds){
     regs <- cut(Z[(ps+1-h):(nrow(D)-h),],breaks=c(-Inf,sort(thresholds),Inf),labels=FALSE)
     result <- 0
@@ -340,33 +432,44 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
     }
     return(result)
   }
-  nano_$bar <- ifelse(is.null(nano_$bar),TRUE,FALSE)
-  if(nano_$bar) bar <- txtProgressBar(min=0, max=rep, initial=0, width=min(50,rep), char="+", style=3)
+  # Progress bar option
+  if(progress) handlers("txtprogressbar") else handlers("void")
+  # Main MCMC loop
+  with_progress({
+  pb <- progressor(steps=rep)
   for(j in 1:rep){
+      # Initialize accumulators for skewed distributions
       if(dist %in% c("Skew-normal","Skew-Student-t")){
          bis <- matrix(0,k,1)
          Bis <- matrix(0,k,k)
       }
+      # Update regime allocation if TAR/SETAR
       if(regim > 1){
          hs <- hs.chains[,j]
          thresholds <- thresholds.chains[,j]
          regs <- cut(Z[(ps+1-hs):(nrow(D)-hs),],breaks=c(-Inf,sort(thresholds),Inf),labels=FALSE)
       }
+      # Loop over regimes
       for(i in 1:regim){
           places <- regs == i
           X <- matrix(data[[i]]$X[places,],sum(places),ncol(data[[i]]$X))
-          n <- nrow(X); s <- ncol(X)
+          n <- nrow(X)
+          s <- ncol(X)
+          # Remove skewness contribution from response
           y2z <- matrix(data[[i]]$y[places,],n,k)
           y <- matrix(y2z - matrix(chains$delta[,j],n,k,byrow=TRUE)*zs[places,],n,k)
+          # Variable selection via SSVS
           if(ssvs){
              usi <- us[places]
              zeta <- chains[[i]]$zeta[,j]
+             # Update AR terms
              for(oi in 1:ars$p[i]){
                  zeta0 <- zeta1 <- zeta
                  zeta1[deterministic + ((oi-1)*k + 1):(oi*k)] <- 1
                  zeta0[deterministic + ((oi-1)*k + 1):(oi*k)] <- 0
                  zeta <- lsm(zeta0,zeta1)
              }
+             # Update terms corresponding to the exogenous series lags
              if(ars$q[i]>0){
                 for(oi in 1:ars$q[i]){
                     zeta0 <- zeta1 <- zeta
@@ -375,6 +478,7 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
                     zeta <- lsm(zeta0,zeta1)
                 }
              }
+             # Update terms corresponding to the threshold series lags
              if(ars$d[i]>0){
                 for(oi in 1:ars$d[i]){
                     zeta0 <- zeta1 <- zeta
@@ -387,15 +491,18 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
              chains[[i]]$zeta <- cbind(chains[[i]]$zeta,zeta)
              X <- matrix(X[,zeta==1],n,sum(zeta))
           }else zeta <- rep(1,s)
+          # Prior precision for location parameters
           Sigmarinv <- diag(sum(zeta))/prior$delta0^(s/sum(zeta))
           s <- sum(zeta)
           mu0s <- matrix(prior$mu0,s,k)
           ncols <- ncol(chains[[i]]$location)
+          # Update latent scale variables depending on the distribution
           if(dist %in% c("Gaussian","Skew-normal")) us[places] <- rep(1,n)
           else{
               resu <- y-X%*%chains[[i]]$location[zeta==1,(ncols-k+1):ncols]
               usi <- colSums(t(resu)*tcrossprod(Sigmanew2[[i]],resu))
           }
+          # Sample latent scale variables
           switch(dist,
                  "Laplace"={us[places] <- apply(matrix(usi,length(usi),1),1,function(x) 1/rgig(n=1,lambda=(2-k)/2,chi=x,psi=1/4))},
                  "Hyperbolic"={us[places] <- apply(matrix(usi,length(usi),1),1,function(x) 1/rgig(n=1,lambda=(2-k)/2,chi=x+1,psi=chains$extra[,j]^2))},
@@ -409,16 +516,19 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
                                         us[places] <- ifelse(runif(n)<=a/(a+b),chains$extra[2,j],1)})
           usi <- us[places]
           zsi <- matrix(0,n,k)
+          # Sample latent skewness variables
           if(dist %in% c("Skew-normal","Skew-Student-t")){
              ais <- matrix(chains$delta[,j],k,n)*tcrossprod(Sigmanew2[[i]],y2z-X%*%chains[[i]]$location[zeta==1,(ncols-k+1):ncols])
              Ais <- diag(k) + matrix(chains$delta[,j],k,k)*Sigmanew2[[i]]*matrix(chains$delta[,j],k,k,byrow=TRUE)
              Ais2 <- chol2inv(chol(Ais))
              if(k>1) Ais3 <- chol(Ais2)
              ais <- crossprod(Ais2,ais)
+             # Univariate case
              if(k==1) zsi <- matrix(unlist(lapply(1:n,function(x){mu <- ais[,x]
                                                                   var <- Ais2/usi[x]
                                                                   tn1(mu=mu,var=var)
                                                                   })),n,k,byrow=TRUE)
+             # Multivariate case
              else zsi <- matrix(unlist(lapply(1:n,function(x){mu <- ais[,x]
                                                               var <- Ais2/usi[x]
                                                               ind <- TRUE
@@ -438,27 +548,35 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
              zs[places,] <- zsi
              y <- matrix(data[[i]]$y[places,] - matrix(chains$delta[,j],n,k,byrow=TRUE)*zsi,n,k)
           }
+          # Weighted regression matrices
           Xu <- matrix(sqrt(usi),n,s)*X
           yu <- matrix(sqrt(usi),n,k)*y
+          # Posterior covariance of regression coefficients
           A <- chol2inv(chol(Sigmarinv + crossprod(Xu)))
           M <- crossprod(A,(crossprod(Xu,yu) + crossprod(Sigmarinv,mu0s)))
+          # Sample regression coefficients
           betanew <- M + crossprod(chol(A),matrix(rnorm(s*k),s,k))%*%chol(chains[[i]]$scale[,(ncols-k+1):ncols])
+          # Store full coefficient vector
           betanew2 <- matrix(chains[[i]]$location[,(ncols-k+1):ncols],nrow(chains[[i]]$location),k)
           betanew2[zeta==1,] <- betanew
           chains[[i]]$location <- cbind(chains[[i]]$location,betanew2)
+          # Update covariance matrix
           Omega <- Omega0 + crossprod(betanew-mu0s,Sigmarinv)%*%(betanew-mu0s) + crossprod(yu-Xu%*%betanew)
           Omegachol <- chol(chol2inv(chol(Omega)))
           Sigmanew2[[i]] <- tcrossprod(crossprod(Omegachol,matrix(rnorm(k*(prior$tau0+s+n)),k,prior$tau0+s+n)))
           chains[[i]]$scale <- cbind(chains[[i]]$scale,chol2inv(chol(Sigmanew2[[i]])))
+          # Auxiliary variable for contaminated normal
           if(dist=="Contaminated normal"){
              resu <- y-X%*%betanew
              ss[places] <- colSums(t(resu)*tcrossprod(Sigmanew2[[i]],resu))
           }
+          # Accumulate terms for skewness parameter update
           if(dist %in% c("Skew-normal","Skew-Student-t")){
              bis <- bis + rowSums(matrix(matrix(usi,k,n,byrow=TRUE)*t(zsi)*tcrossprod(Sigmanew2[[i]],(y2z-X%*%betanew)),k,n))
              Bis <- Bis + Reduce(`+`, lapply(1:n,function(x) usi[x]*(matrix(zsi[x,],k,k)*Sigmanew2[[i]]*matrix(zsi[x,],k,k,byrow=TRUE))))
           }
       }
+      # Update extra distribution parameters
       switch(dist,
              "Hyperbolic"={etanew <- length(us)*(resto - (1/2)*(nus^2*mean(1/us)))
                            etanew <- exp(etanew - max(etanew))
@@ -478,11 +596,13 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
                                   u0 <- pgamma(q=1,shape=(sum(a)*k + prior$gamma02)/2,scale=2/(prior$eta02 + sum(ss*a)))
                                   etanew2 <- max(0.01,qgamma(p=runif(1)*u0,shape=(sum(a)*k + prior$gamma02)/2,scale=2/(prior$eta02 + sum(ss*a))))
                                   chains$extra <- cbind(chains$extra,matrix(c(etanew1,etanew2),2,1))})
+      # Update skewness parameter
       if(dist %in% c("Skew-normal","Skew-Student-t")){
          Bis2 <- chol2inv(chol(Bis + diag(k)/prior$lambda0))
          chains$delta <- cbind(chains$delta,Bis2%*%bis + crossprod(chol(Bis2),matrix(rnorm(k),k,1)))
       }else chains$delta <- cbind(chains$delta,matrix(0,k,1))
       ncols <- ncol(chains[[1]]$location)
+      # Updates for thresholds and delay parameter
       if(regim > 1){
          a0 <- (thresholds.chains[,j] - t0)/(t1 - t0)
          if(length(a0) > 1) a0 <- c(a0[1],diff(a0))
@@ -514,8 +634,10 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
             hs.chains <- cbind(hs.chains,sample(prior$hmin:prior$hmax,size=1,prob=resul))
          }else hs.chains <- cbind(hs.chains,prior$hmin)
       }
-      if(nano_$bar) setTxtProgressBar(bar,j)
+      if(progress) pb()
   }
+  })
+  # Thin and discard burn-in for location and scale parameters
   for(i in 1:regim){
       chains[[i]]$location <- matrix(chains[[i]]$location[,ids],nrow=nrow(chains[[i]]$location),ncol=n.sim*k)
       rownames(chains[[i]]$location) <- name[[i]]
@@ -524,13 +646,17 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
       rownames(chains[[i]]$scale) <- colnames(D)
       if(ssvs) chains[[i]]$zeta <- chains[[i]]$zeta[,ids1]
   }
+  # Thin and discard burn-in for extra parameters if they are present
   if(dist %in% c("Skew-Student-t","Student-t","Hyperbolic","Slash","Contaminated normal"))
      chains$extra <- matrix(chains$extra[,ids1],nrow=ifelse(dist=="Contaminated normal",2,1),ncol=n.sim)
+  # Thin and discard burn-in for skewness parameters if they are present
   if(dist %in% c("Skew-normal","Skew-Student-t"))
      chains$delta <- matrix(chains$delta[,ids1],nrow=k,ncol=n.sim)
+  # Stores the main results of the fitting process
   out_ <- list(data=data,chains=chains,n.burnin=n.burnin,n.sim=n.sim,n.thin=n.thin,regim=regim,Intercept=Intercept,nseason=nseason,name=name,dist=dist,ps=ps,ars=ars,formula=Formula(formula),trend=trend,deterministic=deterministic,call=match.call(),log=log,output.series=D,ssvs=ssvs,setar=setar)
   if(!missing(row.names)) out_$row.names <- paste0(" (",paste0(rownames(data[[1]]$y)[c(1,nrow(data[[1]]$y))],collapse=" to "),")")
   if(max(ars$q)>0) out_$r <- r
+  # Thin and discard burn-in for thresholds and delay parameter if they are present
   if(regim > 1){
      out_$chains$thresholds <- matrix(thresholds.chains[,ids1],ncol=n.sim)
      out_$chains$h <- hs.chains[,ids1]
@@ -539,6 +665,7 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
      out_$ta=100*mean(ta[ids1-1])
   }
   if(max(ars$q) > 0) out_$exogenous.series=X2
+  # Assign a class to the storage object and then return it
   class(out_) <- "mtar"
   return(out_)
 }

@@ -2,14 +2,14 @@
 % Please edit documentation in R/simulation.R
 \name{simtar}
 \alias{simtar}
-\title{Simulation of multivariate time series according to a TAR model}
+\title{Simulation of multivariate time series from a TAR model}
 \usage{
 simtar(
   n,
   k = 2,
   ars = ars(),
   Intercept = TRUE,
-  trend = c("none", "linear", "quad"),
+  trend = c("none", "linear", "quadratic"),
   nseason = NULL,
   parms,
   delay = 0,
@@ -20,60 +20,74 @@ simtar(
     "Contaminated normal", "Skew-Student-t", "Skew-normal"),
   skewness = NULL,
   extra = NULL,
-  setar = NULL
+  setar = NULL,
+  Verbose = TRUE
 )
 }
 \arguments{
-\item{n}{a positive integer value indicating the length of the desired output series.}
+\item{n}{A positive integer specifying the length of the simulated output series.}
 
-\item{k}{a positive integer value indicating the dimension of the desired output series.}
+\item{k}{A positive integer specifying the dimension of the multivariate output series.}
 
-\item{ars}{It is a list composed of four objects, namely: the number of regimes (\code{nregim}),
-the autoregressive order (\code{p}), and the maximum lags for the exogenous (\code{q})
-and the threshold (\code{d}) series within each regime. It can be validated using the
-\code{ars()} routine.}
+\item{ars}{A list defining the TAR model structure, composed of four elements: the number
+of regimes (\code{nregim}), the autoregressive order (\code{p}), and the maximum
+lags of the exogenous (\code{q}) and threshold (\code{d}) series within each
+regime. This object can be validated using the \code{ars()} function.}
 
-\item{Intercept}{an (optional) logical variable. If \code{TRUE}, then the model includes an intercept.}
+\item{Intercept}{An optional logical indicating whether an intercept term is included
+in each regime.}
 
-\item{trend}{It is an (optional) character string that allows the user to specify the
-degree of deterministic time trend to be included in each regime. The available
-options are: linear trend ("linear"), quadratic trend ("quad"), and no time
-trend ("none"). By default, \code{trend} is set to "none".}
+\item{trend}{An optional character string specifying the degree of deterministic time
+trend to be included in each regime. Available options are a linear trend
+(\code{"linear"}), a quadratic trend (\code{"quadratic"}), or no trend
+(\code{"none"}). By default, \code{trend} is set to \code{"none"}.}
 
-\item{nseason}{It is an (optional) integer value that allows the user to specify the number
-of seasonal periods. When the \code{nseason} is specified, \code{nseason}-1
-seasonal dummies are added to the regressors within each regime.}
+\item{nseason}{An optional integer, greater than or equal to 2, specifying the number of
+seasonal periods. When provided, \code{nseason - 1} seasonal dummy variables are added to
+the regressors within each regime. By default, \code{nseason} is set to \code{NULL},
+thereby indicating that the TAR model has no seasonal effects.}
 
-\item{parms}{a list with as many sublists as regimes in the user-specified TAR model. Each sublist is composed of two matrices. The first corresponds
-to location parameters, while the second corresponds to scale parameters.}
+\item{parms}{A list with one sublist per regime. Each sublist contains two matrices: the
+first matrix corresponds to the location parameters, and the second matrix
+corresponds to the scale parameters of the model.}
 
-\item{delay}{an (optional) non-negative integer value indicating the delay in the threshold series.}
+\item{delay}{An optional non-negative integer specifying the delay parameter of the
+threshold series. By default, \code{delay} is set to \code{0}.}
 
-\item{thresholds}{a vector with \eqn{l-1} real values sorted ascendingly.}
+\item{thresholds}{A numeric vector of length \code{nregim-1} containing the threshold values,
+sorted in ascending order.}
 
-\item{t.series}{a matrix with the values of the threshold series.}
+\item{t.series}{A matrix containing the values of the threshold series.}
 
-\item{ex.series}{a matrix with the values of the multivariate exogenous series.}
+\item{ex.series}{A matrix containing the values of the multivariate exogenous series.}
 
-\item{dist}{an (optional) character string which allows the user to specify the multivariate
-distribution to be used to describe the behavior of the noise process. The
-available options are: Gaussian ("Gaussian"), Student-\eqn{t} ("Student-t"),
-Slash ("Slash"), Symmetric Hyperbolic ("Hyperbolic"), Laplace ("Laplace"), and
-contaminated normal ("Contaminated normal"). By default,\code{dist} is set to
-"Gaussian".}
+\item{dist}{An optional character string specifying the multivariate distribution chosen
+to model the noise process. Supported options include Gaussian
+(\code{"Gaussian"}), Student-\eqn{t} (\code{"Student-t"}), Slash
+(\code{"Slash"}), Symmetric Hyperbolic (\code{"Hyperbolic"}), Laplace
+(\code{"Laplace"}), and Contaminated Normal (\code{"Contaminated normal"}).
+By default, \code{dist} is set to \code{"Gaussian"}.}
 
-\item{skewness}{an (optional) vector with the values of the skewness parameters. By default,\code{delta} is set to \code{NULL}.}
+\item{skewness}{An optional numeric vector specifying the skewness parameters of the
+noise distribution, when applicable.}
 
-\item{extra}{a value indicating the value of the extra parameter of the noise process distribution, if any.}
+\item{extra}{An optional value specifying the extra parameter of the noise distribution,
+when required.}
 
-\item{setar}{an (optional) positive integer indicating the component of the output series which should
-be the threshold variable. By default,\code{setar} is set to \code{NULL}.}
+\item{setar}{An optional positive integer indicating which component of the output
+series is used as the threshold variable. By default, \code{setar} is set
+to \code{NULL}, indicating that the model is not of SETAR type.}
+
+\item{Verbose}{An optional logical indicating whether a description of the simulated
+TAR model should be printed. By default, \code{Verbose} is set to \code{TRUE}.}
 }
 \value{
-a \code{data.frame} containing the output series, threshold series (if any), and multivariate exogenous series (if any).
+A \code{data.frame} containing the simulated multivariate output series, and, if
+specified, the threshold series and multivariate exogenous series.
 }
 \description{
-This function simulates multivariate time series according to a user-specified TAR model.
+This function simulates multivariate time series generated by a user-specified
+Threshold Autoregressive (TAR) model.
 }
 \examples{
 \donttest{
@@ -83,6 +97,7 @@ k <- 3
 myars <- ars(nregim=2,p=c(1,2))
 Z <- as.matrix(arima.sim(n=n+max(myars$p),list(ar=c(0.5))))
 probs <- sort((0.6 + runif(myars$nregim-1)*0.8)*c(1:(myars$nregim-1))/myars$nregim)
+dist <- "Student-t"; extra <- 6
 parms <- list()
 for(j in 1:myars$nregim){
     np <- 1 + myars$p[j]*k
@@ -92,18 +107,19 @@ for(j in 1:myars$nregim){
     parms[[j]]$scale <- rgamma(k,shape=1,scale=1)*diag(k)
 }
 thresholds <- quantile(Z,probs=probs)
-out1 <- simtar(n=n,k=k,ars=myars,parms=parms,thresholds=thresholds,
-               t.series=Z,dist="Student-t",extra=6)
+out1 <- simtar(n=n, k=k, ars=myars, parms=parms, thresholds=thresholds,
+               t.series=Z, dist=dist, extra=extra)
 str(out1)
 
-fit1 <- mtar(~ Y1 + Y2 + Y3 | t.series, data=out1, ars=myars, dist="Student-t",
-             n.sim=3000, n.burn=2000, n.thin=2)
+fit1 <- mtar(~ Y1 + Y2 + Y3 | Z, data=out1, ars=myars, dist=dist,
+             n.burn=2000, n.sim=3000, n.thin=2)
 summary(fit1)
 
 ###### Simulation of a trivariate VAR model
 n <- 2000
 k <- 3
 myars <- ars(nregim=1,p=2)
+dist <- "Slash"; extra <- 2
 parms <- list()
 for(j in 1:myars$nregim){
     np <- 1 + myars$p[j]*k
@@ -112,16 +128,17 @@ for(j in 1:myars$nregim){
     parms[[j]]$location <- matrix(parms[[j]]$location,np,k)
     parms[[j]]$scale <- rgamma(k,shape=1,scale=1)*diag(k)
 }
-out2 <- simtar(n=n,k=k,ars=myars,parms=parms,dist="Slash",extra=2)
+out2 <- simtar(n=n, k=k, ars=myars, parms=parms, dist=dist, extra=extra)
 str(out2)
 
-fit2 <- mtar(~ Y1 + Y2 + Y3, data=out2, ars=myars, dist="Slash", n.sim=3000,
-             n.burn=2000, n.thin=2)
+fit2 <- mtar(~ Y1 + Y2 + Y3, data=out2, ars=myars, dist=dist,
+             n.burn=2000, n.sim=3000, n.thin=2)
 summary(fit2)
 
 n <- 5000
 k <- 3
 myars <- ars(nregim=2,p=c(1,2))
+dist <- "Laplace"
 parms <- list()
 for(j in 1:myars$nregim){
     np <- 1 + myars$p[j]*k
@@ -131,11 +148,11 @@ for(j in 1:myars$nregim){
     parms[[j]]$scale <- rgamma(k,shape=1,scale=1)*diag(k)
 }
 out3 <- simtar(n=n, k=k, ars=myars, parms=parms, delay=2,
-               thresholds=-1, dist="Laplace", setar=2)
+               thresholds=-1, dist=dist, setar=2)
 str(out3)
 
-fit3 <- mtar(~ Y1 + Y2 + Y3, data=out3, ars=myars, dist="Laplace",
-             n.sim=3000, n.burn=2000, n.thin=2, setar=2)
+fit3 <- mtar(~ Y1 + Y2 + Y3, data=out3, ars=myars, dist=dist,
+             n.burn=2000, n.sim=3000, n.thin=2, setar=2)
 summary(fit3)
 
 }

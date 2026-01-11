@@ -2,18 +2,19 @@
 % Please edit documentation in R/bayesians.R
 \name{DIC}
 \alias{DIC}
-\title{Deviance information criterion (DIC)}
+\title{Deviance Information Criterion (DIC)}
 \usage{
 DIC(...)
 }
 \arguments{
-\item{...}{one or several objects of the same class.}
+\item{...}{one or more fitted model objects of the same class.}
 }
 \value{
-A matrix with the values of the DIC for each object in the input.
+A numeric matrix containing the DIC values corresponding to each fitted object supplied in \code{...}.
 }
 \description{
-This function computes the Deviance Information Criterion (DIC), which is an adjusted within-sample predictive accuracy measure.
+Computes the Deviance Information Criterion (DIC), an adjusted
+within-sample measure of predictive accuracy, for models estimated using Bayesian methods.
 }
 \references{
 Spiegelhalter D.J., Best N.G., Carlin B.P. and Van Der Linde A. (2002) Bayesian Measures of Model Complexity and Fit.

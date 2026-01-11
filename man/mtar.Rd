@@ -9,7 +9,7 @@ mtar(
   data,
   subset,
   Intercept = TRUE,
-  trend = c("none", "linear", "quad"),
+  trend = c("none", "linear", "quadratic"),
   nseason = NULL,
   ars = ars(),
   row.names,
@@ -21,76 +21,70 @@ mtar(
   n.thin = 1,
   ssvs = FALSE,
   setar = NULL,
-  log = FALSE,
+  progress = TRUE,
   ...
 )
 }
 \arguments{
-\item{formula}{a three-part expression of type \code{Formula} describing the TAR model
-to be fitted to the data. In the first part, the variables in the
-multivariate output series are listed; in the second part, the threshold
-series is specified, and in the third part, the variables in the
-multivariate exogenous series are specified.}
+\item{formula}{A three-part expression of class \code{Formula} describing the TAR model to be fitted.
+The first part specifies the variables in the multivariate output series, the second part
+defines the threshold series, and the third part specifies the variables in the multivariate
+exogenous series.}
 
-\item{data}{a data frame containing the variables in the model.
-If not found in data, the variables are taken from \code{environment(formula)},
-typically the environment from which \code{mtar} is called.}
+\item{data}{A data frame containing the variables in the model. If not found in \code{data}, the
+variables are taken from \code{environment(formula)}, typically the environment from
+which \code{mtar_grid()} is called.}
 
-\item{subset}{an (optional) vector specifying a subset of observations to be used in the
-fitting process.}
+\item{subset}{An optional vector specifying a subset of observations to be used in the fitting process.}
 
-\item{Intercept}{an (optional) logical variable. If \code{TRUE}, then the model
-includes an intercept.}
+\item{Intercept}{An optional logical indicating whether an intercept should be included within each regime.}
 
-\item{trend}{an (optional) character string that allows the user to specify the
-degree of deterministic time trend to be included in each regime. The available
-options are: linear trend ("linear"), quadratic trend ("quad"), and no time
-trend ("none"). By default, \code{trend} is set to "none".}
+\item{trend}{An optional character string specifying the degree of deterministic time trend to be
+included in each regime. Available options are \code{"linear"}, \code{"quadratic"}, and
+\code{"none"}. By default, \code{trend} is set to \code{"none"}.}
 
-\item{nseason}{an (optional) integer value that allows the user to specify the number
-of seasonal periods. When the \code{nseason} is specified, \code{nseason}-1
-seasonal dummies are added to the regressors within each regime.}
+\item{nseason}{An optional integer, greater than or equal to 2, specifying the number of seasonal periods.
+When provided, \code{nseason - 1} seasonal dummy variables are added to the regressors within each regime.
+By default, \code{nseason} is set to \code{NULL}, thereby indicating that the TAR model has no seasonal effects.}
 
-\item{ars}{a list composed of four objects, namely: the number of regimes (\code{nregim}),
-the autoregressive order (\code{p}), and the maximum lags for the exogenous (\code{q})
-and the threshold (\code{d}) series within each regime. It can be validated using the
-routine \code{ars()}. Only \code{nregim} and \code{p} are required.}
+\item{ars}{A list defining the autoregressive structure of the model. It contains four
+components: the number of regimes (\code{nregim}), the autoregressive order within each
+regime (\code{p}), and the maximum lags for the exogenous (\code{q}) and threshold
+(\code{d}) series in each regime. The object can be validated using the helper
+function \code{ars()}.}
 
-\item{row.names}{an (optional) vector that allows the user to name the time point to
-which each row in the data set corresponds.}
+\item{row.names}{An optional variable in \code{data} labelling the time points corresponding to each row of the data set.}
 
-\item{dist}{an (optional) character string that allows the user to specify the
-multivariate distribution to be used to describe the noise process
-behavior. The available options are: Gaussian ("Gaussian"), Student-\eqn{t}
-("Student-t"), Slash ("Slash"), Symmetric Hyperbolic ("Hyperbolic"),
-Laplace ("Laplace"), Contaminated normal ("Contaminated normal"),
-Skew-normal ("Skew-normal") and Skew-Student-\eqn{t} ("Skew-Student-t").
-By default, \code{dist} is set to "Gaussian".}
+\item{dist}{A character string specifying the multivariate distributions used to model the noise
+process. Available options are \code{"Gaussian"}, \code{"Student-t"}, \code{"Slash"},
+\code{"Hyperbolic"}, \code{"Laplace"}, \code{"Contaminated normal"},
+\code{"Skew-normal"}, and \code{"Skew-Student-t"}. By default, \code{dist} is set to
+\code{"Gaussian"}.}
 
-\item{prior}{an (optional) list that allows the user to specify the values of the
-hyperparameters, that is, allows to specify the values of the parameters
-of the prior distributions. It can be validated using the \code{priors()} routine.}
+\item{prior}{An optional list specifying the hyperparameter values that define the prior
+distribution. This list can be validated using the \code{priors()} function. By default,
+\code{prior} is set to an empty list, thereby indicating that the hyperparameter values
+should be set so that a non-informative prior distribution is obtained.}
 
-\item{n.sim}{an (optional) positive integer specifying the required number of iterations
-for the simulation after the burn-in period. By default, \code{n.sim} is set
-to 500.}
+\item{n.sim}{An optional positive integer specifying the number of simulation iterations after the
+burn-in period. By default, \code{n.sim} is set to \code{500}.}
 
-\item{n.burnin}{an (optional) positive integer specifying the required number of burn-in
-iterations for the simulation. By default, \code{n.burnin} is set to 100.}
+\item{n.burnin}{An optional positive integer specifying the number of burn-in iterations. By default,
+\code{n.burnin} is set to \code{100}.}
 
-\item{n.thin}{an (optional) positive integer specifying the required thinning interval
-for the simulation. By default, \code{n.thin} is set to 1.}
+\item{n.thin}{An optional positive integer specifying the thinning interval. By default,
+\code{n.thin} is set to \code{1}.}
 
-\item{ssvs}{an (optional) logical variable. If \code{ssvs=TRUE} then the Stochastic Search
-Variable Selection (SSVS) procedure is applied to identify relevant lags of the
-output, exogenous and threhold series. By default, \code{ssvs} is set to \code{FALSE}.}
+\item{ssvs}{An optional logical indicating whether the Stochastic Search Variable Selection (SSVS)
+procedure should be applied to identify relevant lags of the output, exogenous, and threshold
+series. By default, \code{ssvs} is set to \code{FALSE}.}
 
-\item{setar}{an (optional) positive integer indicating the component of the output series which is
-the threshold variable. By default,\code{setar} is set to \code{NULL}, which
-indicates that the fitted model is not SETAR.}
+\item{setar}{An optional positive integer indicating the component of the output series used as the
+threshold variable. By default, \code{setar} is set to \code{NULL}, indicating that the
+fitted model is not a SETAR model.}
 
-\item{log}{an (optional) logical variable. If \code{TRUE}, then the behaviour of the output
-series is described using the exponentiated version of \code{dist}.}
+\item{progress}{An optional logical indicating whether a progress bar should be displayed during
+execution. By default, \code{progress} is set to \code{TRUE}.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
@@ -131,26 +125,36 @@ list with components including
 }
 }
 \description{
-This function uses Gibbs sampling to generate a sample from the posterior
-             distribution of the parameters of a multivariate TAR model when the noise
-             process follows Gaussian, Student-\eqn{t}, Slash, Symmetric Hyperbolic,
-             Contaminated normal, Laplace, Skew-normal, or skew-\eqn{t} distribution.
+This function implements a Gibbs sampling algorithm to draw samples from the
+posterior distribution of the parameters of a multivariate Threshold Autoregressive (TAR)
+model and its special cases as SETAR and VAR models. The procedure accommodates a wide
+range of noise process distributions, including Gaussian, Student-\eqn{t}, Slash, Symmetric
+Hyperbolic, Contaminated normal, Laplace, Skew-normal, and Skew-Student-\eqn{t}.
 }
 \examples{
 \donttest{
 ###### Example 1: Returns of the closing prices of three financial indexes
 data(returns)
 fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
-             dist="Gaussian", ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100,
-             n.sim=3000, n.thin=2)
+             subset={Date<="2016-03-14"}, dist="Student-t",
+             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=2000, n.sim=3000,
+             n.thin=2, ssvs=TRUE)
 summary(fit1)
 
 ###### Example 2: Rainfall and two river flows in Colombia
 data(riverflows)
 fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
-             dist="Gaussian", ars=ars(nregim=3,p=5), n.burnin=2000,
-             n.sim=3000, n.thin=2)
+             subset={Date<="2009-04-04"}, dist="Laplace", ssvs=TRUE,
+             ars=ars(nregim=3,p=5), n.burnin=2000, n.sim=3000, n.thin=2)
 summary(fit2)
+
+###### Example 3: Temperature, precipitation, and two river flows in Iceland
+data(iceland.rf)
+fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
+             data=iceland.rf, subset={Date<="1974-12-21"}, row.names=Date,
+             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=2000, n.sim=3000,
+             n.thin=2, dist="Slash")
+summary(fit3)
 }
 
 
