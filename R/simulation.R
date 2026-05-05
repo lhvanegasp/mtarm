@@ -123,62 +123,95 @@ simtar <- function(n,k=2,ars=ars(),Intercept=TRUE,trend=c("none","linear","quadr
                    parms,delay=0,thresholds=NULL,t.series=NULL,ex.series=NULL,dist=c("Gaussian",
                    "Student-t","Hyperbolic","Laplace","Slash","Contaminated normal","Skew-Student-t",
                    "Skew-normal"),skewness=NULL,extra=NULL,setar=NULL,Verbose=TRUE){
-  # Match the selected distribution and trend options
-  dist <- match.arg(dist)
-  trend <- match.arg(trend)
-  # Check logical arguments for validity and correct length
-  if(!is.logical(Intercept) | length(Intercept)!= 1) stop("'Intercept' must be a single logical value",call.=FALSE)
-  if(!is.logical(Verbose) | length(Verbose)!= 1) stop("'Verbose' must be a single logical value",call.=FALSE)
-  # Check validity of the number of components of the output series
-  if(k<=0 | k!=floor(k)) stop("The value of the argument 'k' must be a positive integer!",call.=FALSE)
-  # Check validity of the sample size n
-  if(n<=0 | n!=floor(n)) stop("The value of the argument 'n' must be a positive integer!",call.=FALSE)
-  # Validate seasonal component
-  if(!is.null(nseason)){
-     if(nseason!=floor(nseason) | nseason<2) stop("The value of the argument 'nseason' must be an integer higher than 1",call.=FALSE)
+  if(inherits(parms,"mtar")){
+     n <- nrow(parms$data[[1]]$X)
+     k <- ncol(parms$data[[1]]$y)
+     dist <- parms$dist
+     trend <- parms$trend
+     Intercept <- parms$Intercept
+     if(!is.logical(Verbose) | length(Verbose)!= 1) stop("'Verbose' must be a single logical value",call.=FALSE)
+     # Check validity of the sample size n
+     if(n<=0 | n!=floor(n)) stop("The value of the argument 'n' must be a positive integer!",call.=FALSE)
+     nseason <- parms$nseason
+     # Number of deterministic components: intercept, trend, seasonality
+     deterministic <- Intercept + switch(trend,"linear"=1,"quadratic"=2) + ifelse(is.null(nseason),0,nseason-1)
+     regim <- parms$regim
+     setar <- parms$setar
+     ars <- parms$ars
+     r <- delay <- 0
+     ps <- max(ars$p,ars$q,ars$d,delay)
+     a <- coef(parms)
+     if(regim > 1){
+        delay <- a$delay
+        thresholds <- a$thresholds
+     }
+     if(!is.null(parms$threshold.series)) t.series <- tail(parms$threshold.series,n+ps)
+     if(!is.null(parms$exogenous.series)){
+        ex.series <- tail(parms$exogenous.series,n+ps)
+        r <- ncol(ex.series)
+     }
+     if(!is.null(a$skewness)) skewness <- a$skewness
+     if(!is.null(a$extra)) extra <- a$extra
+     parms <- a
+  }else{
+    # Match the selected distribution and trend options
+    dist <- match.arg(dist)
+    trend <- match.arg(trend)
+    # Check logical arguments for validity and correct length
+    if(!is.logical(Intercept) | length(Intercept)!= 1) stop("'Intercept' must be a single logical value",call.=FALSE)
+    if(!is.logical(Verbose) | length(Verbose)!= 1) stop("'Verbose' must be a single logical value",call.=FALSE)
+    # Check validity of the number of components of the output series
+    if(k<=0 | k!=floor(k)) stop("The value of the argument 'k' must be a positive integer!",call.=FALSE)
+    # Check validity of the sample size n
+    if(n<=0 | n!=floor(n)) stop("The value of the argument 'n' must be a positive integer!",call.=FALSE)
+    # Validate seasonal component
+    if(!is.null(nseason)){
+       if(nseason!=floor(nseason) | nseason<2) stop("The value of the argument 'nseason' must be an integer higher than 1",call.=FALSE)
+    }
+    # Seasonal effects require an intercept
+    if(!is.null(nseason)) if(!Intercept) stop("The argument 'nseason' is not applicable when 'Intercept=FALSE'!",call.=FALSE)
+    # Number of deterministic components: intercept, trend, seasonality
+    deterministic <- Intercept + switch(trend,"linear"=1,"quadratic"=2) + ifelse(is.null(nseason),0,nseason-1)
+    regim <- ars$nregim
+    # Checks specific to TAR/SETAR models
+    if(regim > 1){
+       if(delay<0 | delay!=floor(delay)) stop("The value of the argument 'delay' must be a non-negative integer!",call.=FALSE)
+       if(delay==0 & !is.null(setar)) stop("For SETAR models the value of the argument 'delay' must be a positive integer!",call.=FALSE)
+       if(is.null(t.series) & is.null(setar)) stop("For TAR models the argument 't.series' is required!",call.=FALSE)
+       if(is.null(thresholds)) stop("For TAR and SETAR models the argument 'thresholds' is required!",call.=FALSE) else thresholds <- sort(thresholds)
+       if(length(thresholds)!=regim-1)
+          stop(paste0("The length of the argument 'thresholds' must be ",regim-1,", and the length of the argument supplied is ",length(thresholds)),call.=FALSE)
+    }
+    # Maximum required lag
+    ps <- max(ars$p,ars$q,ars$d,delay)
+    # Validate threshold variable length for TAR models
+    if(regim > 1 & is.null(setar)){
+       if(length(t.series)!=n+ps)
+          stop(paste0("The length of the argument 't.series' must be ",n+ps,", and the length of the argument supplied is ",length(t.series)),call.=FALSE)
+    }
+    # Validate exogenous series for ARX terms
+    if(max(ars$q)>0){
+       if(is.null(ex.series)) stop("An exogenous series is required!",call.=FALSE)
+       if(nrow(ex.series)!=n+ps)
+          stop(paste0("The number of rows of 'ex.series' must be ",n+ps,", and the number of rows of the argument supplied is ",nrow(ex.series)),call.=FALSE)
+       r <- ncol(ex.series)
+    }else r <- 0
+    # Validate extra distribution-specific parameters
+    if(dist %in% c("Student-t","Hyperbolic","Slash","Contaminated normal","Skew-Student-t")){
+       if(is.null(extra))
+          stop("For 'Student-t', 'Hyperbolic', 'Slash', 'Contaminated normal' and 'Skew-Student-t' distributions an extra parameter value must be specified!",call.=FALSE)
+       if(dist %in% c("Student-t","Skew-Student-t","Hyperbolic","Slash") & extra[1]<=0)
+          stop("For 'Student-t', 'Skew-Student-t', 'Hyperbolic', and 'Slash' distributions the extra parameter value must be positive!",call.=FALSE)
+       if(dist=="Contaminated normal" & (length(extra)!=2 | any(extra<=0) | any(extra>=1)))
+          stop("For 'Contaminated normal' distribution the extra parameter must be a 2-dimensional vector with values in the interval (0,1)!",call.=FALSE)
+    }
+    # Validate skewness parameters for skewed distributions
+    if(dist %in% c("Skew-normal","Skew-Student-t") & (is.null(skewness) | length(skewness)!=k)){
+       stop(paste0("For 'Skew-normal' and 'Skew-Student-t' distributions an ",k,"-dimensional skewness parameter must be specified!"),call.=FALSE)
+       skewness <- matrix(skewness,k,1)
+    }
   }
-  # Seasonal effects require an intercept
-  if(!is.null(nseason)) if(!Intercept) stop("The argument 'nseason' is not applicable when 'Intercept=FALSE'!",call.=FALSE)
-  # Number of deterministic components: intercept, trend, seasonality
-  deterministic <- Intercept + switch(trend,"linear"=1,"quadratic"=2) + ifelse(is.null(nseason),0,nseason-1)
-  regim <- ars$nregim
-  # Checks specific to TAR/SETAR models
-  if(regim > 1){
-     if(delay<0 | delay!=floor(delay)) stop("The value of the argument 'delay' must be a non-negative integer!",call.=FALSE)
-     if(delay==0 & !is.null(setar)) stop("For SETAR models the value of the argument 'delay' must be a positive integer!",call.=FALSE)
-     if(is.null(t.series) & is.null(setar)) stop("For TAR models the argument 't.series' is required!",call.=FALSE)
-     if(is.null(thresholds)) stop("For TAR and SETAR models the argument 'thresholds' is required!",call.=FALSE) else thresholds <- sort(thresholds)
-     if(length(thresholds)!=regim-1)
-        stop(paste0("The length of the argument 'thresholds' must be ",regim-1,", and the length of the argument supplied is ",length(thresholds)),call.=FALSE)
-  }
-  # Maximum required lag
-  ps <- max(ars$p,ars$q,ars$d,delay)
-  # Validate threshold variable length for TAR models
-  if(regim > 1 & is.null(setar)){
-     if(length(t.series)!=n+ps)
-        stop(paste0("The length of the argument 't.series' must be ",n+ps,", and the length of the argument supplied is ",length(t.series)),call.=FALSE)
-  }
-  # Validate exogenous series for ARX terms
-  if(max(ars$q)>0){
-     if(is.null(ex.series)) stop("An exogenous series is required!",call.=FALSE)
-     if(nrow(ex.series)!=n+ps)
-        stop(paste0("The number of rows of 'ex.series' must be ",n+ps,", and the number of rows of the argument supplied is ",nrow(ex.series)),call.=FALSE)
-     r <- ncol(ex.series)
-  }else r <- 0
-  # Validate extra distribution-specific parameters
-  if(dist %in% c("Student-t","Hyperbolic","Slash","Contaminated normal","Skew-Student-t")){
-     if(is.null(extra))
-        stop("For 'Student-t', 'Hyperbolic', 'Slash', 'Contaminated normal' and 'Skew-Student-t' distributions an extra parameter value must be specified!",call.=FALSE)
-     if(dist %in% c("Student-t","Skew-Student-t","Hyperbolic","Slash") & extra[1]<=0)
-        stop("For 'Student-t', 'Skew-Student-t', 'Hyperbolic', and 'Slash' distributions the extra parameter value must be positive!",call.=FALSE)
-     if(dist=="Contaminated normal" & (length(extra)!=2 | any(extra<=0) | any(extra>=1)))
-        stop("For 'Contaminated normal' distribution the extra parameter must be a 2-dimensional vector with values in the interval (0,1)!",call.=FALSE)
-  }
-  # Validate skewness parameters for skewed distributions
-  if(dist %in% c("Skew-normal","Skew-Student-t") & (is.null(skewness) | length(skewness)!=k)){
-     stop(paste0("For 'Skew-normal' and 'Skew-Student-t' distributions an ",k,"-dimensional skewness parameter must be specified!"),call.=FALSE)
-     skewness <- matrix(skewness,k,1)
-  }
+
   # Time index used for trend construction
   t.ids <- matrix(seq(ps+1,ps+n),n,1)
   # Construct deterministic design matrix (intercept and trend)
@@ -205,37 +238,37 @@ simtar <- function(n,k=2,ars=ars(),Intercept=TRUE,trend=c("none","linear","quadr
      detnam <- detnam[-1]
   }
   if(Verbose){
-     cat("\n\nSample size          :",n," time points")
-     cat("\nOutput Series        :",paste0("Y",1:k,collapse = " | "))
-     if(ars$nregim > 1) cat("\nThreshold Series     :",paste0(ifelse(is.null(setar),"Z",paste0("Y",setar))," with a delay equal to ",delay))
-     if(max(ars$q)>0) cat("\nExogenous Series     :",paste0("X",1:r,collapse=" | "))
-     cat("\nError Distribution   :",switch(dist,
+     message("\n\nSample size          :",n," time points")
+     message("\nOutput Series        :",paste0("Y",1:k,collapse = " | "))
+     if(ars$nregim > 1) message("\nThreshold Series     :",paste0(ifelse(is.null(setar),"Z",paste0("Y",setar))," with a delay equal to ",delay))
+     if(max(ars$q)>0) message("\nExogenous Series     :",paste0("X",1:r,collapse=" | "))
+     message("\nError Distribution   :",switch(dist,
                                            "Gaussian"=,"Laplace"=dist,
                                            "Student-t"=,"Slash"=,"Hyperbolic"=,"Contaminated normal"=paste0(dist,"(",paste0(extra,collapse=","),")"),
                                            "Skew-normal"=paste0(dist,"((",paste0(skewness,collapse=","),"))"),
                                            "Skew-Student-t"=paste0("Skew-Student-t(",extra,",",paste0("(",paste0(skewness,collapse=","),")"),")")
                                            ))
-     cat("\nNumber of regimes    :",ars$nregim)
-     cat("\nDeterministics       :",ifelse(length(detnam)>1,paste(detnam,collapse=" + "),detnam))
-     if(min(ars$p)==max(ars$p)) cat("\nAutoregressive orders:",paste0(ars$p[1]," in each regime"))
-     else cat("\nAutoregressive orders:",paste(ars$p,collapse=", "))
+     message("\nNumber of regimes    :",ars$nregim)
+     message("\nDeterministics       :",ifelse(length(detnam)>1,paste(detnam,collapse=" + "),detnam))
+     if(min(ars$p)==max(ars$p)) message("\nAutoregressive orders:",paste0(ars$p[1]," in each regime"))
+     else message("\nAutoregressive orders:",paste(ars$p,collapse=", "))
      if(max(ars$q)>0){
-        if(min(ars$q)==max(ars$q)) cat("\nMaximum lags for ES  :",paste0(ars$q[1]," in each regime"))
-        else cat("\nMaximum lags for ES  :",paste(ars$q,collapse=", "))
+        if(min(ars$q)==max(ars$q)) message("\nMaximum lags for ES  :",paste0(ars$q[1]," in each regime"))
+        else message("\nMaximum lags for ES  :",paste(ars$q,collapse=", "))
      }
      if(max(ars$d)>0){
-        if(min(ars$d)==max(ars$d)) cat("\nMaximum lags for TS  :",paste0(ars$d[1]," in each regime"))
-        else cat("\nMaximum lags for TS  :",paste(ars$d,collapse=", "))
+        if(min(ars$d)==max(ars$d)) message("\nMaximum lags for TS  :",paste0(ars$d[1]," in each regime"))
+        else message("\nMaximum lags for TS  :",paste(ars$d,collapse=", "))
      }
      if(ars$nregim > 1){
        thresholds1 <- paste0(c("(-Inf",paste0("(",thresholds)),",",c(paste0(thresholds,"]"),"Inf)"))
        d <- data.frame(thresholds1)
        rownames(d) <- paste("Regime",1:nrow(d))
        colnames(d) <- " "
-       cat("\n\nThresholds")
+       message("\n\nThresholds")
        print(d)
      }
-     cat("\n")
+     message("\n")
   }
   # Validation of parameter matrices dimensions and definite-positiveness of scale matrices
   for(i in 1:regim){
@@ -271,15 +304,15 @@ simtar <- function(n,k=2,ars=ars(),Intercept=TRUE,trend=c("none","linear","quadr
       if(Verbose){
          colnames(parms2) <- name
          rownames(parms2) <- paste0("Y",1:k)
-         cat("\nRegime ",i,":\n")
-         cat("\nAutoregressive coefficients\n")
+         message("\nRegime ",i,":\n")
+         message("\nAutoregressive coefficients\n")
          print(parms2,na.print="|")
       }
       parms[[i]]$scale2  <- try(chol(parms[[i]]$scale),silent=TRUE)
       if(!is.matrix(parms[[i]]$scale2)) stop(paste0("The scale matrix in regime ",i," is not positive definite!"),call.=FALSE)
       if(Verbose){
          colnames(parms[[i]]$scale) <- rownames(parms[[i]]$scale) <- rownames(parms2)
-         cat("\nScale parameter\n")
+         message("\nScale parameter\n")
          print(parms[[i]]$scale)
       }
   }
@@ -315,7 +348,7 @@ simtar <- function(n,k=2,ars=ars(),Intercept=TRUE,trend=c("none","linear","quadr
                   "Laplace"={rexp(1,rate=1/8)},
                   "Hyperbolic"={rgig(n=1,lambda=1,chi=1,psi=extra^2)})
       # Skewness offset if applicable
-      if(dist %in% c("Skew-normal","Skew-Student-t")) offset <- sqrt(u)*matrix(skewness*qnorm(0.5 + runif(k)*0.5),k,1)
+      if(dist %in% c("Skew-normal","Skew-Student-t")) offset <- sqrt(u)*matrix(matrix(skewness,k,1)*matrix(qnorm(0.5 + runif(k)*0.5),k,1),k,1)
       else offset <- matrix(0,k,1)
       # Generate the observation
       myseries[current,] <- crossprod(parms[[regimeni]]$scale2,matrix(sqrt(u)*rnorm(k),k,1)) + matrix(mu,k,1) + offset

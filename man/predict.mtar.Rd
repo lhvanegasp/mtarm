@@ -8,7 +8,7 @@
   object,
   ...,
   newdata,
-  n.ahead = 1,
+  n.ahead = NULL,
   row.names,
   credible = 0.95,
   out.of.sample = FALSE
@@ -31,7 +31,8 @@ model), and, when \code{out.of.sample = TRUE}, the realized values of the output
 required credible intervals. By default, \code{credible} is set to \code{0.95}.}
 
 \item{out.of.sample}{An optional logical indicator. If \code{TRUE} then the log-score,
-Absolute Error (AE), Absolute Percentage Error (APE) and Squared Error (SE) are computed
+Energy-Score (ES), Absolute Error (AE), Absolute Percentage Error (APE), Squared Error (SE),
+ are computed
 as measures of predictive accuracy. In this case, \code{newdata} must include the observed
 values of the output series.}
 }
@@ -52,29 +53,50 @@ Computes forecasts from a fitted multivariate Threshold Autoregressive (TAR) mod
 ###### Example 1: Returns of the closing prices of three financial indexes
 data(returns)
 fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
-             subset={Date<="2016-03-14"}, dist="Student-t",
-             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=2000, n.sim=3000,
-             n.thin=2, ssvs=TRUE)
-out1 <- predict(fit1, newdata=subset(returns,Date>"2016-03-14"), n.ahead=10)
-out1$summary
+             subset={Date<="2015-12-07"}, dist="Student-t",
+             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
+             n.thin=2)
+p1 <- predict(fit1, newdata=subset(returns,Date>"2015-12-07"), n.ahead=75,
+              credible=0.8, out.of.sample=TRUE)
+with(p1,summary)
+with(p1,cbind(LS,ES,APE,CR))
+plot(p1,last=100)
 
 ###### Example 2: Rainfall and two river flows in Colombia
 data(riverflows)
 fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
-             subset={Date<="2009-04-04"}, dist="Laplace",
-             ars=ars(nregim=3,p=5), n.burnin=2000, n.sim=3000, n.thin=2)
-out2 <- predict(fit2, newdata=subset(riverflows,Date>"2009-04-04"), n.ahead=10)
-out2$summary
+             subset={Date<="2009-02-13"}, dist="Laplace",
+             ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
+p2 <- predict(fit2, newdata=subset(riverflows,Date>"2009-02-13"), n.ahead=60,
+              credible=0.8, out.of.sample=TRUE)
+with(p2,summary)
+with(p2,cbind(LS,ES,APE,CR))
+plot(p2,last=100)
 
 ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 data(iceland.rf)
 fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
-             data=iceland.rf, subset={Date<="1974-12-21"}, row.names=Date,
-             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=2000, n.sim=3000,
-             n.thin=2)
-out3 <- predict(fit3, newdata=subset(iceland.rf,Date>"1974-12-21"), n.ahead=10)
-out3$summary
+             data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
+             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
+             n.thin=2, dist="Slash")
+p3 <- predict(fit3, newdata=subset(iceland.rf,Date>"1974-11-06"), n.ahead=55,
+              credible=0.8, out.of.sample=TRUE)
+with(p3,summary)
+with(p3,cbind(LS,ES,APE,CR))
+plot(p3,last=100)
+
+###### Example 4: U.S. stock returns
+data(US.returns)
+fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
+             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
+             n.sim=2000, n.thin=2, dist="Student-t")
+p4 <- predict(fit4, newdata=subset(US.returns,Date>"2025-11-28"),n.ahead=100,
+              credible=0.8, out.of.sample=TRUE)
+with(p4,summary)
+with(p4,cbind(LS,ES,APE,CR))
+plot(p4,last=100)
 }
+
 }
 \references{
 Nieto, F.H. (2005) Modeling Bivariate Threshold Autoregressive Processes in the Presence of Missing Data.

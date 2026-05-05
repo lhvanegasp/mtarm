@@ -1,7 +1,8 @@
 Package: mtarm
 Type: Package
 Title: Bayesian Estimation of Multivariate Threshold Autoregressive Models
-Version: 0.1.8
+Version: 0.1.9
+url: https://lhvanegasp.github.io/mtarm/
 Authors@R: c(person("Luis Hernando","Vanegas",role=c("aut","cre"),email="lhvanegasp@unal.edu.co"),
              person("Sergio Alejandro","Calderón",role="aut",email="sacalderonv@unal.edu.co"),             
              person("Luz Marina","Rondón",role="aut",email="lmrondonp@unal.edu.co"))
@@ -11,10 +12,11 @@ Author: Luis Hernando Vanegas [aut, cre],
 Maintainer: Luis Hernando Vanegas <lhvanegasp@unal.edu.co>
 Description: Estimation, inference and forecasting using the Bayesian approach for multivariate threshold autoregressive (TAR) models in which the distribution used to describe the noise process belongs to the class of Gaussian variance mixtures.
 Imports: methods, stats, utils, graphics, Formula, grDevices, GIGrvg, coda, mvtnorm, future.apply, progressr, future
+Suggests: cli
 BugReports: https://github.com/lhvanegasp/mtarm/issues
 Encoding: UTF-8
 LazyData: false
 RoxygenNote: 7.3.3
 NeedsCompilation: no
 License: GPL-2 | GPL-3
-URL: https://github.com/lhvanegasp/mtarm
+URL: https://github.com/lhvanegasp/mtarm, https://lhvanegasp.github.io/mtarm/

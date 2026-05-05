@@ -7,9 +7,9 @@
 #' predictive performance.
 #' @param n.ahead a positive integer specifying the number of forecast steps ahead to use in the
 #' predictive performance evaluation.
-#' @export out.of.sample
-out.of.sample <- function(...,newdata,n.ahead) {
-  UseMethod("out.of.sample")
+#' @export out_of_sample
+out_of_sample <- function(...,newdata,n.ahead) {
+  UseMethod("out_of_sample")
 }
 #'
 #' @title Deviance Information Criterion (DIC)
@@ -48,33 +48,41 @@ WAIC <- function(...) {
 #' \donttest{
 #' ###### Example 1: Returns of the closing prices of three financial indexes
 #' data(returns)
-#' fit1a <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
-#'               subset={Date<="2016-03-14"}, dist="Student-t",
-#'               ars=ars(nregim=3,p=c(1,1,2)), n.burnin=2000, n.sim=3000,
-#'               n.thin=2)
-#' fit1b <- update(fit1a,dist="Slash")
-#' fit1c <- update(fit1a,dist="Laplace")
-#' DIC(fit1a,fit1b,fit1c)
+#' fit1 <- mtar_grid(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
+#'                   subset={Date<="2015-12-07"}, dist=c("Gaussian","Student-t",
+#'                   "Slash","Laplace"), nregim.min=2, nregim.max=3, p.min=2,
+#'                   p.max=2, n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   plan_strategy="multisession")
+#' DIC(fit1)
 #'
 #' ###### Example 2: Rainfall and two river flows in Colombia
 #' data(riverflows)
-#' fit2a <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
-#'               subset={Date<="2009-04-04"}, dist="Laplace",
-#'               ars=ars(nregim=3,p=5), n.burnin=2000, n.sim=3000, n.thin=2)
-#' fit2b <- update(fit2a,dist="Slash")
-#' fit2c <- update(fit2a,dist="Student-t")
-#' DIC(fit2a,fit2b,fit2c)
+#' fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
+#'                   row.names=Date, subset={Date<="2009-02-13"},dist="Laplace",
+#'                   nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=1000,
+#'                   n.sim=2000, n.thin=2, plan_strategy="multisession")
+#' DIC(fit2)
 #'
 #' ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 #' data(iceland.rf)
-#' fit3a <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
-#'               data=iceland.rf, subset={Date<="1974-12-21"}, row.names=Date,
-#'               ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=2000, n.sim=3000,
-#'               n.thin=2, dist="Slash")
-#' fit3b <- update(fit3a,dist="Laplace")
-#' fit3c <- update(fit3a,dist="Student-t")
-#' DIC(fit3a,fit3b,fit3c)
+#' fit3 <- mtar_grid(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
+#'                   data=iceland.rf,subset={Date<="1974-11-06"},row.names=Date,
+#'                   dist=c("Slash","Student-t"), nregim.min=1, nregim.max=2,
+#'                   p.min=15, p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,
+#'                   n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   plan_strategy="multisession")
+#' DIC(fit3)
+#'
+#' ###### Example 4: U.S. stock returns
+#' data(US.returns)
+#' fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
+#'                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
+#'                   nregim.min=1, nregim.max=2, p.min=3, p.max=3, d.min=3,
+#'                   d.max=3, n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   plan_strategy="multisession")
+#' DIC(fit4)
 #' }
+#'
 #'
 DIC.mtar <- function(...){
   # Internal function to compute minus twice the log-likelihood
@@ -103,6 +111,7 @@ DIC.mtar <- function(...){
          }
       }else{# Case of symmetric distributions
            out <- colSums(t(resu)*tcrossprod(chol2inv(chol(Sigma)),resu))
+
            # Distribution-specific likelihood kernels
            out <- switch(dist,
                          "Gaussian"={exp(-out/2)},
@@ -130,7 +139,6 @@ DIC.mtar <- function(...){
   for(l in 1:(length(another))){
       n.sim <- another[[l]]$n.sim
       dist <- another[[l]]$dist
-      Dbar <- vector()
       k <- ncol(another[[l]]$data[[1]]$y)
       Dbarv <- vector()
       # Indices for threshold series if multiple regimes
@@ -224,33 +232,41 @@ DIC.mtar <- function(...){
 #' \donttest{
 #' ###### Example 1: Returns of the closing prices of three financial indexes
 #' data(returns)
-#' fit1a <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
-#'               subset={Date<="2016-03-14"}, dist="Student-t",
-#'               ars=ars(nregim=3,p=c(1,1,2)), n.burnin=2000, n.sim=3000,
-#'               n.thin=2)
-#' fit1b <- update(fit1a,dist="Slash")
-#' fit1c <- update(fit1a,dist="Laplace")
-#' WAIC(fit1a,fit1b,fit1c)
+#' fit1 <- mtar_grid(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
+#'                   subset={Date<="2015-12-07"}, dist=c("Gaussian","Student-t",
+#'                   "Slash","Laplace"), nregim.min=2, nregim.max=3, p.min=2,
+#'                   p.max=2, n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   plan_strategy="multisession")
+#' WAIC(fit1)
 #'
 #' ###### Example 2: Rainfall and two river flows in Colombia
 #' data(riverflows)
-#' fit2a <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
-#'               subset={Date<="2009-04-04"}, dist="Laplace",
-#'               ars=ars(nregim=3,p=5), n.burnin=2000, n.sim=3000, n.thin=2)
-#' fit2b <- update(fit2a,dist="Slash")
-#' fit2c <- update(fit2a,dist="Student-t")
-#' WAIC(fit2a,fit2b,fit2c)
+#' fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
+#'                   row.names=Date, subset={Date<="2009-02-13"},dist="Laplace",
+#'                   nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=1000,
+#'                   n.sim=2000, n.thin=2, plan_strategy="multisession")
+#' WAIC(fit2)
 #'
 #' ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 #' data(iceland.rf)
-#' fit3a <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
-#'               data=iceland.rf, subset={Date<="1974-12-21"}, row.names=Date,
-#'               ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=2000, n.sim=3000,
-#'               n.thin=2, dist="Slash")
-#' fit3b <- update(fit3a,dist="Laplace")
-#' fit3c <- update(fit3a,dist="Student-t")
-#' WAIC(fit3a,fit3b,fit3c)
+#' fit3 <- mtar_grid(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
+#'                   data=iceland.rf,subset={Date<="1974-11-06"},row.names=Date,
+#'                   dist=c("Slash","Student-t"), nregim.min=1, nregim.max=2,
+#'                   p.min=15, p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,
+#'                   n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   plan_strategy="multisession")
+#' WAIC(fit3)
+#'
+#' ###### Example 4: U.S. stock returns
+#' data(US.returns)
+#' fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
+#'                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
+#'                   nregim.min=1, nregim.max=2, p.min=3, p.max=3, d.min=3,
+#'                   d.max=3, n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   plan_strategy="multisession")
+#' WAIC(fit4)
 #' }
+#'
 #'
 WAIC.mtar <- function(...){
   # Internal function to compute the likelihood contribution
@@ -360,37 +376,51 @@ WAIC.mtar <- function(...){
 #' @param ... additional arguments passed to specific coercion methods.
 #' @return A list of \code{mcmc} objects containing the posterior simulation draws
 #' generated by the \code{mtar()} routine.
-#' @method as.mcmc mtar
 #' @seealso \code{\link[coda]{as.mcmc}}
+#' @method as.mcmc mtar
 #' @export
 #' @examples
 #' \donttest{
 #' ###### Example 1: Returns of the closing prices of three financial indexes
 #' data(returns)
 #' fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
-#'              subset={Date<="2016-03-14"}, dist="Student-t",
-#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=2000, n.sim=3000,
-#'              n.thin=2)
+#'              subset={Date<="2015-12-07"}, dist="Student-t",
+#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
+#'              n.thin=2, ssvs=TRUE)
 #' fit1.mcmc <- coda::as.mcmc(fit1)
 #' summary(fit1.mcmc)
+#' #plot(fit1.mcmc)
 #'
 #' ###### Example 2: Rainfall and two river flows in Colombia
 #' data(riverflows)
 #' fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
-#'              subset={Date<="2009-04-04"}, dist="Laplace",
-#'              ars=ars(nregim=3,p=5), n.burnin=2000, n.sim=3000, n.thin=2)
+#'              subset={Date<="2009-02-13"}, dist="Laplace",
+#'              ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
 #' fit2.mcmc <- coda::as.mcmc(fit2)
 #' summary(fit2.mcmc)
+#' #plot(fit2.mcmc)
 #'
 #' ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 #' data(iceland.rf)
 #' fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
-#'              data=iceland.rf, subset={Date<="1974-12-21"}, row.names=Date,
-#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=2000, n.sim=3000,
+#'              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
+#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
 #'              n.thin=2, dist="Slash")
 #' fit3.mcmc <- coda::as.mcmc(fit3)
 #' summary(fit3.mcmc)
+#' #plot(fit3.mcmc)
+#'
+#' ###### Example 4: U.S. stock returns
+#' data(US.returns)
+#' fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
+#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
+#'              n.sim=2000, n.thin=2, dist="Student-t")
+#' fit4.mcmc <- coda::as.mcmc(fit4)
+#' summary(fit4.mcmc)
+#' #plot(fit4.mcmc)
 #' }
+#'
+#'
 as.mcmc.mtar <- function(x,...){
   # Number of response variables
   k <- ncol(x$data[[1]]$y)
@@ -493,32 +523,32 @@ as.mcmc.mtar <- function(x,...){
 #' @export
 print.summtarmcmc <- function(x,...,digits=max(3,getOption("digits")-2)){
   # Print basic MCMC information: iteration range, thinning, and sample size
-  cat("\n\n Iterations = ",paste0(x$star,":",x$end))
-  cat("\n Thinning interval = ",x$thin)
-  cat("\n Sample size per chain = ",x$sz,"\n\n")
+  message("\n\n Iterations = ",paste0(x$star,":",x$end))
+  message("\n Thinning interval = ",x$thin)
+  message("\n Sample size per chain = ",x$sz,"\n\n")
   # Print threshold parameters if the model has multiple regimes
   if(!is.null(x$thresholds)){
-     cat("\nThresholds:\n")
+     message("\nThresholds:\n")
      print(x$thresholds,digits=digits)
   }
   # Loop over regimes and print regime-specific parameters
   for(j in 1:x$regim){
-      cat("\n\nRegime ",j,"\n")
+      message("\n\nRegime ",j,"\n")
       # Print location parameters
-      cat("\n\nAutoregressive coefficients:\n")
+      message("\n\nAutoregressive coefficients:\n")
       print(x$location[[j]],digits=digits)
       # Print scale parameters
-      cat("\n\nScale parameter:\n")
+      message("\n\nScale parameter:\n")
       print(x$scale[[j]],digits=digits)
   }
   # Print skewness parameters if present
   if(!is.null(x$skewness)){
-     cat("\n\nSkewness parameter:\n")
+     message("\n\nSkewness parameter:\n")
      print(x$skewness,digits=digits)
   }
   # Print extra parameters if present
   if(!is.null(x$extra)){
-     cat("\n\nExtra parameter:\n")
+     message("\n\nExtra parameter:\n")
      print(x$extra,digits=digits)
   }
 }
@@ -581,26 +611,26 @@ plot.mtarmcmc <- function(x, trace=TRUE, density=TRUE, smooth=FALSE, bwf, auto.l
   for(j in 1:x$regim){
       # Open a new graphics device for location parameters
       dev.new()
-      cat(paste("\nAutoregressive coefficients Regime",j,"\n"))
+      message(paste("\nAutoregressive coefficients Regime",j,"\n"))
       plot(x$location[[j]], trace=trace, density=density, smooth=smooth, bwf,
            auto.layout=auto.layout, ask=ask, ...)
       # Open a new graphics device for scale parameters
       dev.new()
-      cat(paste("\nScale parameter Regime",j,"\n"))
+      message(paste("\nScale parameter Regime",j,"\n"))
       plot(x$scale[[j]], trace=trace, density=density, smooth=smooth, bwf,
            auto.layout=auto.layout, ask=ask, ...)
   }
   # Plot skewness parameters if present
   if(!is.null(x$skewness)){
      dev.new()
-     cat("\nSkewness parameter\n")
+     message("\nSkewness parameter\n")
      plot(x$skewness, trace=trace, density=density, smooth=smooth, bwf,
           auto.layout=auto.layout, ask=ask, ...)
   }
   # Plot extra parameters if present
   if(!is.null(x$extra)){
      dev.new()
-     cat("\nExtra parameter\n")
+     message("\nExtra parameter\n")
      plot(x$extra, trace=trace, density=density, smooth=smooth, bwf,
           auto.layout=auto.layout, ask=ask, ...)
   }
@@ -611,9 +641,43 @@ plot.mtarmcmc <- function(x, trace=TRUE, density=TRUE, smooth=FALSE, bwf, auto.l
 #' @param prob a numeric scalar in the interval \eqn{(0,1)} giving the target probability content of
 #' the intervals. By default, \code{prob} is set to \code{0.95}.
 #' @param ... Optional additional arguments for methods. None are used at present.
-#' @method HPDinterval mtar
 #' @seealso \code{\link[coda]{HPDinterval}}
+#' @method HPDinterval mtar
 #' @export
+#'
+#' @examples
+#' \donttest{
+#' ###### Example 1: Returns of the closing prices of three financial indexes
+#' data(returns)
+#' fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
+#'              subset={Date<="2015-12-07"}, dist="Student-t",
+#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
+#'              n.thin=2, ssvs=TRUE)
+#' coda::HPDinterval(fit1)
+#'
+#' ###### Example 2: Rainfall and two river flows in Colombia
+#' data(riverflows)
+#' fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
+#'              subset={Date<="2009-02-13"}, dist="Laplace",
+#'              ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
+#' coda::HPDinterval(fit2)
+#'
+#' ###### Example 3: Temperature, precipitation, and two river flows in Iceland
+#' data(iceland.rf)
+#' fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
+#'              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
+#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
+#'              n.thin=2, dist="Slash")
+#' coda::HPDinterval(fit3)
+#'
+#' ###### Example 4: U.S. stock returns
+#' data(US.returns)
+#' fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
+#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
+#'              n.sim=2000, n.thin=2, dist="Student-t")
+#' coda::HPDinterval(fit4)
+#' }
+#'
 HPDinterval.mtar <- function(obj, prob=0.95, ...){
   # Convert the mtar object to an mcmc object
   obj2 <- as.mcmc(obj)
@@ -678,26 +742,26 @@ HPDinterval.mtar <- function(obj, prob=0.95, ...){
 #' @export
 print.HDPmtar <- function(x, digits=max(3, getOption("digits") - 2), ...){
   # Display the probability level used for the HPD intervals
-  cat("\nProbability = ",x$prob,"\n\n")
+  message("\nProbability = ",x$prob,"\n\n")
   # Print HPD intervals for threshold parameters if they are present
   if(!is.null(x$thresholds)){
-     cat("Thresholds:\n")
+     message("Thresholds:\n")
      print(x$thresholds,digits=digits,na.print="")
   }
   # Print HPD intervals for location parameters
-  cat("\n\nAutoregressive coefficients:\n")
+  message("\n\nAutoregressive coefficients:\n")
   print(x$location,digits=digits,na.print="")
   # Print HPD intervals for scale parameters
-  cat("\n\nScale parameter:\n")
+  message("\n\nScale parameter:\n")
   print(x$scale,digits=digits,na.print="")
   # Print HPD intervals for skewness parameters if they are present
   if(!is.null(x$skewness)){
-     cat("\n\nSkewness parameter:\n")
+     message("\n\nSkewness parameter:\n")
      print(x$skewness,digits=digits,na.print="")
   }
   # Print HPD intervals for extra parameters if they are present
   if(!is.null(x$extra)){
-     cat("\n\nExtra parameter:\n")
+     message("\n\nExtra parameter:\n")
      print(x$extra,digits=digits,na.print="")
   }
 }

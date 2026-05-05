@@ -72,7 +72,7 @@ coef.mtar <- function(object,...,FUN=mean){
   # Skewness parameters for skewed distributions
   if(object$dist %in% c("Skew-normal","Skew-Student-t")){
      out_$skewness <- matrix(apply(object$chains$delta,1,FUN,...),k,1)
-     rownames(out_$skewness) <- paste0("delta",1:k)
+     rownames(out_$skewness) <- paste0("lambda",1:k)
      colnames(out_$skewness) <- ""
   }
   # Extra tail-thickness parameters for heavy-tailed distributions
@@ -236,7 +236,7 @@ summary.mtar <- function(object, credible=0.95,...){
   # Skewness parameter summaries
   if(object$dist %in% c("Skew-normal","Skew-Student-t")){
      out <- resumen(object$chains$delta)
-     rownames(out) <- paste0(paste0("delta",1:k),paste0(rep("",max(nchar(object$name[[1]]))-6),collapse=" "))
+     rownames(out) <- paste0(paste0("lambda",1:k),paste0(rep("",max(nchar(object$name[[1]]))-6),collapse=" "))
      out_$delta <- out
   }
   # Extra parameters for heavy-tailed distributions
@@ -260,32 +260,32 @@ summary.mtar <- function(object, credible=0.95,...){
 #' @export
 print.summary_mtar <- function(x, digits=max(3, getOption("digits") - 2),...){
   # Print sample size and optional row names
-  cat("\n\nSample size          :",paste0(x$sample.size," time points",ifelse(is.null(x$row.names),"",x$row.names)))
+  message("\n\nSample size          :",paste0(x$sample.size," time points",ifelse(is.null(x$row.names),"",x$row.names)))
   # Print sample size and optional row names
-  cat(ifelse(x$ssvs,"\nOutput Series (OS)   :","\nOutput Series        :"),x$output.series)
+  message(ifelse(x$ssvs,"\nOutput Series (OS)   :","\nOutput Series        :"),x$output.series)
   # Print threshold series when more than one regime exists
-  if(x$ars$nregim > 1) cat(ifelse(max(x$ars$d)>0,"\nThreshold Series (TS):","\nThreshold Series     :"),x$threshold.series)
+  if(x$ars$nregim > 1) message(ifelse(max(x$ars$d)>0,"\nThreshold Series (TS):","\nThreshold Series     :"),x$threshold.series)
   # Print exogenous series if present
-  if(max(x$ars$q)>0) cat("\nExogenous Series (ES):",x$exogenous.series)
+  if(max(x$ars$q)>0) message("\nExogenous Series (ES):",x$exogenous.series)
   # Print error distribution and number of regimes
-  cat("\nError Distribution   :",x$dist)
-  cat("\nNumber of regimes    :",x$ars$nregim)
+  message("\nError Distribution   :",x$dist)
+  message("\nNumber of regimes    :",x$ars$nregim)
   # Print deterministic components
-  cat("\nDeterministics       :",x$deterministics)
+  message("\nDeterministics       :",x$deterministics)
   # Print autoregressive lag orders for each regime
-  if(min(x$ars$p)==max(x$ars$p)) cat("\nAutoregressive orders:",paste0(x$ars$p[1]," in each regime"))
-  else cat("\nAutoregressive orders:",paste(x$ars$p,collapse=", "))
+  if(min(x$ars$p)==max(x$ars$p)) message("\nAutoregressive orders:",paste0(x$ars$p[1]," in each regime"))
+  else message("\nAutoregressive orders:",paste(x$ars$p,collapse=", "))
   # Print maximum lags for exogenous variables if present
   if(max(x$ars$q)>0){
-     if(min(x$ars$q)==max(x$ars$q)) cat("\nMaximum lags for ES  :",paste0(x$ars$q[1]," in each regime"))
-     else cat("\nMaximum lags for ES  :",paste(x$ars$q,collapse=", "))
+     if(min(x$ars$q)==max(x$ars$q)) message("\nMaximum lags for ES  :",paste0(x$ars$q[1]," in each regime"))
+     else message("\nMaximum lags for ES  :",paste(x$ars$q,collapse=", "))
   }
   # Print maximum lags for threshold variable if present
   if(max(x$ars$d)>0){
-     if(min(x$ars$d)==max(x$ars$d)) cat("\nMaximum lags for TS  :",paste0(x$ars$d[1]," in each regime"))
-     else cat("\nMaximum lags for TS  :",paste(x$ars$d,collapse=", "))
+     if(min(x$ars$d)==max(x$ars$d)) message("\nMaximum lags for TS  :",paste0(x$ars$d[1]," in each regime"))
+     else message("\nMaximum lags for TS  :",paste(x$ars$d,collapse=", "))
   }
-  cat("\n\n")
+  message("\n\n")
   # If multiple regimes, print the threshold intervals (Mean, HDI_low, HDI_high)
   if(x$ars$nregim > 1){
      # Round threshold summary statistics
@@ -299,32 +299,32 @@ print.summary_mtar <- function(x, digits=max(3, getOption("digits") - 2),...){
      rownames(d) <- paste("Regime",1:nrow(d))
      colnames(d) <- rep(" ",3)
      # Print threshold summary table
-     cat("\nThresholds (Mean, HDI_low, HDI_high)\n")
+     message("\nThresholds (Mean, HDI_low, HDI_high)\n")
      print(d)
   }
   # Loop through regimes and print location and scale summaries
   for(i in 1:x$ars$nregim){
-      cat("\n\nRegime",i,":\n")
+      message("\n\nRegime",i,":\n")
       # Print SSVS inclusion probabilities for regime i if present
       if(x$ssvs) print(round(x$zeta[[i]],digits=2),digits=2)
       # Print autoregressive coefficients summary
-      cat("\nAutoregressive coefficients\n")
+      message("\nAutoregressive coefficients\n")
       print(round(x$location[[i]],digits=digits),na.print="   |   ")
       # Print scale parameter summary
-      cat("\nScale parameter (Mean, HDI_low, HDI_high)\n")
+      message("\nScale parameter (Mean, HDI_low, HDI_high)\n")
       print(round(x$scale[[i]],digits=digits),na.print="   .")
   }
   # Print skewness parameter if present
   if(x$dist %in% c("Skew-normal","Skew-Student-t")){
-     cat("\n\nSkewness parameter","\n")
+     message("\n\nSkewness parameter","\n")
      print(round(x$delta,digits=digits),na.print="   .   ",)
   }
   # Print extra parameters if present
   if(x$dist %in% c("Slash","Contaminated normal","Student-t","Hyperbolic","Skew-Student-t")){
-     cat("\n\nExtra parameter","\n")
+     message("\n\nExtra parameter","\n")
      print(round(x$extra,digits=digits),na.print="   .   ")
   }
-  cat("\n\n")
+  message("\n\n")
 }
 #'
 #'
@@ -366,7 +366,7 @@ fitted.mtar <- function(object,...){
       # Logical index: which rows belong to regime i
       places <- regs==i
       y <- object$data[[i]]$y[places,]
-      X <- object$data[[i]]$y[places,]
+      X <- object$data[[i]]$X[places,]
       location <- a[[i]]$location
       # Linear predictor X*beta for regime i
       if(object$ssvs){
@@ -469,32 +469,32 @@ print.listmtar <- function(x,...){
   # Build a string with the names of the exogenous series, if present
   if(min(x2$ars$q)>0) exogenous.series <- ifelse(length(colnames(x2$exogenous.series))==1,colnames(x2$exogenous.series),paste(colnames(x2$exogenous.series),collapse="    |    "))
   # Print the sample size and optional row names information
-  cat("\n\nSample size          :",paste0(nrow(x2$data[[1]]$X)," time points",ifelse(is.null(x2$row.names),"",x2$row.names)))
+  message("\n\nSample size          :",paste0(nrow(x2$data[[1]]$X)," time points",ifelse(is.null(x2$row.names),"",x2$row.names)))
   # Print the output series names
-  cat("\nOutput Series        :",output.series)
+  message("\nOutput Series        :",output.series)
   # If there is more than one regime, print the threshold series information
-  if(x2$ars$nregim > 1) cat(ifelse(max(x2$ars$d)>0,"\nThreshold Series (TS):","\nThreshold Series     :"),x2$ts)
+  if(x2$ars$nregim > 1) message(ifelse(max(x2$ars$d)>0,"\nThreshold Series (TS):","\nThreshold Series     :"),x2$ts)
   # If exogenous variables are included, print their names
-  if(max(x2$ars$q)>0) cat("\nExogenous Series (ES):",exogenous.series)
+  if(max(x2$ars$q)>0) message("\nExogenous Series (ES):",exogenous.series)
   # Print the noise process distribution
-  cat("\nError Distribution   :",paste0(x2$dist,collapse=", "))
+  message("\nError Distribution   :",paste0(x2$dist,collapse=", "))
   # Print the range of the number of regimes across models in the list
-  cat("\nNumber of regimes    :",paste0(c(x[[1]]$ars$nregim,x[[length(x)]]$ars$nregim),collapse=" to "))
+  message("\nNumber of regimes    :",paste0(c(x[[1]]$ars$nregim,x[[length(x)]]$ars$nregim),collapse=" to "))
   # Identify the deterministic components in the model: intercept, trend, and seasonality
   a <- ifelse(x2$Intercept,"Intercept","")
   b <- ifelse(x2$trend=="none","",paste0(ifelse(a=="","a ","+ a "),x2$trend," time trend"))
   c <- ifelse(is.null(x2$nseason),"",paste0("+ ",x2$nseason," seasonal periods"))
   # Print the deterministic terms included in the model
-  cat("\nDeterministics       :",paste(a,b,c))
+  message("\nDeterministics       :",paste(a,b,c))
   # Print the range of autoregressive orders p across models
-  cat("\nAutoregressive orders:",paste0(c(x[[1]]$ars$p[1],x[[length(x)]]$ars$p[1]),collapse=" to "))
+  message("\nAutoregressive orders:",paste0(c(x[[1]]$ars$p[1],x[[length(x)]]$ars$p[1]),collapse=" to "))
   # If exogenous variables are included, print the maximum lag orders q
   if(max(x2$ars$q)>0){
-     cat("\nMaximum lags for ES  :",paste0(c(x[[1]]$ars$q[1],x[[length(x)]]$ars$q[1]),collapse=" to "))
+     message("\nMaximum lags for ES  :",paste0(c(x[[1]]$ars$q[1],x[[length(x)]]$ars$q[1]),collapse=" to "))
   }
   # If threshold effects are included, print the maximum lag orders d
   if(max(x2$ars$d)>0){
-     cat("\nMaximum lags for TS  :",paste0(c(x[[1]]$ars$d[1],x[[length(x)]]$ars$d[1]),collapse=" to "))
+     message("\nMaximum lags for TS  :",paste0(c(x[[1]]$ars$d[1],x[[length(x)]]$ars$d[1]),collapse=" to "))
   }
 }
 #' @method print mtar
@@ -506,35 +506,35 @@ print.mtar <- function(x,...){
     # Build a string with the names of the exogenous series, if present
     if(min(x$ars$q)>0) exogenous.series <- ifelse(length(colnames(x$exogenous.series))==1,colnames(x$exogenous.series),paste(colnames(x$exogenous.series),collapse="    |    "))
     # Print the sample size and optional row names information
-    cat("\n\nSample size          :",paste0(nrow(x$data[[1]]$X)," time points",ifelse(is.null(x$row.names),"",x$row.names)))
+    message("\n\nSample size          :",paste0(nrow(x$data[[1]]$X)," time points",ifelse(is.null(x$row.names),"",x$row.names)))
     # Print the output series names
-    cat("\nOutput Series        :",output.series)
+    message("\nOutput Series        :",output.series)
     # If there is more than one regime, print the threshold series information
-    if(x$ars$nregim > 1) cat(ifelse(max(x$ars$d)>0,"\nThreshold Series (TS):","\nThreshold Series     :"),x$ts)
+    if(x$ars$nregim > 1) message(ifelse(max(x$ars$d)>0,"\nThreshold Series (TS):","\nThreshold Series     :"),x$ts)
     # If exogenous variables are included in the model, print their names
-    if(max(x$ars$q)>0) cat("\nExogenous Series (ES):",exogenous.series)
+    if(max(x$ars$q)>0) message("\nExogenous Series (ES):",exogenous.series)
     # Print the noise process distribution
-    cat("\nError Distribution   :",x$dist)
+    message("\nError Distribution   :",x$dist)
     # Print the number of regimes in the model
-    cat("\nNumber of regimes    :",x$regim)
+    message("\nNumber of regimes    :",x$regim)
     # Identify the deterministic components in the model: intercept, trend, and seasonality
     a <- ifelse(x$Intercept,"Intercept","")
     b <- ifelse(x$trend=="none","",paste0(ifelse(a=="","a ","+ a "),x$trend," time trend"))
     c <- ifelse(is.null(x$nseason),"",paste0("+ ",x$nseason," seasonal periods"))
     # Print the deterministic terms included in the model
-    cat("\nDeterministics       :",paste(a,b,c))
+    message("\nDeterministics       :",paste(a,b,c))
     # Print the autoregressive orders p by regime
-    if(min(x$ars$p)==max(x$ars$p)) cat("\nAutoregressive orders:",paste0(x$ars$p[1]," in each regime"))
-    else cat("\nAutoregressive orders:",paste(x$ars$p,collapse=", "))
+    if(min(x$ars$p)==max(x$ars$p)) message("\nAutoregressive orders:",paste0(x$ars$p[1]," in each regime"))
+    else message("\nAutoregressive orders:",paste(x$ars$p,collapse=", "))
     # If exogenous variables are included, print the maximum lag orders q by regime
     if(max(x$ars$q)>0){
-       if(min(x$ars$q)==max(x$ars$q)) cat("\nMaximum lags for ES  :",paste0(x$ars$q[1]," in each regime"))
-       else cat("\nMaximum lags for ES  :",paste(x$ars$q,collapse=", "))
+       if(min(x$ars$q)==max(x$ars$q)) message("\nMaximum lags for ES  :",paste0(x$ars$q[1]," in each regime"))
+       else message("\nMaximum lags for ES  :",paste(x$ars$q,collapse=", "))
     }
     # If threshold effects are included, print the maximum lag orders d by regime
     if(max(x$ars$d)>0){
-       if(min(x$ars$d)==max(x$ars$d)) cat("\nMaximum lags for TS  :",paste0(x$ars$d[1]," in each regime"))
-       else cat("\nMaximum lags for TS  :",paste(x$ars$d,collapse=", "))
+       if(min(x$ars$d)==max(x$ars$d)) message("\nMaximum lags for TS  :",paste0(x$ars$d[1]," in each regime"))
+       else message("\nMaximum lags for TS  :",paste(x$ars$d,collapse=", "))
     }
 }
 #'

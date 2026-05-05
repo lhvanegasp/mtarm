@@ -1,7 +1,7 @@
 #' @importFrom grDevices dev.new dev.interactive
 #' @importFrom graphics abline hist lines par identify curve legend
 #' @importFrom methods missingArg
-#' @importFrom stats pnorm pt density median model.extract model.matrix pgamma qgamma qnorm quantile rbeta rbinom rexp rgamma rnorm runif sd terms na.omit qqnorm dnorm predict resid fitted coef
+#' @importFrom stats pnorm pt density median model.extract model.matrix pgamma qgamma qnorm quantile rbeta rbinom rexp rgamma rnorm runif sd terms na.omit qqnorm dnorm predict resid fitted coef dist
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom Formula Formula model.part
 #' @importFrom mvtnorm pmvnorm pmvt
@@ -113,21 +113,23 @@
 #' @title U.S. Stock Returns
 #'
 #' @description The dataset comprises observations of both continuously compounded and
-#' simple returns derived from the S&P 500 index, along with the first difference of
+#' simple returns derived from the S&P 500 index, along with the difference of
 #' the Chicago Board Options Exchange Market Volatility Index (VIX). The sample period
-#' spans from January 5, 1990, to March 30, 2012.
+#' spans from January 5, 2005, to April 24, 2026.
 #'
 #' @docType data
 #'
 #' @usage data(US.returns)
 #'
-#' @format A data frame with 5606 rows and 4 variables:
+#' @format A data frame with 5420 rows and 6 variables:
 #' \describe{
 #'   \item{Date}{A vector indicating the date of each observation.}
+#'   \item{SP500}{A numeric vector giving the S&P500 index.}
+#'   \item{VIX}{A numeric vector giving the Chicago Board Options
+#'              Exchange Market Volatility Index (VIX).}
 #'   \item{CCR}{A numeric vector giving the continuously compounded returns.}
 #'   \item{SR}{A numeric vector giving the simple returns.}
-#'   \item{dVIX}{A numeric vector giving (the first difference of) the Chicago
-#'               Board Options Exchange Market Volatility Index (VIX).}
+#'   \item{dVIX}{A numeric vector giving the difference \eqn{VIX_{t-1}-VIX_{t-2}}.}
 #' }
 #' @keywords datasets
 #' @references Massacci, D. (2014) A two-regime threshold model with conditional skewed
@@ -135,7 +137,7 @@
 #' @examples
 #' data(US.returns)
 #' dev.new()
-#' plot(ts(as.matrix(US.returns[,-1])), main="Returns and (the first difference of) VIX")
+#' plot(ts(as.matrix(US.returns[,-1])))
 #'
 "US.returns"
 #'

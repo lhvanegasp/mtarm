@@ -20,33 +20,41 @@ for objects of class \code{mtar}.
 \donttest{
 ###### Example 1: Returns of the closing prices of three financial indexes
 data(returns)
-fit1a <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
-              subset={Date<="2016-03-14"}, dist="Student-t",
-              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=2000, n.sim=3000,
-              n.thin=2)
-fit1b <- update(fit1a,dist="Slash")
-fit1c <- update(fit1a,dist="Laplace")
-WAIC(fit1a,fit1b,fit1c)
+fit1 <- mtar_grid(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
+                  subset={Date<="2015-12-07"}, dist=c("Gaussian","Student-t",
+                  "Slash","Laplace"), nregim.min=2, nregim.max=3, p.min=2,
+                  p.max=2, n.burnin=1000, n.sim=2000, n.thin=2,
+                  plan_strategy="multisession")
+WAIC(fit1)
 
 ###### Example 2: Rainfall and two river flows in Colombia
 data(riverflows)
-fit2a <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
-              subset={Date<="2009-04-04"}, dist="Laplace",
-              ars=ars(nregim=3,p=5), n.burnin=2000, n.sim=3000, n.thin=2)
-fit2b <- update(fit2a,dist="Slash")
-fit2c <- update(fit2a,dist="Student-t")
-WAIC(fit2a,fit2b,fit2c)
+fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
+                  row.names=Date, subset={Date<="2009-02-13"},dist="Laplace",
+                  nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=1000,
+                  n.sim=2000, n.thin=2, plan_strategy="multisession")
+WAIC(fit2)
 
 ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 data(iceland.rf)
-fit3a <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
-              data=iceland.rf, subset={Date<="1974-12-21"}, row.names=Date,
-              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=2000, n.sim=3000,
-              n.thin=2, dist="Slash")
-fit3b <- update(fit3a,dist="Laplace")
-fit3c <- update(fit3a,dist="Student-t")
-WAIC(fit3a,fit3b,fit3c)
+fit3 <- mtar_grid(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
+                  data=iceland.rf,subset={Date<="1974-11-06"},row.names=Date,
+                  dist=c("Slash","Student-t"), nregim.min=1, nregim.max=2,
+                  p.min=15, p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,
+                  n.burnin=1000, n.sim=2000, n.thin=2,
+                  plan_strategy="multisession")
+WAIC(fit3)
+
+###### Example 4: U.S. stock returns
+data(US.returns)
+fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
+                  row.names=Date, dist=c("Laplace","Student-t","Slash"),
+                  nregim.min=1, nregim.max=2, p.min=3, p.max=3, d.min=3,
+                  d.max=3, n.burnin=1000, n.sim=2000, n.thin=2,
+                  plan_strategy="multisession")
+WAIC(fit4)
 }
+
 
 }
 \seealso{

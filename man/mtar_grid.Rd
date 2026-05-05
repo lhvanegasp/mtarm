@@ -27,7 +27,7 @@ mtar_grid(
   n.thin = 1,
   ssvs = FALSE,
   setar = NULL,
-  plan_strategy = c("sequential", "multisession"),
+  plan_strategy = c("multisession", "sequential"),
   progress = TRUE
 )
 }
@@ -126,6 +126,46 @@ regime (from \code{d.min} to \code{d.max}).
 In all calls to \code{mtar()}, the same set of time points is used for model fitting. This is
 achieved by appropriately adjusting the \code{subset} argument of \code{mtar()} for each model
 specification, thereby ensuring comparability across models.
+}
+\examples{
+\donttest{
+###### Example 1: Returns of the closing prices of three financial indexes
+data(returns)
+fit1 <- mtar_grid(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
+                  subset={Date<="2015-12-07"}, dist=c("Gaussian","Student-t",
+                  "Slash","Laplace"), nregim.min=2, nregim.max=3, p.min=2,
+                  p.max=2, n.burnin=1000, n.sim=2000, n.thin=2,
+                  plan_strategy="multisession")
+summary(fit1)
+
+###### Example 2: Rainfall and two river flows in Colombia
+data(riverflows)
+fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
+                  row.names=Date, subset={Date<="2009-02-13"},dist="Laplace",
+                  nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=1000,
+                  n.sim=2000, n.thin=2, plan_strategy="multisession")
+summary(fit2)
+
+###### Example 3: Temperature, precipitation, and two river flows in Iceland
+data(iceland.rf)
+fit3 <- mtar_grid(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
+                  data=iceland.rf,subset={Date<="1974-11-06"},row.names=Date,
+                  dist=c("Slash","Student-t"), nregim.min=1, nregim.max=2,
+                  p.min=15, p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,
+                  n.burnin=1000, n.sim=2000, n.thin=2,
+                  plan_strategy="multisession")
+summary(fit3)
+
+###### Example 4: U.S. stock returns
+data(US.returns)
+fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
+                  row.names=Date, dist=c("Laplace","Student-t","Slash"),
+                  nregim.min=1, nregim.max=2, p.min=3, p.max=3, d.min=3,
+                  d.max=3, n.burnin=1000, n.sim=2000, n.thin=2,
+                  plan_strategy="multisession")
+summary(fit4)
+}
+
 }
 \seealso{
 mtar
