@@ -210,7 +210,7 @@ data(returns)
 fit1 <- mtar_grid(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
                   subset={Date<="2015-12-07"}, dist=c("Gaussian","Student-t",
                   "Slash","Laplace"), nregim.min=2, nregim.max=3, p.min=2,
-                  p.max=2, n.burnin=1000, n.sim=2000, n.thin=2,
+                  p.max=2, n.burnin=100, n.sim=200, n.thin=2,
                   plan_strategy="multisession")
 summary(fit1)
 #>               Length Class Mode
@@ -227,16 +227,24 @@ summary(fit1)
 data(riverflows)
 fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
                   row.names=Date, subset={Date<="2009-02-13"},dist="Laplace",
-                  nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=1000,
-                  n.sim=2000, n.thin=2, plan_strategy="multisession")
-summary(fit2)
-#>             Length Class Mode
-#> Laplace.2.1 24     mtar  list
-#> Laplace.2.2 24     mtar  list
-#> Laplace.2.3 24     mtar  list
-#> Laplace.3.1 24     mtar  list
-#> Laplace.3.2 24     mtar  list
-#> Laplace.3.3 24     mtar  list
+                  nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=100,
+                  n.sim=200, n.thin=2, plan_strategy="multisession")
+fit2
+#> 
+#> 
+#> Sample size          :1137 time points (2006-01-04 to 2009-02-13)
+#> 
+#> Output Series        :Bedon    |    LaPlata
+#> 
+#> Threshold Series     :Rainfall with a estimated delay equal to 0
+#> 
+#> Error Distribution   :Laplace
+#> 
+#> Number of regimes    :2 to 3
+#> 
+#> Deterministics       :Intercept  
+#> 
+#> Autoregressive orders:1 to 3
 
 ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 data(iceland.rf)
@@ -244,24 +252,36 @@ fit3 <- mtar_grid(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
                   data=iceland.rf,subset={Date<="1974-11-06"},row.names=Date,
                   dist=c("Slash","Student-t"), nregim.min=1, nregim.max=2,
                   p.min=15, p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,
-                  n.burnin=1000, n.sim=2000, n.thin=2,
+                  n.burnin=100, n.sim=200, n.thin=2,
                   plan_strategy="multisession")
-summary(fit3)
-#>                    Length Class Mode
-#> Slash.1.15.4.2     23     mtar  list
-#> Slash.2.15.4.2     26     mtar  list
-#> Student-t.1.15.4.2 23     mtar  list
-#> Student-t.2.15.4.2 26     mtar  list
+fit3
+#> 
+#> 
+#> Sample size          :1026 time points (1972-01-16 to 1974-11-06)
+#> 
+#> Output Series        :Jokulsa    |    Vatnsdalsa
+#> 
+#> Exogenous Series (ES):Precipitation
+#> 
+#> Error Distribution   :Slash
+#> 
+#> Number of regimes    :1 to 2
+#> 
+#> Deterministics       :Intercept  
+#> 
+#> Autoregressive orders:15 to 15
+#> 
+#> Maximum lags for ES  :4 to 4
 
 ###### Example 4: U.S. stock returns
 data(US.returns)
 fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
                   nregim.min=1, nregim.max=2, p.min=3, p.max=3, d.min=3,
-                  d.max=3, n.burnin=1000, n.sim=2000, n.thin=2,
+                  d.max=3, n.burnin=100, n.sim=200, n.thin=2,
                   plan_strategy="multisession")
-#> Error in getGlobalsAndPackages(expr, envir = envir, globals = globals): The total size of the 7 globals exported for future expression (‘FUN()’) is 992.24 MiB. This exceeds the maximum allowed size 500.00 MiB per plan() argument 'maxSizeOfObjects'. This limit is set to protect against transfering too large objects to parallel workers by mistake, which may not be intended and could be costly. See help("future.globals.maxSize", package = "future") for how to adjust or remove the default threshold via an R option The three largest globals are ‘FUN’ (992.00 MiB of class ‘function’), ‘mycall’ (240.07 KiB of class ‘call’) and ‘grid’ (895 bytes of class ‘list’)
-summary(fit4)
+#> Error in getGlobalsAndPackages(expr, envir = envir, globals = globals): The total size of the 7 globals exported for future expression (‘FUN()’) is 649.84 MiB. This exceeds the maximum allowed size 500.00 MiB per plan() argument 'maxSizeOfObjects'. This limit is set to protect against transfering too large objects to parallel workers by mistake, which may not be intended and could be costly. See help("future.globals.maxSize", package = "future") for how to adjust or remove the default threshold via an R option The three largest globals are ‘FUN’ (649.61 MiB of class ‘function’), ‘mycall’ (240.07 KiB of class ‘call’) and ‘grid’ (895 bytes of class ‘list’)
+fit4
 #> Error: object 'fit4' not found
 # }
 ```

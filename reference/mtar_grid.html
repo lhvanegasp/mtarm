@@ -240,7 +240,7 @@ model specification considered in the grid.</p>
 <span class="r-in"><span><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu">mtar_grid</span><span class="op">(</span><span class="op">~</span> <span class="va">COLCAP</span> <span class="op">+</span> <span class="va">BOVESPA</span> <span class="op">|</span> <span class="va">SP500</span>, data<span class="op">=</span><span class="va">returns</span>, row.names<span class="op">=</span><span class="va">Date</span>,</span></span>
 <span class="r-in"><span>                  subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2015-12-07"</span><span class="op">}</span>, dist<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gaussian"</span>,<span class="st">"Student-t"</span>,</span></span>
 <span class="r-in"><span>                  <span class="st">"Slash"</span>,<span class="st">"Laplace"</span><span class="op">)</span>, nregim.min<span class="op">=</span><span class="fl">2</span>, nregim.max<span class="op">=</span><span class="fl">3</span>, p.min<span class="op">=</span><span class="fl">2</span>,</span></span>
-<span class="r-in"><span>                  p.max<span class="op">=</span><span class="fl">2</span>, n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                  p.max<span class="op">=</span><span class="fl">2</span>, n.burnin<span class="op">=</span><span class="fl">100</span>, n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               Length Class Mode</span>
@@ -257,16 +257,24 @@ model specification considered in the grid.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">riverflows</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu">mtar_grid</span><span class="op">(</span><span class="op">~</span> <span class="va">Bedon</span> <span class="op">+</span> <span class="va">LaPlata</span> <span class="op">|</span> <span class="va">Rainfall</span>, data<span class="op">=</span><span class="va">riverflows</span>,</span></span>
 <span class="r-in"><span>                  row.names<span class="op">=</span><span class="va">Date</span>, subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2009-02-13"</span><span class="op">}</span>,dist<span class="op">=</span><span class="st">"Laplace"</span>,</span></span>
-<span class="r-in"><span>                  nregim.min<span class="op">=</span><span class="fl">2</span>, nregim.max<span class="op">=</span><span class="fl">3</span>, p.min<span class="op">=</span><span class="fl">1</span>, p.max<span class="op">=</span><span class="fl">3</span>,n.burnin<span class="op">=</span><span class="fl">1000</span>,</span></span>
-<span class="r-in"><span>                  n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>, plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Length Class Mode</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.1 24     mtar  list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2 24     mtar  list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.3 24     mtar  list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.1 24     mtar  list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2 24     mtar  list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.3 24     mtar  list</span>
+<span class="r-in"><span>                  nregim.min<span class="op">=</span><span class="fl">2</span>, nregim.max<span class="op">=</span><span class="fl">3</span>, p.min<span class="op">=</span><span class="fl">1</span>, p.max<span class="op">=</span><span class="fl">3</span>,n.burnin<span class="op">=</span><span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                  n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>, plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit2</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Sample size          :1137 time points (2006-01-04 to 2009-02-13)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Output Series        :Bedon    |    LaPlata</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Threshold Series     :Rainfall with a estimated delay equal to 0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Error Distribution   :Laplace</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of regimes    :2 to 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Deterministics       :Intercept  </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive orders:1 to 3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 3: Temperature, precipitation, and two river flows in Iceland</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iceland.rf</span><span class="op">)</span></span></span>
@@ -274,24 +282,36 @@ model specification considered in the grid.</p>
 <span class="r-in"><span>                  data<span class="op">=</span><span class="va">iceland.rf</span>,subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"1974-11-06"</span><span class="op">}</span>,row.names<span class="op">=</span><span class="va">Date</span>,</span></span>
 <span class="r-in"><span>                  dist<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Slash"</span>,<span class="st">"Student-t"</span><span class="op">)</span>, nregim.min<span class="op">=</span><span class="fl">1</span>, nregim.max<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  p.min<span class="op">=</span><span class="fl">15</span>, p.max<span class="op">=</span><span class="fl">15</span>, q.min<span class="op">=</span><span class="fl">4</span>, q.max<span class="op">=</span><span class="fl">4</span>, d.min<span class="op">=</span><span class="fl">2</span>, d.max<span class="op">=</span><span class="fl">2</span>,</span></span>
-<span class="r-in"><span>                  n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                  n.burnin<span class="op">=</span><span class="fl">100</span>, n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    Length Class Mode</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.1.15.4.2     23     mtar  list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.15.4.2     26     mtar  list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.1.15.4.2 23     mtar  list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.15.4.2 26     mtar  list</span>
+<span class="r-in"><span><span class="va">fit3</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Sample size          :1026 time points (1972-01-16 to 1974-11-06)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Output Series        :Jokulsa    |    Vatnsdalsa</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exogenous Series (ES):Precipitation</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Error Distribution   :Slash</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of regimes    :1 to 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Deterministics       :Intercept  </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive orders:15 to 15</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Maximum lags for ES  :4 to 4</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 4: U.S. stock returns</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">US.returns</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu">mtar_grid</span><span class="op">(</span><span class="op">~</span> <span class="va">CCR</span> <span class="op">|</span> <span class="va">dVIX</span>, data<span class="op">=</span><span class="va">US.returns</span>, subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2025-11-28"</span><span class="op">}</span>,</span></span>
 <span class="r-in"><span>                  row.names<span class="op">=</span><span class="va">Date</span>, dist<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Laplace"</span>,<span class="st">"Student-t"</span>,<span class="st">"Slash"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                  nregim.min<span class="op">=</span><span class="fl">1</span>, nregim.max<span class="op">=</span><span class="fl">2</span>, p.min<span class="op">=</span><span class="fl">3</span>, p.max<span class="op">=</span><span class="fl">3</span>, d.min<span class="op">=</span><span class="fl">3</span>,</span></span>
-<span class="r-in"><span>                  d.max<span class="op">=</span><span class="fl">3</span>, n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                  d.max<span class="op">=</span><span class="fl">3</span>, n.burnin<span class="op">=</span><span class="fl">100</span>, n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in getGlobalsAndPackages(expr, envir = envir, globals = globals):</span> The total size of the 7 globals exported for future expression (‘FUN()’) is 992.24 MiB. This exceeds the maximum allowed size 500.00 MiB per plan() argument 'maxSizeOfObjects'. This limit is set to protect against transfering too large objects to parallel workers by mistake, which may not be intended and could be costly. See help("future.globals.maxSize", package = "future") for how to adjust or remove the default threshold via an R option The three largest globals are ‘FUN’ (992.00 MiB of class ‘function’), ‘mycall’ (240.07 KiB of class ‘call’) and ‘grid’ (895 bytes of class ‘list’)</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in getGlobalsAndPackages(expr, envir = envir, globals = globals):</span> The total size of the 7 globals exported for future expression (‘FUN()’) is 649.84 MiB. This exceeds the maximum allowed size 500.00 MiB per plan() argument 'maxSizeOfObjects'. This limit is set to protect against transfering too large objects to parallel workers by mistake, which may not be intended and could be costly. See help("future.globals.maxSize", package = "future") for how to adjust or remove the default threshold via an R option The three largest globals are ‘FUN’ (649.61 MiB of class ‘function’), ‘mycall’ (240.07 KiB of class ‘call’) and ‘grid’ (895 bytes of class ‘list’)</span>
+<span class="r-in"><span><span class="va">fit4</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit4' not found</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>

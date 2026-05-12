@@ -67,33 +67,33 @@
 <span class="r-in"><span><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="mtar_grid.html">mtar_grid</a></span><span class="op">(</span><span class="op">~</span> <span class="va">COLCAP</span> <span class="op">+</span> <span class="va">BOVESPA</span> <span class="op">|</span> <span class="va">SP500</span>, data<span class="op">=</span><span class="va">returns</span>, row.names<span class="op">=</span><span class="va">Date</span>,</span></span>
 <span class="r-in"><span>                  subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2015-12-07"</span><span class="op">}</span>, dist<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gaussian"</span>,<span class="st">"Student-t"</span>,</span></span>
 <span class="r-in"><span>                  <span class="st">"Slash"</span>,<span class="st">"Laplace"</span><span class="op">)</span>, nregim.min<span class="op">=</span><span class="fl">2</span>, nregim.max<span class="op">=</span><span class="fl">3</span>, p.min<span class="op">=</span><span class="fl">2</span>,</span></span>
-<span class="r-in"><span>                  p.max<span class="op">=</span><span class="fl">2</span>, n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                  p.max<span class="op">=</span><span class="fl">2</span>, n.burnin<span class="op">=</span><span class="fl">100</span>, n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="DIC.html">DIC</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     DIC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.2.2  -17932.95</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.3.2  -18200.59</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2   -17957.06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2   -18146.81</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.2     -18048.38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.3.2     -18277.74</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.2 -18064.88</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.3.2 -18330.33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.2.2  -17928.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.3.2  -18160.20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2   -17957.75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2   -18135.86</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.2     -18119.38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.3.2     -18253.74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.2 -18061.29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.3.2 -18283.28</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 2: Rainfall and two river flows in Colombia</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">riverflows</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="mtar_grid.html">mtar_grid</a></span><span class="op">(</span><span class="op">~</span> <span class="va">Bedon</span> <span class="op">+</span> <span class="va">LaPlata</span> <span class="op">|</span> <span class="va">Rainfall</span>, data<span class="op">=</span><span class="va">riverflows</span>,</span></span>
 <span class="r-in"><span>                  row.names<span class="op">=</span><span class="va">Date</span>, subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2009-02-13"</span><span class="op">}</span>,dist<span class="op">=</span><span class="st">"Laplace"</span>,</span></span>
-<span class="r-in"><span>                  nregim.min<span class="op">=</span><span class="fl">2</span>, nregim.max<span class="op">=</span><span class="fl">3</span>, p.min<span class="op">=</span><span class="fl">1</span>, p.max<span class="op">=</span><span class="fl">3</span>,n.burnin<span class="op">=</span><span class="fl">1000</span>,</span></span>
-<span class="r-in"><span>                  n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>, plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                  nregim.min<span class="op">=</span><span class="fl">2</span>, nregim.max<span class="op">=</span><span class="fl">3</span>, p.min<span class="op">=</span><span class="fl">1</span>, p.max<span class="op">=</span><span class="fl">3</span>,n.burnin<span class="op">=</span><span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                  n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>, plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="DIC.html">DIC</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  DIC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.1 13117.93</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2 13075.83</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.3 13051.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.1 13056.26</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2 13018.06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.3 12986.01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.1 13135.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2 13106.52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.3 13074.63</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.1 13057.79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2 13016.44</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.3 12997.95</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 3: Temperature, precipitation, and two river flows in Iceland</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iceland.rf</span><span class="op">)</span></span></span>
@@ -101,23 +101,23 @@
 <span class="r-in"><span>                  data<span class="op">=</span><span class="va">iceland.rf</span>,subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"1974-11-06"</span><span class="op">}</span>,row.names<span class="op">=</span><span class="va">Date</span>,</span></span>
 <span class="r-in"><span>                  dist<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Slash"</span>,<span class="st">"Student-t"</span><span class="op">)</span>, nregim.min<span class="op">=</span><span class="fl">1</span>, nregim.max<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  p.min<span class="op">=</span><span class="fl">15</span>, p.max<span class="op">=</span><span class="fl">15</span>, q.min<span class="op">=</span><span class="fl">4</span>, q.max<span class="op">=</span><span class="fl">4</span>, d.min<span class="op">=</span><span class="fl">2</span>, d.max<span class="op">=</span><span class="fl">2</span>,</span></span>
-<span class="r-in"><span>                  n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                  n.burnin<span class="op">=</span><span class="fl">100</span>, n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="DIC.html">DIC</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                         DIC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.1.15.4.2     8249.091</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.15.4.2     7470.261</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.1.15.4.2 8378.278</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.15.4.2 7541.864</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.1.15.4.2     8255.327</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.15.4.2     7475.956</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.1.15.4.2 8376.104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.15.4.2 7540.244</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 4: U.S. stock returns</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">US.returns</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="mtar_grid.html">mtar_grid</a></span><span class="op">(</span><span class="op">~</span> <span class="va">CCR</span> <span class="op">|</span> <span class="va">dVIX</span>, data<span class="op">=</span><span class="va">US.returns</span>, subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2025-11-28"</span><span class="op">}</span>,</span></span>
 <span class="r-in"><span>                  row.names<span class="op">=</span><span class="va">Date</span>, dist<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Laplace"</span>,<span class="st">"Student-t"</span>,<span class="st">"Slash"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                  nregim.min<span class="op">=</span><span class="fl">1</span>, nregim.max<span class="op">=</span><span class="fl">2</span>, p.min<span class="op">=</span><span class="fl">3</span>, p.max<span class="op">=</span><span class="fl">3</span>, d.min<span class="op">=</span><span class="fl">3</span>,</span></span>
-<span class="r-in"><span>                  d.max<span class="op">=</span><span class="fl">3</span>, n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                  d.max<span class="op">=</span><span class="fl">3</span>, n.burnin<span class="op">=</span><span class="fl">100</span>, n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in getGlobalsAndPackages(expr, envir = envir, globals = globals):</span> The total size of the 7 globals exported for future expression (‘FUN()’) is 981.89 MiB. This exceeds the maximum allowed size 500.00 MiB per plan() argument 'maxSizeOfObjects'. This limit is set to protect against transfering too large objects to parallel workers by mistake, which may not be intended and could be costly. See help("future.globals.maxSize", package = "future") for how to adjust or remove the default threshold via an R option The three largest globals are ‘FUN’ (981.65 MiB of class ‘function’), ‘mycall’ (240.07 KiB of class ‘call’) and ‘grid’ (895 bytes of class ‘list’)</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in getGlobalsAndPackages(expr, envir = envir, globals = globals):</span> The total size of the 7 globals exported for future expression (‘FUN()’) is 639.51 MiB. This exceeds the maximum allowed size 500.00 MiB per plan() argument 'maxSizeOfObjects'. This limit is set to protect against transfering too large objects to parallel workers by mistake, which may not be intended and could be costly. See help("future.globals.maxSize", package = "future") for how to adjust or remove the default threshold via an R option The three largest globals are ‘FUN’ (639.28 MiB of class ‘function’), ‘mycall’ (240.07 KiB of class ‘call’) and ‘grid’ (895 bytes of class ‘list’)</span>
 <span class="r-in"><span><span class="fu"><a href="DIC.html">DIC</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit4' not found</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
