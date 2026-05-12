@@ -119,7 +119,7 @@
 #' data(returns)
 #' fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
 #'              subset={Date<="2015-12-07"}, dist="Student-t",
-#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
+#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100, n.sim=200,
 #'              n.thin=2)
 #' summary(fit1)
 #' DIC(fit1)
@@ -129,7 +129,7 @@
 #' data(riverflows)
 #' fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
 #'              subset={Date<="2009-02-13"}, dist="Laplace",
-#'              ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
+#'              ars=ars(nregim=3,p=5), n.burnin=100, n.sim=200, n.thin=2)
 #' summary(fit2)
 #' DIC(fit2)
 #' WAIC(fit2)
@@ -138,7 +138,7 @@
 #' data(iceland.rf)
 #' fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
 #'              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
-#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
+#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=100, n.sim=200,
 #'              n.thin=2, dist="Slash")
 #' summary(fit3)
 #' DIC(fit3)
@@ -147,8 +147,8 @@
 #' ###### Example 4: U.S. stock returns
 #' data(US.returns)
 #' fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
-#'              n.sim=2000, n.thin=2, dist="Student-t")
+#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=100,
+#'              n.sim=200, n.thin=2, dist="Student-t")
 #' summary(fit4)
 #' DIC(fit4)
 #' WAIC(fit4)
@@ -204,7 +204,7 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
   nano_ <- list(...)
   # Validate SETAR option
   if(!is.null(setar)){
-     if(floor(setar)!=setar | setar<1 | setar>k) stop(paste("The value of the argument SETAR should be an integer greater than or equal to 1, but less than or equal to",k),call.=FALSE)
+     if(floor(setar)!=setar | setar<1 | setar>k) stop(paste0("The value of the SETAR argument must be an integer between 1 and ",k,", inclusive"),call.=FALSE)
   }
   # Build threshold (regime-switching) variables if needed
   if(regim > 1){
@@ -212,7 +212,7 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
        suppressWarnings({
         mz <- model.part(Formula(formula), data = mmf, rhs = 2, terms = TRUE)
        })
-        if(ncol(mz)==0) stop("Fitting a TAR model requires specifying a threshold series (i.e., the input series used to determine the regimes)",call.=FALSE)
+        if(ncol(mz)==0) stop("To fit a TAR model, it is necessary to specify a threshold series (i.e., the input series used to determine the regimes)",call.=FALSE)
         Z <- model.matrix(mz, data = mmf)
         if(attr(terms(mz),"intercept")){
            Znames <- colnames(Z)
@@ -220,7 +220,7 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
            colnames(Z) <- Znames[-1]
         }
      }else{
-          if(max(ars$d)>0) stop("The lags of the threshold series are not applicable to SETAR models, since they coincide with the output series lags!",call.=FALSE)
+          if(max(ars$d)>0) stop("The lags of the threshold series are not applicable in SETAR models, as they coincide with the lags of the output series",call.=FALSE)
           Z <- matrix(D[,setar],ncol=1)
           colnames(Z) <- colnames(D)[setar]
      }
@@ -233,7 +233,7 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
     })
      if(ncol(mx2)==0){
         if(length(ars$q)==1) pez <- paste0(ars$q,collapse=",") else pez <- paste0("(",paste0(ars$q,collapse=","),")")
-        stop(paste0("An exogenous time series was not provided, yet q=",pez," was requested."),call.=FALSE)
+        stop(paste0("No exogenous time series was provided, although q =",pez," was specified"),call.=FALSE)
      }
      X2 <- model.matrix(mx2, data = mmf)
      if(attr(terms(mx2),"intercept")){

@@ -23,7 +23,7 @@ Highest Posterior Density intervals for objects of class \code{mtar}
 data(returns)
 fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
              subset={Date<="2015-12-07"}, dist="Student-t",
-             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
+             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100, n.sim=200,
              n.thin=2, ssvs=TRUE)
 coda::HPDinterval(fit1)
 
@@ -31,22 +31,22 @@ coda::HPDinterval(fit1)
 data(riverflows)
 fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
              subset={Date<="2009-02-13"}, dist="Laplace",
-             ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
+             ars=ars(nregim=3,p=5), n.burnin=100, n.sim=200, n.thin=2)
 coda::HPDinterval(fit2)
 
 ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 data(iceland.rf)
 fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
-             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
+             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=100, n.sim=200,
              n.thin=2, dist="Slash")
 coda::HPDinterval(fit3)
 
 ###### Example 4: U.S. stock returns
 data(US.returns)
 fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
-             n.sim=2000, n.thin=2, dist="Student-t")
+             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=100,
+             n.sim=200, n.thin=2, dist="Student-t")
 coda::HPDinterval(fit4)
 }
 

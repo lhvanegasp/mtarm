@@ -125,11 +125,12 @@ list with components including
 }
 }
 \description{
-This function implements a Gibbs sampling algorithm to draw samples from the
-posterior distribution of the parameters of a multivariate Threshold Autoregressive (TAR)
-model and its special cases as SETAR and VAR models. The procedure accommodates a wide
-range of noise process distributions, including Gaussian, Student-\eqn{t}, Slash, Symmetric
-Hyperbolic, Contaminated normal, Laplace, Skew-normal, and Skew-Student-\eqn{t}.
+This function implements a Gibbs sampling algorithm to generate
+draws from the posterior distribution of the parameters of a multivariate
+Threshold Autoregressive (TAR) model, including special cases such as SETAR
+and VAR models. The approach accommodates a wide range of noise process
+distributions, including Gaussian, Student-\eqn{t}, Slash, symmetric hyperbolic,
+contaminated normal, Laplace, skew-normal, and skew-Student-\eqn{t}.
 }
 \examples{
 \donttest{
@@ -137,7 +138,7 @@ Hyperbolic, Contaminated normal, Laplace, Skew-normal, and Skew-Student-\eqn{t}.
 data(returns)
 fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
              subset={Date<="2015-12-07"}, dist="Student-t",
-             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
+             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100, n.sim=200,
              n.thin=2)
 summary(fit1)
 DIC(fit1)
@@ -147,7 +148,7 @@ WAIC(fit1)
 data(riverflows)
 fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
              subset={Date<="2009-02-13"}, dist="Laplace",
-             ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
+             ars=ars(nregim=3,p=5), n.burnin=100, n.sim=200, n.thin=2)
 summary(fit2)
 DIC(fit2)
 WAIC(fit2)
@@ -156,7 +157,7 @@ WAIC(fit2)
 data(iceland.rf)
 fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
-             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
+             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=100, n.sim=200,
              n.thin=2, dist="Slash")
 summary(fit3)
 DIC(fit3)
@@ -165,8 +166,8 @@ WAIC(fit3)
 ###### Example 4: U.S. stock returns
 data(US.returns)
 fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
-             n.sim=2000, n.thin=2, dist="Student-t")
+             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=100,
+             n.sim=200, n.thin=2, dist="Student-t")
 summary(fit4)
 DIC(fit4)
 WAIC(fit4)

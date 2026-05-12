@@ -51,7 +51,7 @@ WAIC <- function(...) {
 #' fit1 <- mtar_grid(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
 #'                   subset={Date<="2015-12-07"}, dist=c("Gaussian","Student-t",
 #'                   "Slash","Laplace"), nregim.min=2, nregim.max=3, p.min=2,
-#'                   p.max=2, n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   p.max=2, n.burnin=100, n.sim=200, n.thin=2,
 #'                   plan_strategy="multisession")
 #' DIC(fit1)
 #'
@@ -59,8 +59,8 @@ WAIC <- function(...) {
 #' data(riverflows)
 #' fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
 #'                   row.names=Date, subset={Date<="2009-02-13"},dist="Laplace",
-#'                   nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=1000,
-#'                   n.sim=2000, n.thin=2, plan_strategy="multisession")
+#'                   nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=100,
+#'                   n.sim=200, n.thin=2, plan_strategy="multisession")
 #' DIC(fit2)
 #'
 #' ###### Example 3: Temperature, precipitation, and two river flows in Iceland
@@ -69,7 +69,7 @@ WAIC <- function(...) {
 #'                   data=iceland.rf,subset={Date<="1974-11-06"},row.names=Date,
 #'                   dist=c("Slash","Student-t"), nregim.min=1, nregim.max=2,
 #'                   p.min=15, p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,
-#'                   n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   n.burnin=100, n.sim=200, n.thin=2,
 #'                   plan_strategy="multisession")
 #' DIC(fit3)
 #'
@@ -78,7 +78,7 @@ WAIC <- function(...) {
 #' fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
 #'                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
 #'                   nregim.min=1, nregim.max=2, p.min=3, p.max=3, d.min=3,
-#'                   d.max=3, n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   d.max=3, n.burnin=100, n.sim=200, n.thin=2,
 #'                   plan_strategy="multisession")
 #' DIC(fit4)
 #' }
@@ -235,7 +235,7 @@ DIC.mtar <- function(...){
 #' fit1 <- mtar_grid(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
 #'                   subset={Date<="2015-12-07"}, dist=c("Gaussian","Student-t",
 #'                   "Slash","Laplace"), nregim.min=2, nregim.max=3, p.min=2,
-#'                   p.max=2, n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   p.max=2, n.burnin=100, n.sim=200, n.thin=2,
 #'                   plan_strategy="multisession")
 #' WAIC(fit1)
 #'
@@ -243,8 +243,8 @@ DIC.mtar <- function(...){
 #' data(riverflows)
 #' fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
 #'                   row.names=Date, subset={Date<="2009-02-13"},dist="Laplace",
-#'                   nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=1000,
-#'                   n.sim=2000, n.thin=2, plan_strategy="multisession")
+#'                   nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=100,
+#'                   n.sim=200, n.thin=2, plan_strategy="multisession")
 #' WAIC(fit2)
 #'
 #' ###### Example 3: Temperature, precipitation, and two river flows in Iceland
@@ -253,7 +253,7 @@ DIC.mtar <- function(...){
 #'                   data=iceland.rf,subset={Date<="1974-11-06"},row.names=Date,
 #'                   dist=c("Slash","Student-t"), nregim.min=1, nregim.max=2,
 #'                   p.min=15, p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,
-#'                   n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   n.burnin=100, n.sim=200, n.thin=2,
 #'                   plan_strategy="multisession")
 #' WAIC(fit3)
 #'
@@ -262,7 +262,7 @@ DIC.mtar <- function(...){
 #' fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
 #'                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
 #'                   nregim.min=1, nregim.max=2, p.min=3, p.max=3, d.min=3,
-#'                   d.max=3, n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   d.max=3, n.burnin=100, n.sim=200, n.thin=2,
 #'                   plan_strategy="multisession")
 #' WAIC(fit4)
 #' }
@@ -385,7 +385,7 @@ WAIC.mtar <- function(...){
 #' data(returns)
 #' fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
 #'              subset={Date<="2015-12-07"}, dist="Student-t",
-#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
+#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100, n.sim=200,
 #'              n.thin=2, ssvs=TRUE)
 #' fit1.mcmc <- coda::as.mcmc(fit1)
 #' summary(fit1.mcmc)
@@ -395,7 +395,7 @@ WAIC.mtar <- function(...){
 #' data(riverflows)
 #' fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
 #'              subset={Date<="2009-02-13"}, dist="Laplace",
-#'              ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
+#'              ars=ars(nregim=3,p=5), n.burnin=100, n.sim=200, n.thin=2)
 #' fit2.mcmc <- coda::as.mcmc(fit2)
 #' summary(fit2.mcmc)
 #' #plot(fit2.mcmc)
@@ -404,7 +404,7 @@ WAIC.mtar <- function(...){
 #' data(iceland.rf)
 #' fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
 #'              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
-#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
+#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=100, n.sim=200,
 #'              n.thin=2, dist="Slash")
 #' fit3.mcmc <- coda::as.mcmc(fit3)
 #' summary(fit3.mcmc)
@@ -413,8 +413,8 @@ WAIC.mtar <- function(...){
 #' ###### Example 4: U.S. stock returns
 #' data(US.returns)
 #' fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
-#'              n.sim=2000, n.thin=2, dist="Student-t")
+#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=100,
+#'              n.sim=200, n.thin=2, dist="Student-t")
 #' fit4.mcmc <- coda::as.mcmc(fit4)
 #' summary(fit4.mcmc)
 #' #plot(fit4.mcmc)
@@ -651,7 +651,7 @@ plot.mtarmcmc <- function(x, trace=TRUE, density=TRUE, smooth=FALSE, bwf, auto.l
 #' data(returns)
 #' fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
 #'              subset={Date<="2015-12-07"}, dist="Student-t",
-#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
+#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100, n.sim=200,
 #'              n.thin=2, ssvs=TRUE)
 #' coda::HPDinterval(fit1)
 #'
@@ -659,22 +659,22 @@ plot.mtarmcmc <- function(x, trace=TRUE, density=TRUE, smooth=FALSE, bwf, auto.l
 #' data(riverflows)
 #' fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
 #'              subset={Date<="2009-02-13"}, dist="Laplace",
-#'              ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
+#'              ars=ars(nregim=3,p=5), n.burnin=100, n.sim=200, n.thin=2)
 #' coda::HPDinterval(fit2)
 #'
 #' ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 #' data(iceland.rf)
 #' fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
 #'              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
-#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
+#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=100, n.sim=200,
 #'              n.thin=2, dist="Slash")
 #' coda::HPDinterval(fit3)
 #'
 #' ###### Example 4: U.S. stock returns
 #' data(US.returns)
 #' fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
-#'              n.sim=2000, n.thin=2, dist="Student-t")
+#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=100,
+#'              n.sim=200, n.thin=2, dist="Student-t")
 #' coda::HPDinterval(fit4)
 #' }
 #'

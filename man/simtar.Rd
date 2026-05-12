@@ -112,7 +112,7 @@ out1 <- simtar(n=n, k=k, ars=myars, parms=parms, thresholds=thresholds,
 str(out1)
 
 fit1 <- mtar(~ Y1 + Y2 + Y3 | Z, data=out1, ars=myars, dist=dist,
-             n.burn=2000, n.sim=3000, n.thin=2)
+             n.burn=200, n.sim=300, n.thin=2)
 summary(fit1)
 
 ###### Simulation of a trivariate VAR model
@@ -132,7 +132,7 @@ out2 <- simtar(n=n, k=k, ars=myars, parms=parms, dist=dist, extra=extra)
 str(out2)
 
 fit2 <- mtar(~ Y1 + Y2 + Y3, data=out2, ars=myars, dist=dist,
-             n.burn=2000, n.sim=3000, n.thin=2)
+             n.burn=200, n.sim=300, n.thin=2)
 summary(fit2)
 
 n <- 5000
@@ -152,7 +152,7 @@ out3 <- simtar(n=n, k=k, ars=myars, parms=parms, delay=2,
 str(out3)
 
 fit3 <- mtar(~ Y1 + Y2 + Y3, data=out3, ars=myars, dist=dist,
-             n.burn=2000, n.sim=3000, n.thin=2, setar=2)
+             n.burn=200, n.sim=300, n.thin=2, setar=2)
 summary(fit3)
 
 }
