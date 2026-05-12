@@ -10,7 +10,10 @@ on:
 
 name: pkgdown.yaml
 
-permissions: read-all
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   pkgdown:
