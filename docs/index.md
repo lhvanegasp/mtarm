@@ -1,0 +1,4 @@
+Estimation, inference and forecasting using the Bayesian approach for
+multivariate threshold autoregressive (TAR) models in which the
+distribution used to describe the noise process belongs to the class of
+Gaussian variance mixtures.

@@ -1,0 +1,95 @@
+# Package index
+
+## All functions
+
+- [`ars()`](https://lhvanegasp.github.io/mtarm/reference/ars.md) :
+  Auxiliary function to specify the number of regimes and lag orders
+
+- [`as.mcmc(`*`<mtar>`*`)`](https://lhvanegasp.github.io/mtarm/reference/as.mcmc.mtar.md)
+  :
+
+  Coercion of `mtar` objects to `mcmc` objects
+
+- [`coef(`*`<mtar>`*`)`](https://lhvanegasp.github.io/mtarm/reference/coef.mtar.md)
+  :
+
+  coef method for objects of class `mtar`
+
+- [`DIC(`*`<mtar>`*`)`](https://lhvanegasp.github.io/mtarm/reference/DIC.mtar.md)
+  :
+
+  Deviance Information Criterion (DIC) for objects of class `mtar`
+
+- [`DIC()`](https://lhvanegasp.github.io/mtarm/reference/DIC.md) :
+  Deviance Information Criterion (DIC)
+
+- [`effectiveSize_TAR()`](https://lhvanegasp.github.io/mtarm/reference/effectiveSize_TAR.md)
+  :
+
+  Effective sample size for `mtar` objects
+
+- [`geweke_diagTAR()`](https://lhvanegasp.github.io/mtarm/reference/geweke_diagTAR.md)
+  :
+
+  Geweke's convergence diagnostic for `mtar` objects
+
+- [`geweke_plotTAR()`](https://lhvanegasp.github.io/mtarm/reference/geweke_plotTAR.md)
+  :
+
+  Geweke-Brooks plot for objects of class `mtar`
+
+- [`HPDinterval(`*`<mtar>`*`)`](https://lhvanegasp.github.io/mtarm/reference/HPDinterval.mtar.md)
+  :
+
+  Highest Posterior Density intervals for objects of class `mtar`
+
+- [`iceland.rf`](https://lhvanegasp.github.io/mtarm/reference/iceland.rf.md)
+  : Temperature, precipitation, and two river flows in Iceland
+
+- [`mtar()`](https://lhvanegasp.github.io/mtarm/reference/mtar.md) :
+  Bayesian estimation of a multivariate Threshold Autoregressive (TAR)
+  model.
+
+- [`mtar_grid()`](https://lhvanegasp.github.io/mtarm/reference/mtar_grid.md)
+  : Bayesian Estimation of Multivariate TAR Models
+
+- [`out_of_sample(`*`<listmtar>`*`)`](https://lhvanegasp.github.io/mtarm/reference/out_of_sample.listmtar.md)
+  : Computing Out-of-Sample predictive accuracy measures
+
+- [`out_of_sample(`*`<mtar>`*`)`](https://lhvanegasp.github.io/mtarm/reference/out_of_sample.mtar.md)
+  : Computing Out-of-Sample predictive accuracy measures
+
+- [`out_of_sample()`](https://lhvanegasp.github.io/mtarm/reference/out_of_sample.md)
+  : Out-of-sample predictive accuracy measures
+
+- [`predict(`*`<mtar>`*`)`](https://lhvanegasp.github.io/mtarm/reference/predict.mtar.md)
+  : Forecasting for multivariate TAR models
+
+- [`priors()`](https://lhvanegasp.github.io/mtarm/reference/priors.md) :
+  Auxiliary function for setting hyperparameter values
+
+- [`returns`](https://lhvanegasp.github.io/mtarm/reference/returns.md) :
+  Returns of the closing prices of three financial indexes
+
+- [`riverflows`](https://lhvanegasp.github.io/mtarm/reference/riverflows.md)
+  : Rainfall and two river flows in Colombia
+
+- [`simtar()`](https://lhvanegasp.github.io/mtarm/reference/simtar.md) :
+  Simulation of multivariate time series from a TAR model
+
+- [`US.returns`](https://lhvanegasp.github.io/mtarm/reference/US.returns.md)
+  : U.S. Stock Returns
+
+- [`vcov(`*`<mtar>`*`)`](https://lhvanegasp.github.io/mtarm/reference/vcov.mtar.md)
+  :
+
+  vcov method for objects of class `mtar`
+
+- [`WAIC(`*`<mtar>`*`)`](https://lhvanegasp.github.io/mtarm/reference/WAIC.mtar.md)
+  :
+
+  Watanabe-Akaike or Widely Available Information Criterion (WAIC) for
+  objects of class `mtar`
+
+- [`WAIC()`](https://lhvanegasp.github.io/mtarm/reference/WAIC.md) :
+  Watanabe-Akaike or Widely Available Information Criterion (WAIC)
