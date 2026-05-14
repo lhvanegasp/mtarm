@@ -167,10 +167,10 @@ oos3
 data(US.returns)
 fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
-                  nregim.min=1, nregim.max=2, p.min=3, p.max=3, d.min=3,
+                  nregim.min=2, nregim.max=2, p.min=3, p.max=3, d.min=3,
                   d.max=3, n.burnin=100, n.sim=200, n.thin=2,
                   plan_strategy="multisession")
-#> Error in getGlobalsAndPackages(expr, envir = envir, globals = globals): The total size of the 7 globals exported for future expression (‘FUN()’) is 642.14 MiB. This exceeds the maximum allowed size 500.00 MiB per plan() argument 'maxSizeOfObjects'. This limit is set to protect against transfering too large objects to parallel workers by mistake, which may not be intended and could be costly. See help("future.globals.maxSize", package = "future") for how to adjust or remove the default threshold via an R option The three largest globals are ‘FUN’ (641.90 MiB of class ‘function’), ‘mycall’ (240.07 KiB of class ‘call’) and ‘grid’ (895 bytes of class ‘list’)
+#> Error in getGlobalsAndPackages(expr, envir = envir, globals = globals): The total size of the 7 globals exported for future expression (‘FUN()’) is 642.47 MiB. This exceeds the maximum allowed size 500.00 MiB per plan() argument 'maxSizeOfObjects'. This limit is set to protect against transfering too large objects to parallel workers by mistake, which may not be intended and could be costly. See help("future.globals.maxSize", package = "future") for how to adjust or remove the default threshold via an R option The three largest globals are ‘FUN’ (642.24 MiB of class ‘function’), ‘mycall’ (240.07 KiB of class ‘call’) and ‘grid’ (767 bytes of class ‘list’)
 oos4 <- out_of_sample(fit4, newdata=subset(US.returns, Date>"2025-11-28"),
                       n.ahead=100, by.component=TRUE, FUN=median)
 #> Error: object 'fit4' not found

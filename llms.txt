@@ -99,3 +99,9 @@ Gaussian variance mixtures.
 
   vcov method for objects of class `mtar`
 
+# Articles
+
+### Tutorials
+
+- [Introduction to the mtarm
+  Package](https://lhvanegasp.github.io/mtarm/articles/Introduction.md):
