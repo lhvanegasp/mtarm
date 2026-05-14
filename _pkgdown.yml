@@ -1,4 +1,8 @@
 url: https://lhvanegasp.github.io/mtarm/
 template:
   bootstrap: 5
+articles:
+- title: Tutorials
+  navbar: Articles
+  contents: Introduction
 

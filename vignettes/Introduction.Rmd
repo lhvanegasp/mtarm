@@ -1,0 +1,158 @@
+---
+title: "Introduction to the mtarm Package"
+author: 
+- "Luis Hernando Vanegas"
+- "Sergio Alejandro Calderón"
+- "Luz Marina Rondón"
+
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
+
+bibliography: references.bib
+
+vignette: >
+  %\VignetteIndexEntry{Introduction to the mtarm Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4
+)
+```
+
+# Multivariate Threshold Autoregressive (TAR) models
+
+The `mtarm` package provides a computational tool designed for Bayesian estimation, inference, and forecasting in multivariate Threshold Autoregressive (TAR) models. These models provide a versatile approach for modeling nonlinear multivariate time series and include multivariate Self-Exciting Threshold Autoregressive (SETAR) and Vector Autoregressive (VAR) models as particular cases [@VANEGAS2025]. The package accommodates a broad class of innovation distributions beyond the Gaussian assumption, such as Student-$t$, slash, symmetric hyperbolic, Laplace, contaminated normal, skew-normal, and skew-$t$ distributions, thereby enabling robust modeling of heavy tails, asymmetry, and other non-Gaussian characteristics.
+
+## Installation
+
+### Install from GitHub
+
+```{r eval = FALSE}
+remotes::install_github("lhvanegasp/mtarm")
+```
+
+### Install from CRAN
+
+```{r eval = FALSE}
+install.packages("mtarm")
+```
+
+## Application: Temperature, precipitation, and two river flows in Iceland
+
+### Dataset
+
+The data are available in the object \`iceland.rf\` and were obtained from [@T90], who provided a detailed description of the geographical and meteorological characteristics of the rivers and analyzed each series individually. Subsequently, [@T98] conducted a bivariate analysis of the same dataset. The focus is on the bivariate time series $\{(Y_{1,t},Y_{2,t})^{\top}\}_{t\geq 1}$, where $Y_{1,t}$ and $Y_{2,t}$ denote the daily river flow (in cubic meters per second, ${m}^3/{s}$) of the Jökulsá Eystri and Vatnsdalsá rivers, respectively. The sample covers the period from 1972 to 1974, comprising 1095 observations. The exogenous variables include daily precipitation $X_t$, measured in millimeters (${mm}$), and temperature $Z_t$, measured in degrees Celsius ($^\circ\mathrm{C}$), both recorded at the meteorological station in Hveravellir. Precipitation corresponds to the accumulated rainfall from 9:00 A.M. of the previous day to 9:00 A.M. of the current day.
+
+```{r fig.width=9, fig.height=7}
+library(mtarm)
+data(iceland.rf)       
+str(iceland.rf)     
+```
+
+```{r fig.width=9, fig.height=5}
+summary(iceland.rf[,-5])
+```
+
+```{r fig.width=9, fig.height=5}
+plot(ts(as.matrix(iceland.rf[,-5])), main="Iceland")
+```
+
+### Model specification
+
+Following [@T98], the series are modeled using a $\mathrm{TAR}(2; p=(15,15), q=(4,4), d=(2,2))$ specification given by
+
+\$\$Y_t=\\sum\\limits\_{j=1}\^2 I(Z\_{t-h}\\in(c\_{j-1},c_j])\\Big(\\!{\\phi}\_0\^{\^{(j)}}+\\sum\\limits\_{i=1}\^{15}\\boldsymbol{\\phi}\_i\^{\^{(j)}}Y\_{t-i}+\\sum\\limits\_{i=1}\^{4}\\boldsymbol{\\beta}\_i\^{\^{(j)}}\\!X\_{t-i}+\\sum\\limits\_{i=1}\^{2}{\\delta}\_i\^{\^{(j)}}\\!Z\_{t-i}+\\epsilon_t\^{\^{(j)}}\\!\\Big),\$\$
+
+where $\epsilon_t^{^{(j)}}$ is the error term. The last 55 observations (from November 7 to December 31, 1974), corresponding to $5\%$ of the sample, are excluded from the estimation stage and reserved for out-of-sample forecast evaluation. The following code requests the estimation for the $\mathrm{TAR}(2; p=(15,15), q=(4,4), d=(2,2))$ specification under Gaussian, Slash, Student-$t$, and Laplace error distributions.
+
+### Parameter estimation
+
+```{r}
+fits <- mtar_grid(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
+                  data=iceland.rf, subset={Date<="1974-11-06"}, 					      
+                  row.names=Date, nregim.min=2, nregim.max=2, p.min=15,  				
+                  p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,  					      
+                  n.burnin=200, n.sim=300, n.thin=3, ssvs=TRUE,
+                  dist=c("Gaussian","Slash","Student-t","Laplace"),
+                  plan_strategy="multisession")
+
+fits
+```
+
+### Model comparison using forecast accuracy measures
+
+#### Adjusted within-sample
+
+The following code requests Deviance Information Criterion (DIC) [@spiegelhalter02; @spiegelhalter14] and Watanabe-Akaike Information Criterion (WAIC) [@w10] values.
+
+```{r}
+DICs <- DIC(fits)
+DICs
+
+WAICs <- WAIC(fits)
+WAICs
+```
+
+#### Out-of-sample
+
+In addition, the following code provides the median of the log-score [@Good1952], the Energy Score (ES) [@GneitingEtAl2008TEST]—a multivariate extension of the Continuous Ranked Probability Score (CRPS)[@MathesonWinkler1976; @GrimitGneitingBerrocalJohnson2006]—and the Absolute Percentage Error (APE), all computed from the observed and forecasted values for the last 55 observations.
+
+```{r}
+newdata <- subset(iceland.rf, Date>"1974-11-06") 
+oos <- out_of_sample(fits, newdata=newdata, n.ahead=nrow(newdata),  
+                     by.component=TRUE, FUN=median) 
+oos[,c(1,2,5,6)]
+```
+
+### Residuals
+
+```{r fig.width=9, fig.height=5}
+res <- residuals(fits$`Student-t.2.15.4.2`)  
+```
+
+```{r fig.width=9, fig.height=5}
+par(mfrow=c(1,2)) 
+qqnorm(res$full, pch=20, col="blue", main="") 
+abline(0, 1, lty=3) 
+hist(res$full, freq=FALSE, xlab="Quantile-type residual", ylab="Density", main="") 
+curve(dnorm(x), col="blue", add=TRUE)
+```
+
+```{r fig.width=9, fig.height=5}
+par(mfrow=c(1,2))  
+acf(res$full, col="blue", main="")
+pacf(res$full, col="blue", main="")
+```
+
+### Forecasting
+
+```{r}
+pred <- predict(fits$`Student-t.2.15.4.2`, newdata=newdata, n.ahead=nrow(newdata),
+                row.names=Date, credible=0.8)
+
+head(pred$summary)
+tail(pred$summary)
+```
+
+### Convergence diagnostics
+
+#### Geweke statistic
+
+```{r}
+geweke_diagTAR(fits$`Student-t.2.15.4.2`)
+
+```
+
+#### Effective sample size
+
+```{r}
+effectiveSize_TAR(fits$`Student-t.2.15.4.2`) 
+```

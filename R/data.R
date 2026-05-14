@@ -6,7 +6,7 @@
 #' @importFrom Formula Formula model.part
 #' @importFrom mvtnorm pmvnorm pmvt
 #' @importFrom GIGrvg rgig
-#' @importFrom coda mcmc as.mcmc geweke.diag geweke.plot HPDinterval
+#' @importFrom coda mcmc as.mcmc geweke.diag geweke.plot HPDinterval effectiveSize
 #' @importFrom future.apply future_lapply
 #' @importFrom progressr handlers progressor with_progress
 #' @importFrom future plan

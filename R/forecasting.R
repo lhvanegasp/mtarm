@@ -263,7 +263,7 @@ predict.mtar <- function(object,...,newdata,n.ahead=NULL,row.names,credible=0.95
      lss <- t(apply(x,1,quantile,probs=ks))
      dif <- apply(abs(lss-lis),1,which.min)
      out_ <- c(ifelse(object$dist %in% c("Skew-normal","Skew-Student-t"),median(x),mean(x)),lis[dif],lss[dif])
-     names(out_) <- paste0(name[i],c(".Mean",".HDI_Low",".HDI_high"))
+     names(out_) <- paste0(name[i],c(".Mean",".Lower",".Upper"))
      return(out_)
   }
   # Apply summary function to each series
@@ -353,8 +353,9 @@ plot.predict_mtar <- function(x,...,last,historical=list(),forecasts=list(),fore
     if(is.null(forecasts.PI$density)) forecasts.PI$density <- NA
     if(is.null(forecasts.PI$col)) forecasts.PI$col <- "light gray"
     # Loop over each component of the output series
+    if(!interactive()) par(mfrow=c(k,1))
     for(i in 1:k){
-        dev.new()
+        if(interactive()) dev.new()
         # Set common y-axis limits based on observed data and forecasts
         historical$ylim <- forecasts.PI$ylim <- forecasts$ylim <- range(y2[,i],out_[,1:3+3*(i-1)])
         # Historical data for the i-th component of the output series
@@ -512,7 +513,7 @@ out_of_sample.mtar <- function(...,newdata,n.ahead=NULL,credible=0.95,by.compone
 #' data(US.returns)
 #' fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
 #'                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
-#'                   nregim.min=1, nregim.max=2, p.min=3, p.max=3, d.min=3,
+#'                   nregim.min=2, nregim.max=2, p.min=3, p.max=3, d.min=3,
 #'                   d.max=3, n.burnin=100, n.sim=200, n.thin=2,
 #'                   plan_strategy="multisession")
 #' oos4 <- out_of_sample(fit4, newdata=subset(US.returns, Date>"2025-11-28"),

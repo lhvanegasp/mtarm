@@ -135,7 +135,7 @@ summary.mtar <- function(object, credible=0.95,...){
   # Internal helper function to compute summary statistics for MCMC draws
   resumen <- function(x){
         x <- matrix(x,ifelse(is.null(nrow(x)),1,nrow(x)),ifelse(is.null(ncol(x)),length(x),ncol(x)))
-        # Initialize output: mean, 2(1-PD), HDI low, HDI high
+        # Initialize output: mean, 2(1-PD), HDI.lower, HDI.upper
         y <- matrix(0,nrow(x),4)
         # Posterior means
         y[,1] <- rowMeans(x)
@@ -151,7 +151,7 @@ summary.mtar <- function(object, credible=0.95,...){
         y[,3] <- lis[cbind(1:nrow(x),dif)]
         y[,4] <- lss[cbind(1:nrow(x),dif)]
         # Naming columns
-        colnames(y) <- c("   Mean"," 2(1-PD) ","HDI_low","HDI_high")
+        colnames(y) <- c("   Mean"," 2(1-PD) ","HDI.Lower","HDI.Upper")
         return(y)
   }
   # Threshold summary if more than one regime
@@ -286,7 +286,7 @@ print.summary_mtar <- function(x, digits=max(3, getOption("digits") - 2),...){
      else message("\nMaximum lags for TS  :",paste(x$ars$d,collapse=", "))
   }
   message("\n\n")
-  # If multiple regimes, print the threshold intervals (Mean, HDI_low, HDI_high)
+  # If multiple regimes, print the threshold intervals (Mean, HDI.Lower, HDI.Upper)
   if(x$ars$nregim > 1){
      # Round threshold summary statistics
      thresholds <- round(x$thresholds,digits=digits)
@@ -299,7 +299,7 @@ print.summary_mtar <- function(x, digits=max(3, getOption("digits") - 2),...){
      rownames(d) <- paste("Regime",1:nrow(d))
      colnames(d) <- rep(" ",3)
      # Print threshold summary table
-     message("\nThresholds (Mean, HDI_low, HDI_high)\n")
+     message("\nThresholds (Mean, HDI.Lower, HDI.Upper)\n")
      print(d)
   }
   # Loop through regimes and print location and scale summaries
@@ -311,7 +311,7 @@ print.summary_mtar <- function(x, digits=max(3, getOption("digits") - 2),...){
       message("\nAutoregressive coefficients\n")
       print(round(x$location[[i]],digits=digits),na.print="   |   ")
       # Print scale parameter summary
-      message("\nScale parameter (Mean, HDI_low, HDI_high)\n")
+      message("\nScale parameter (Mean, HDI.Lower, HDI.Upper)\n")
       print(round(x$scale[[i]],digits=digits),na.print="   .")
   }
   # Print skewness parameter if present
