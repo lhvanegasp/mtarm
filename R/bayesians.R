@@ -72,15 +72,6 @@ WAIC <- function(...) {
 #'                   n.burnin=100, n.sim=200, n.thin=2,
 #'                   plan_strategy="multisession")
 #' DIC(fit3)
-#'
-#' ###### Example 4: U.S. stock returns
-#' data(US.returns)
-#' fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-#'                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
-#'                   nregim.min=2, nregim.max=2, p.min=3, p.max=3, d.min=3,
-#'                   d.max=3, n.burnin=100, n.sim=200, n.thin=2,
-#'                   plan_strategy="multisession")
-#' DIC(fit4)
 #' }
 #'
 #'
@@ -256,15 +247,6 @@ DIC.mtar <- function(...){
 #'                   n.burnin=100, n.sim=200, n.thin=2,
 #'                   plan_strategy="multisession")
 #' WAIC(fit3)
-#'
-#' ###### Example 4: U.S. stock returns
-#' data(US.returns)
-#' fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-#'                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
-#'                   nregim.min=2, nregim.max=2, p.min=3, p.max=3, d.min=3,
-#'                   d.max=3, n.burnin=100, n.sim=200, n.thin=2,
-#'                   plan_strategy="multisession")
-#' WAIC(fit4)
 #' }
 #'
 #'

@@ -52,7 +52,7 @@ test_that("mtar is reproducible using seed()", {
     parms[[j]]$scale <- rgamma(k,shape=1,scale=1)*diag(k)
   }
   out <- simtar(n=n, k=k, ars=myars, parms=parms, delay=2,
-                thresholds=-1, dist=dist, setar=2)
+                thresholds=-1, dist=dist, setar=2, Verbose=FALSE)
   set.seed(9226)
   fit0 <- mtar(~ Y1 + Y2 + Y3, data=out, ars=myars, dist=dist,
                n.burn=100, n.sim=200, n.thin=2, setar=2)

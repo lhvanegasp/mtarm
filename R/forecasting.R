@@ -515,7 +515,7 @@ out_of_sample.mtar <- function(...,newdata,n.ahead=NULL,credible=0.95,by.compone
 #'                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
 #'                   nregim.min=2, nregim.max=2, p.min=3, p.max=3, d.min=3,
 #'                   d.max=3, n.burnin=100, n.sim=200, n.thin=2,
-#'                   plan_strategy="multisession")
+#'                   plan_strategy="sequential")
 #' oos4 <- out_of_sample(fit4, newdata=subset(US.returns, Date>"2025-11-28"),
 #'                       n.ahead=100, by.component=TRUE, FUN=median)
 #' oos4

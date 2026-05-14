@@ -2,7 +2,7 @@
 #' @importFrom graphics abline hist lines par identify curve legend
 #' @importFrom methods missingArg
 #' @importFrom stats pnorm pt density median model.extract model.matrix pgamma qgamma qnorm quantile rbeta rbinom rexp rgamma rnorm runif sd terms na.omit qqnorm dnorm predict resid fitted coef dist
-#' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom utils setTxtProgressBar txtProgressBar tail
 #' @importFrom Formula Formula model.part
 #' @importFrom mvtnorm pmvnorm pmvt
 #' @importFrom GIGrvg rgig
