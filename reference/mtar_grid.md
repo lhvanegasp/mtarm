@@ -210,7 +210,7 @@ data(returns)
 fit1 <- mtar_grid(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
                   subset={Date<="2015-12-07"}, dist=c("Gaussian","Student-t",
                   "Slash","Laplace"), nregim.min=2, nregim.max=3, p.min=2,
-                  p.max=2, n.burnin=100, n.sim=200, n.thin=2,
+                  p.max=2, n.burnin=1000, n.sim=2000, n.thin=2,
                   plan_strategy="multisession")
 summary(fit1)
 #>               Length Class Mode
@@ -227,8 +227,8 @@ summary(fit1)
 data(riverflows)
 fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
                   row.names=Date, subset={Date<="2009-02-13"},dist="Laplace",
-                  nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=100,
-                  n.sim=200, n.thin=2, plan_strategy="multisession")
+                  nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=1000,
+                  n.sim=2000, n.thin=2, plan_strategy="multisession")
 fit2
 #> 
 #> 
@@ -252,7 +252,7 @@ fit3 <- mtar_grid(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
                   data=iceland.rf,subset={Date<="1974-11-06"},row.names=Date,
                   dist=c("Slash","Student-t"), nregim.min=1, nregim.max=2,
                   p.min=15, p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,
-                  n.burnin=100, n.sim=200, n.thin=2,
+                  n.burnin=1000, n.sim=2000, n.thin=2,
                   plan_strategy="multisession")
 fit3
 #> 
@@ -278,9 +278,9 @@ data(US.returns)
 fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
                   nregim.min=2, nregim.max=2, p.min=3, p.max=3, d.min=3,
-                  d.max=3, n.burnin=100, n.sim=200, n.thin=2,
+                  d.max=3, n.burnin=1000, n.sim=2000, n.thin=2,
                   plan_strategy="multisession")
-#> Error in getGlobalsAndPackages(expr, envir = envir, globals = globals): The total size of the 7 globals exported for future expression (‘FUN()’) is 650.20 MiB. This exceeds the maximum allowed size 500.00 MiB per plan() argument 'maxSizeOfObjects'. This limit is set to protect against transfering too large objects to parallel workers by mistake, which may not be intended and could be costly. See help("future.globals.maxSize", package = "future") for how to adjust or remove the default threshold via an R option The three largest globals are ‘FUN’ (649.97 MiB of class ‘function’), ‘mycall’ (240.07 KiB of class ‘call’) and ‘grid’ (767 bytes of class ‘list’)
+#> Error in getGlobalsAndPackages(expr, envir = envir, globals = globals): The total size of the 7 globals exported for future expression (‘FUN()’) is 990.03 MiB. This exceeds the maximum allowed size 500.00 MiB per plan() argument 'maxSizeOfObjects'. This limit is set to protect against transfering too large objects to parallel workers by mistake, which may not be intended and could be costly. See help("future.globals.maxSize", package = "future") for how to adjust or remove the default threshold via an R option The three largest globals are ‘FUN’ (989.80 MiB of class ‘function’), ‘mycall’ (240.07 KiB of class ‘call’) and ‘grid’ (767 bytes of class ‘list’)
 fit4
 #> Error: object 'fit4' not found
 # }

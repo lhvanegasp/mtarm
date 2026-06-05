@@ -12,8 +12,8 @@ out_of_sample(
   newdata,
   n.ahead = NULL,
   credible = 0.95,
-  by.component = TRUE,
-  FUN = mean
+  FUN = mean,
+  rolling = NULL
 )
 ```
 
@@ -39,15 +39,14 @@ out_of_sample(
   required prediction intervals. By default, `credible` is set to
   `0.95`.
 
-- by.component:
-
-  An optional logical argument. If `TRUE`, the predictive accuracy
-  measures are computed separately for each component of the
-  multivariate output series. By default, `by.component` is set to
-  `TRUE`.
-
 - FUN:
 
   An optional function used to summarize the `n.ahead` values computed
   for each predictive accuracy measure. By default, `FUN` is set to
   `mean`.
+
+- rolling:
+
+  An optional positive integer specifying the rolling-window size used
+  for forecasting. By default, `rolling = NULL`, indicating that
+  rolling-window forecasting is not performed.

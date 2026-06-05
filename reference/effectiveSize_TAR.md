@@ -37,215 +37,318 @@ model.
 data(returns)
 fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
              subset={Date<="2015-12-07"}, dist="Student-t",
-             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100, n.sim=200,
+             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
              n.thin=2)
 effectiveSize_TAR(fit1)
 #> Thresholds:
-#>                   
-#> Threshold.1 2.4214
-#> Threshold.2 1.1597
+#> Threshold.1 Threshold.2 
+#>     0.84717     4.02627 
+#> 
+#> 
+#> Regime 1
 #> 
 #> 
 #> Autoregressive coefficients:
-#>                        Regime 1 Regime 2 Regime 3
-#> COLCAP:(Intercept)       11.656   7.4179   2.2602
-#> COLCAP:COLCAP.lag(1)    162.378  16.1602  36.5935
-#> COLCAP:COLCAP.lag(2)                     200.0000
-#> COLCAP:BOVESPA.lag(1)   154.235 200.0000  74.2236
-#> COLCAP:BOVESPA.lag(2)                    200.0000
-#> BOVESPA:(Intercept)      21.823  12.0798   1.6371
-#> BOVESPA:COLCAP.lag(1)   200.000  46.1487  88.2264
-#> BOVESPA:COLCAP.lag(2)                    147.4864
-#> BOVESPA:BOVESPA.lag(1)  200.000  65.9495  39.2059
-#> BOVESPA:BOVESPA.lag(2)                    24.4224
+#>                 COLCAP BOVESPA
+#> (Intercept)     1.1218  1.2128
+#> COLCAP.lag(1)   4.4828 13.6557
+#> BOVESPA.lag(1) 58.9096  4.4196
 #> 
 #> 
 #> Scale parameter:
-#>                 Regime 1 Regime 2 Regime 3
-#> COLCAP.COLCAP    110.162   9.0389   96.293
-#> COLCAP.BOVESPA   150.729  15.0427  200.000
-#> BOVESPA.BOVESPA   50.612  15.4202   47.325
+#>          COLCAP BOVESPA
+#> COLCAP   6.0401  43.334
+#> BOVESPA 43.3340  26.981
+#> 
+#> 
+#> Regime 2
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                   COLCAP   BOVESPA
+#> (Intercept)       5.1349    2.1494
+#> COLCAP.lag(1)  1519.4574 1396.2732
+#> BOVESPA.lag(1)  163.5625 1739.7830
+#> 
+#> 
+#> Scale parameter:
+#>          COLCAP BOVESPA
+#> COLCAP  156.141  18.032
+#> BOVESPA  18.032  39.752
+#> 
+#> 
+#> Regime 3
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                  COLCAP  BOVESPA
+#> (Intercept)      21.874   14.667
+#> COLCAP.lag(1)   989.006 1864.230
+#> BOVESPA.lag(1)   44.539  158.761
+#> COLCAP.lag(2)  1668.674 1488.340
+#> BOVESPA.lag(2) 1072.583 1042.925
+#> 
+#> 
+#> Scale parameter:
+#>          COLCAP BOVESPA
+#> COLCAP   462.62  1274.3
+#> BOVESPA 1274.33  1086.8
 #> 
 #> 
 #> Extra parameter:
-#>          
-#> nu 22.326
+#>     nu 
+#> 165.69 
 
 ###### Example 2: Rainfall and two river flows in Colombia
 data(riverflows)
 fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
              subset={Date<="2009-02-13"}, dist="Laplace",
-             ars=ars(nregim=3,p=5), n.burnin=100, n.sim=200, n.thin=2)
+             ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
 effectiveSize_TAR(fit2)
 #> Thresholds:
-#>                    
-#> Threshold.1  1.8662
-#> Threshold.2 33.7245
+#> Threshold.1 Threshold.2 
+#>        4.80      108.78 
+#> 
+#> 
+#> Regime 1
 #> 
 #> 
 #> Autoregressive coefficients:
-#>                        Regime 1 Regime 2 Regime 3
-#> Bedon:(Intercept)       126.430  124.755   82.514
-#> Bedon:Bedon.lag(1)       78.055  106.911   74.776
-#> Bedon:Bedon.lag(2)      100.921   80.493   83.908
-#> Bedon:Bedon.lag(3)       92.497   73.183   89.587
-#> Bedon:Bedon.lag(4)      103.667   73.872  101.770
-#> Bedon:Bedon.lag(5)       65.919   92.616  123.722
-#> Bedon:LaPlata.lag(1)    108.492  119.532  113.718
-#> Bedon:LaPlata.lag(2)    113.016   67.160  136.651
-#> Bedon:LaPlata.lag(3)     78.653   75.886  123.799
-#> Bedon:LaPlata.lag(4)    136.038   81.702   97.235
-#> Bedon:LaPlata.lag(5)    116.760  100.040   83.779
-#> LaPlata:(Intercept)      83.907  106.602   77.122
-#> LaPlata:Bedon.lag(1)    134.861   93.099  103.715
-#> LaPlata:Bedon.lag(2)     92.990  115.051  127.126
-#> LaPlata:Bedon.lag(3)     97.143   84.841  498.472
-#> LaPlata:Bedon.lag(4)     89.707   90.693  171.373
-#> LaPlata:Bedon.lag(5)     73.659   99.569   98.556
-#> LaPlata:LaPlata.lag(1)   99.662   96.481  105.455
-#> LaPlata:LaPlata.lag(2)   75.645  116.419  200.000
-#> LaPlata:LaPlata.lag(3)  100.883   79.307  109.032
-#> LaPlata:LaPlata.lag(4)   78.794   85.061  102.308
-#> LaPlata:LaPlata.lag(5)   68.638   90.623   89.520
+#>                  Bedon LaPlata
+#> (Intercept)    1138.99  971.22
+#> Bedon.lag(1)    993.84  834.99
+#> LaPlata.lag(1) 1147.99  851.63
+#> Bedon.lag(2)    897.21  893.20
+#> LaPlata.lag(2)  897.01  869.79
+#> Bedon.lag(3)   1492.10 1190.43
+#> LaPlata.lag(3)  915.32 1034.05
+#> Bedon.lag(4)    959.00 1000.64
+#> LaPlata.lag(4) 1020.62  759.98
+#> Bedon.lag(5)    597.86 1016.20
+#> LaPlata.lag(5)  943.82  724.75
 #> 
 #> 
 #> Scale parameter:
-#>                 Regime 1 Regime 2 Regime 3
-#> Bedon.Bedon       105.74   97.772   135.45
-#> Bedon.LaPlata     108.15  554.594   155.09
-#> LaPlata.LaPlata   129.08  107.707   126.68
+#>          Bedon LaPlata
+#> Bedon   1036.8  1331.0
+#> LaPlata 1331.0  1070.5
+#> 
+#> 
+#> Regime 2
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                  Bedon LaPlata
+#> (Intercept)     737.95  694.61
+#> Bedon.lag(1)    973.67  763.31
+#> LaPlata.lag(1) 1198.49  968.96
+#> Bedon.lag(2)    661.13 1147.67
+#> LaPlata.lag(2)  738.13 1050.56
+#> Bedon.lag(3)    611.41  997.93
+#> LaPlata.lag(3)  821.61  841.68
+#> Bedon.lag(4)    723.11  874.81
+#> LaPlata.lag(4)  810.94  841.22
+#> Bedon.lag(5)   1001.92 1039.61
+#> LaPlata.lag(5) 1000.42  854.51
+#> 
+#> 
+#> Scale parameter:
+#>          Bedon LaPlata
+#> Bedon   1219.3  1298.0
+#> LaPlata 1298.0  1011.8
+#> 
+#> 
+#> Regime 3
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                 Bedon LaPlata
+#> (Intercept)    823.85  900.61
+#> Bedon.lag(1)   607.71  994.24
+#> LaPlata.lag(1) 912.61  862.87
+#> Bedon.lag(2)   734.82  940.74
+#> LaPlata.lag(2) 938.03  952.75
+#> Bedon.lag(3)   663.17 1146.92
+#> LaPlata.lag(3) 916.65  844.58
+#> Bedon.lag(4)   928.95  918.01
+#> LaPlata.lag(4) 895.78  808.19
+#> Bedon.lag(5)   821.92 1081.29
+#> LaPlata.lag(5) 937.64 1082.19
+#> 
+#> 
+#> Scale parameter:
+#>          Bedon LaPlata
+#> Bedon   1166.2  1243.7
+#> LaPlata 1243.7  1028.6
 
 ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 data(iceland.rf)
 fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
-             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=100, n.sim=200,
+             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
              n.thin=2, dist="Slash")
 effectiveSize_TAR(fit3)
 #> Thresholds:
-#>                 
-#> threshold 7.2894
+#> Threshold.1 
+#>      198.82 
+#> 
+#> 
+#> Regime 1
 #> 
 #> 
 #> Autoregressive coefficients:
-#>                                 Regime 1 Regime 2
-#> Jokulsa:(Intercept)               56.938  112.549
-#> Jokulsa:Jokulsa.lag( 1)           57.528   60.095
-#> Jokulsa:Jokulsa.lag( 2)          100.456   73.768
-#> Jokulsa:Jokulsa.lag( 3)           68.462   93.074
-#> Jokulsa:Jokulsa.lag( 4)           66.175   98.564
-#> Jokulsa:Jokulsa.lag( 5)           66.514   91.210
-#> Jokulsa:Jokulsa.lag( 6)           79.013  109.946
-#> Jokulsa:Jokulsa.lag( 7)           88.201  146.628
-#> Jokulsa:Jokulsa.lag( 8)           65.806  150.856
-#> Jokulsa:Jokulsa.lag( 9)           35.850  153.653
-#> Jokulsa:Jokulsa.lag(10)          119.382  136.112
-#> Jokulsa:Jokulsa.lag(11)          200.000  200.000
-#> Jokulsa:Jokulsa.lag(12)          214.528  161.191
-#> Jokulsa:Jokulsa.lag(13)           54.056   88.863
-#> Jokulsa:Jokulsa.lag(14)          118.133   84.732
-#> Jokulsa:Jokulsa.lag(15)           34.745   68.039
-#> Jokulsa:Vatnsdalsa.lag( 1)        69.430   67.659
-#> Jokulsa:Vatnsdalsa.lag( 2)        30.241   44.744
-#> Jokulsa:Vatnsdalsa.lag( 3)        31.701   44.401
-#> Jokulsa:Vatnsdalsa.lag( 4)        55.507  127.057
-#> Jokulsa:Vatnsdalsa.lag( 5)        63.180   30.829
-#> Jokulsa:Vatnsdalsa.lag( 6)        96.712   21.474
-#> Jokulsa:Vatnsdalsa.lag( 7)       150.276   46.302
-#> Jokulsa:Vatnsdalsa.lag( 8)       150.092  121.650
-#> Jokulsa:Vatnsdalsa.lag( 9)       122.888  105.857
-#> Jokulsa:Vatnsdalsa.lag(10)       144.445   77.013
-#> Jokulsa:Vatnsdalsa.lag(11)       370.829   30.754
-#> Jokulsa:Vatnsdalsa.lag(12)       257.169   18.096
-#> Jokulsa:Vatnsdalsa.lag(13)       153.446   41.334
-#> Jokulsa:Vatnsdalsa.lag(14)       125.189  100.907
-#> Jokulsa:Vatnsdalsa.lag(15)       117.680   61.902
-#> Jokulsa:Precipitation.lag(1)     123.996  135.135
-#> Jokulsa:Precipitation.lag(2)     144.510   72.709
-#> Jokulsa:Precipitation.lag(3)     107.450  156.592
-#> Jokulsa:Precipitation.lag(4)      94.845  107.361
-#> Jokulsa:Temperature.lag(1)        91.852  134.663
-#> Jokulsa:Temperature.lag(2)        35.327  118.196
-#> Vatnsdalsa:(Intercept)            46.331  120.018
-#> Vatnsdalsa:Jokulsa.lag( 1)        38.310  126.835
-#> Vatnsdalsa:Jokulsa.lag( 2)       148.336  154.058
-#> Vatnsdalsa:Jokulsa.lag( 3)        94.091  200.000
-#> Vatnsdalsa:Jokulsa.lag( 4)        59.057  200.000
-#> Vatnsdalsa:Jokulsa.lag( 5)        92.359  155.977
-#> Vatnsdalsa:Jokulsa.lag( 6)       111.417  200.000
-#> Vatnsdalsa:Jokulsa.lag( 7)       176.801   73.872
-#> Vatnsdalsa:Jokulsa.lag( 8)       143.753   97.478
-#> Vatnsdalsa:Jokulsa.lag( 9)        71.521  107.737
-#> Vatnsdalsa:Jokulsa.lag(10)       132.079  135.336
-#> Vatnsdalsa:Jokulsa.lag(11)       155.512  147.279
-#> Vatnsdalsa:Jokulsa.lag(12)        98.311  150.918
-#> Vatnsdalsa:Jokulsa.lag(13)        89.061  136.143
-#> Vatnsdalsa:Jokulsa.lag(14)       139.532  124.345
-#> Vatnsdalsa:Jokulsa.lag(15)        59.363   28.465
-#> Vatnsdalsa:Vatnsdalsa.lag( 1)     50.504   61.489
-#> Vatnsdalsa:Vatnsdalsa.lag( 2)     56.265   42.535
-#> Vatnsdalsa:Vatnsdalsa.lag( 3)     52.346   63.765
-#> Vatnsdalsa:Vatnsdalsa.lag( 4)     38.051   92.552
-#> Vatnsdalsa:Vatnsdalsa.lag( 5)     53.575   16.852
-#> Vatnsdalsa:Vatnsdalsa.lag( 6)     99.309   11.125
-#> Vatnsdalsa:Vatnsdalsa.lag( 7)    120.766   68.020
-#> Vatnsdalsa:Vatnsdalsa.lag( 8)    107.518   25.032
-#> Vatnsdalsa:Vatnsdalsa.lag( 9)    200.000   31.321
-#> Vatnsdalsa:Vatnsdalsa.lag(10)    127.131   65.781
-#> Vatnsdalsa:Vatnsdalsa.lag(11)    131.033   41.634
-#> Vatnsdalsa:Vatnsdalsa.lag(12)    364.238   91.759
-#> Vatnsdalsa:Vatnsdalsa.lag(13)    141.604  110.756
-#> Vatnsdalsa:Vatnsdalsa.lag(14)    130.625   61.068
-#> Vatnsdalsa:Vatnsdalsa.lag(15)    158.985   39.898
-#> Vatnsdalsa:Precipitation.lag(1)  200.000  104.555
-#> Vatnsdalsa:Precipitation.lag(2)  106.080  105.898
-#> Vatnsdalsa:Precipitation.lag(3)  129.596  131.656
-#> Vatnsdalsa:Precipitation.lag(4)   81.628  100.551
-#> Vatnsdalsa:Temperature.lag(1)    109.609  108.672
-#> Vatnsdalsa:Temperature.lag(2)     94.988  115.144
+#>                      Jokulsa Vatnsdalsa
+#> (Intercept)           280.82     514.35
+#> Jokulsa.lag( 1)       264.16     447.84
+#> Vatnsdalsa.lag( 1)    554.78     517.91
+#> Jokulsa.lag( 2)       501.06     640.73
+#> Vatnsdalsa.lag( 2)    453.42     427.77
+#> Jokulsa.lag( 3)       737.44    1062.07
+#> Vatnsdalsa.lag( 3)    822.63     637.86
+#> Jokulsa.lag( 4)       524.47    1064.85
+#> Vatnsdalsa.lag( 4)    774.09     658.89
+#> Jokulsa.lag( 5)       445.33    1007.48
+#> Vatnsdalsa.lag( 5)    971.07     931.70
+#> Jokulsa.lag( 6)       453.75     724.53
+#> Vatnsdalsa.lag( 6)    848.32    1491.14
+#> Jokulsa.lag( 7)       848.79     867.64
+#> Vatnsdalsa.lag( 7)   1253.98    1678.29
+#> Jokulsa.lag( 8)       539.93    1016.78
+#> Vatnsdalsa.lag( 8)   1392.85    1692.33
+#> Jokulsa.lag( 9)       616.69     728.33
+#> Vatnsdalsa.lag( 9)    832.94    1265.30
+#> Jokulsa.lag(10)       966.89     921.15
+#> Vatnsdalsa.lag(10)   1022.05    1140.16
+#> Jokulsa.lag(11)      1170.37    1247.86
+#> Vatnsdalsa.lag(11)   1214.23    1394.19
+#> Jokulsa.lag(12)      1210.67     985.52
+#> Vatnsdalsa.lag(12)   1579.42    1653.91
+#> Jokulsa.lag(13)       591.23    1039.97
+#> Vatnsdalsa.lag(13)   1375.49    1035.90
+#> Jokulsa.lag(14)      1083.96    1089.33
+#> Vatnsdalsa.lag(14)   1012.73    1234.03
+#> Jokulsa.lag(15)       436.55     823.60
+#> Vatnsdalsa.lag(15)   1044.13    1076.72
+#> Precipitation.lag(1)  946.07    1239.61
+#> Precipitation.lag(2) 1072.16    1183.20
+#> Precipitation.lag(3) 1246.05    1105.55
+#> Precipitation.lag(4) 1096.27    1134.13
+#> Temperature.lag(1)   1074.28    1373.29
+#> Temperature.lag(2)   1180.93    1112.54
 #> 
 #> 
 #> Scale parameter:
-#>                       Regime 1 Regime 2
-#> Jokulsa.Jokulsa         44.857   26.888
-#> Jokulsa.Vatnsdalsa      84.855  124.102
-#> Vatnsdalsa.Vatnsdalsa   36.087   14.395
+#>            Jokulsa Vatnsdalsa
+#> Jokulsa     185.22     372.15
+#> Vatnsdalsa  372.15     186.16
+#> 
+#> 
+#> Regime 2
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                      Jokulsa Vatnsdalsa
+#> (Intercept)           964.69     775.15
+#> Jokulsa.lag( 1)       618.38    1259.27
+#> Vatnsdalsa.lag( 1)    536.07     683.67
+#> Jokulsa.lag( 2)       444.75     613.29
+#> Vatnsdalsa.lag( 2)    496.60     414.49
+#> Jokulsa.lag( 3)       519.42     468.25
+#> Vatnsdalsa.lag( 3)    439.61     397.54
+#> Jokulsa.lag( 4)       963.37    1449.10
+#> Vatnsdalsa.lag( 4)    903.13     224.84
+#> Jokulsa.lag( 5)       637.80     544.97
+#> Vatnsdalsa.lag( 5)    359.14     266.96
+#> Jokulsa.lag( 6)       955.02     753.00
+#> Vatnsdalsa.lag( 6)    515.57     284.83
+#> Jokulsa.lag( 7)      1374.23    1347.74
+#> Vatnsdalsa.lag( 7)    659.69     546.55
+#> Jokulsa.lag( 8)      1353.76    1336.41
+#> Vatnsdalsa.lag( 8)    664.87     492.96
+#> Jokulsa.lag( 9)      1064.12     945.07
+#> Vatnsdalsa.lag( 9)    729.63     357.15
+#> Jokulsa.lag(10)       988.14    1039.86
+#> Vatnsdalsa.lag(10)    220.51     207.14
+#> Jokulsa.lag(11)      1087.91    1456.49
+#> Vatnsdalsa.lag(11)    377.04     288.17
+#> Jokulsa.lag(12)      1246.21    1558.94
+#> Vatnsdalsa.lag(12)    521.19     534.82
+#> Jokulsa.lag(13)       951.31    1305.53
+#> Vatnsdalsa.lag(13)    486.75     422.51
+#> Jokulsa.lag(14)       659.35    1012.15
+#> Vatnsdalsa.lag(14)    557.75     462.44
+#> Jokulsa.lag(15)       779.32     966.42
+#> Vatnsdalsa.lag(15)    734.19     536.29
+#> Precipitation.lag(1) 1274.21    1220.46
+#> Precipitation.lag(2)  674.57     865.33
+#> Precipitation.lag(3) 1036.42     659.75
+#> Precipitation.lag(4)  808.54     699.31
+#> Temperature.lag(1)   1331.03    1415.60
+#> Temperature.lag(2)    889.16    1289.31
+#> 
+#> 
+#> Scale parameter:
+#>            Jokulsa Vatnsdalsa
+#> Jokulsa     210.05     421.90
+#> Vatnsdalsa  421.90     200.36
 #> 
 #> 
 #> Extra parameter:
-#>          
-#> nu 36.867
+#>     nu 
+#> 173.32 
 
 ###### Example 4: U.S. stock returns
 data(US.returns)
 fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=100,
-             n.sim=200, n.thin=2, dist="Student-t")
+             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
+             n.sim=2000, n.thin=2, dist="Student-t")
 effectiveSize_TAR(fit4)
 #> Thresholds:
-#>                 
-#> threshold 1.5827
+#> Threshold.1 
+#>      2.7021 
+#> 
+#> 
+#> Regime 1
 #> 
 #> 
 #> Autoregressive coefficients:
-#>                 Regime 1 Regime 2
-#> CCR:(Intercept)   145.01   29.947
-#> CCR:CCR.lag(1)    141.46   42.178
-#> CCR:CCR.lag(2)    132.88  107.414
-#> CCR:CCR.lag(3)     91.98   90.675
-#> CCR:dVIX.lag(1)   125.25  146.340
-#> CCR:dVIX.lag(2)   101.50   76.831
-#> CCR:dVIX.lag(3)   109.20  114.224
+#>                CCR
+#> (Intercept) 1200.1
+#> CCR.lag(1)  1239.6
+#> CCR.lag(2)  1170.5
+#> CCR.lag(3)  1017.0
+#> dVIX.lag(1) 1080.4
+#> dVIX.lag(2) 1121.4
+#> dVIX.lag(3) 1212.3
 #> 
 #> 
 #> Scale parameter:
-#>         Regime 1 Regime 2
-#> CCR.CCR   37.252    77.68
+#>       CCR
+#> CCR 118.7
+#> 
+#> 
+#> Regime 2
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                  CCR
+#> (Intercept)  449.253
+#> CCR.lag(1)   979.455
+#> CCR.lag(2)   301.679
+#> CCR.lag(3)  1127.826
+#> dVIX.lag(1)   61.418
+#> dVIX.lag(2) 1178.210
+#> dVIX.lag(3)  147.493
+#> 
+#> 
+#> Scale parameter:
+#>        CCR
+#> CCR 16.599
 #> 
 #> 
 #> Extra parameter:
-#>          
-#> nu 25.547
+#>     nu 
+#> 271.43 
 
 # }
 
