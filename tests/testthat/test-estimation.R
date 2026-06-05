@@ -73,12 +73,13 @@ test_that("mtar is reproducible using seed()", {
 test_that("mtar only accepts valid distributions",{
   vd <- c("Gaussian","Student-t","Hyperbolic","Laplace","Slash",
           "Contaminated normal","Skew-Student-t","Skew-normal")
-  size <- 20
+  size <- 30
   nvd <- sample(vd,size=size,replace=TRUE)
   pos <- ceiling(nchar(nvd)*runif(size))
-  substr(nvd,pos,pos) <- sample(letters,size=size,replace=TRUE)
   data(iceland.rf)
   for(i in 1:size){
+    lettersi <- letters[!(letters %in% substr(nvd[i],pos[i],pos[i]))]
+    substr(nvd[i],pos[i],pos[i]) <- sample(lettersi,size=1)
     expect_error(
       fit <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
                   data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,

@@ -11,7 +11,8 @@
   n.ahead = NULL,
   row.names,
   credible = 0.95,
-  out.of.sample = FALSE
+  out.of.sample = FALSE,
+  rolling = NULL
 )
 }
 \arguments{
@@ -32,18 +33,11 @@ required credible intervals. By default, \code{credible} is set to \code{0.95}.}
 
 \item{out.of.sample}{An optional logical indicator. If \code{TRUE} then the log-score,
 Energy-Score (ES), Absolute Error (AE), Absolute Percentage Error (APE), Squared Error (SE),
- are computed
-as measures of predictive accuracy. In this case, \code{newdata} must include the observed
+ are computed as measures of predictive accuracy. In this case, \code{newdata} must include the observed
 values of the output series.}
-}
-\value{
-A list containing the forecast summaries and, when requested, measures of predictive accuracy.
 
-\tabular{ll}{
-\code{ypred}   \tab a matrix with the results of the forecasting,\cr
-\tab \cr
-\code{summary} \tab a matrix with the mean and credible intervals of the forecasting,\cr
-}
+\item{rolling}{An optional positive integer specifying the rolling-window size used for forecasting
+with fixed parameters. By default, \code{rolling = NULL}, indicating that rolling-window forecasting is not performed.}
 }
 \description{
 Computes forecasts from a fitted multivariate Threshold Autoregressive (TAR) model.
@@ -66,7 +60,7 @@ plot(p1,last=100)
 data(riverflows)
 fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
              subset={Date<="2009-02-13"}, dist="Laplace",
-             ars=ars(nregim=3,p=5), n.burnin=100, n.sim=200, n.thin=2)
+             ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
 p2 <- predict(fit2, newdata=subset(riverflows,Date>"2009-02-13"), n.ahead=60,
               credible=0.8, out.of.sample=TRUE)
 with(p2,summary)
@@ -77,7 +71,7 @@ plot(p2,last=100)
 data(iceland.rf)
 fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
-             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=100, n.sim=200,
+             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
              n.thin=2, dist="Slash")
 p3 <- predict(fit3, newdata=subset(iceland.rf,Date>"1974-11-06"), n.ahead=55,
               credible=0.8, out.of.sample=TRUE)
@@ -88,8 +82,8 @@ plot(p3,last=100)
 ###### Example 4: U.S. stock returns
 data(US.returns)
 fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=100,
-             n.sim=200, n.thin=2, dist="Student-t")
+             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
+             n.sim=2000, n.thin=2, dist="Student-t")
 p4 <- predict(fit4, newdata=subset(US.returns,Date>"2025-11-28"),n.ahead=100,
               credible=0.8, out.of.sample=TRUE)
 with(p4,summary)

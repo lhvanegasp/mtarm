@@ -51,7 +51,7 @@ WAIC <- function(...) {
 #' fit1 <- mtar_grid(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
 #'                   subset={Date<="2015-12-07"}, dist=c("Gaussian","Student-t",
 #'                   "Slash","Laplace"), nregim.min=2, nregim.max=3, p.min=2,
-#'                   p.max=2, n.burnin=100, n.sim=200, n.thin=2,
+#'                   p.max=2, n.burnin=1000, n.sim=2000, n.thin=2,
 #'                   plan_strategy="multisession")
 #' DIC(fit1)
 #'
@@ -59,8 +59,8 @@ WAIC <- function(...) {
 #' data(riverflows)
 #' fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
 #'                   row.names=Date, subset={Date<="2009-02-13"},dist="Laplace",
-#'                   nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=100,
-#'                   n.sim=200, n.thin=2, plan_strategy="multisession")
+#'                   nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=1000,
+#'                   n.sim=2000, n.thin=2, plan_strategy="multisession")
 #' DIC(fit2)
 #'
 #' ###### Example 3: Temperature, precipitation, and two river flows in Iceland
@@ -69,9 +69,18 @@ WAIC <- function(...) {
 #'                   data=iceland.rf,subset={Date<="1974-11-06"},row.names=Date,
 #'                   dist=c("Slash","Student-t"), nregim.min=1, nregim.max=2,
 #'                   p.min=15, p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,
-#'                   n.burnin=100, n.sim=200, n.thin=2,
+#'                   n.burnin=1000, n.sim=2000, n.thin=2,
 #'                   plan_strategy="multisession")
 #' DIC(fit3)
+#'
+#' ###### Example 4: U.S. stock returns
+#' data(US.returns)
+#' fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
+#'                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
+#'                   nregim.min=2, nregim.max=2, p.min=3, p.max=3, d.min=3,
+#'                   d.max=3, n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   plan_strategy="multisession")
+#' DIC(fit4)
 #' }
 #'
 #'
@@ -226,7 +235,7 @@ DIC.mtar <- function(...){
 #' fit1 <- mtar_grid(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
 #'                   subset={Date<="2015-12-07"}, dist=c("Gaussian","Student-t",
 #'                   "Slash","Laplace"), nregim.min=2, nregim.max=3, p.min=2,
-#'                   p.max=2, n.burnin=100, n.sim=200, n.thin=2,
+#'                   p.max=2, n.burnin=1000, n.sim=2000, n.thin=2,
 #'                   plan_strategy="multisession")
 #' WAIC(fit1)
 #'
@@ -234,8 +243,8 @@ DIC.mtar <- function(...){
 #' data(riverflows)
 #' fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
 #'                   row.names=Date, subset={Date<="2009-02-13"},dist="Laplace",
-#'                   nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=100,
-#'                   n.sim=200, n.thin=2, plan_strategy="multisession")
+#'                   nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=1000,
+#'                   n.sim=2000, n.thin=2, plan_strategy="multisession")
 #' WAIC(fit2)
 #'
 #' ###### Example 3: Temperature, precipitation, and two river flows in Iceland
@@ -244,9 +253,18 @@ DIC.mtar <- function(...){
 #'                   data=iceland.rf,subset={Date<="1974-11-06"},row.names=Date,
 #'                   dist=c("Slash","Student-t"), nregim.min=1, nregim.max=2,
 #'                   p.min=15, p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,
-#'                   n.burnin=100, n.sim=200, n.thin=2,
+#'                   n.burnin=1000, n.sim=2000, n.thin=2,
 #'                   plan_strategy="multisession")
 #' WAIC(fit3)
+#'
+#' ###### Example 4: U.S. stock returns
+#' data(US.returns)
+#' fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
+#'                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
+#'                   nregim.min=2, nregim.max=2, p.min=3, p.max=3, d.min=3,
+#'                   d.max=3, n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   plan_strategy="multisession")
+#' WAIC(fit4)
 #' }
 #'
 #'
@@ -367,7 +385,7 @@ WAIC.mtar <- function(...){
 #' data(returns)
 #' fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
 #'              subset={Date<="2015-12-07"}, dist="Student-t",
-#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100, n.sim=200,
+#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
 #'              n.thin=2, ssvs=TRUE)
 #' fit1.mcmc <- coda::as.mcmc(fit1)
 #' summary(fit1.mcmc)
@@ -377,7 +395,7 @@ WAIC.mtar <- function(...){
 #' data(riverflows)
 #' fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
 #'              subset={Date<="2009-02-13"}, dist="Laplace",
-#'              ars=ars(nregim=3,p=5), n.burnin=100, n.sim=200, n.thin=2)
+#'              ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
 #' fit2.mcmc <- coda::as.mcmc(fit2)
 #' summary(fit2.mcmc)
 #' #plot(fit2.mcmc)
@@ -386,7 +404,7 @@ WAIC.mtar <- function(...){
 #' data(iceland.rf)
 #' fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
 #'              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
-#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=100, n.sim=200,
+#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
 #'              n.thin=2, dist="Slash")
 #' fit3.mcmc <- coda::as.mcmc(fit3)
 #' summary(fit3.mcmc)
@@ -395,8 +413,8 @@ WAIC.mtar <- function(...){
 #' ###### Example 4: U.S. stock returns
 #' data(US.returns)
 #' fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=100,
-#'              n.sim=200, n.thin=2, dist="Student-t")
+#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
+#'              n.sim=2000, n.thin=2, dist="Student-t")
 #' fit4.mcmc <- coda::as.mcmc(fit4)
 #' summary(fit4.mcmc)
 #' #plot(fit4.mcmc)
@@ -406,95 +424,92 @@ WAIC.mtar <- function(...){
 as.mcmc.mtar <- function(x,...){
   # Number of response variables
   k <- ncol(x$data[[1]]$y)
-  # Names of the components of the output series
-  yn <- colnames(x$data[[1]]$y)
   # Number of MCMC simulations
   n.sim <- x$n.sim
   # Initialize output list
   out <- list()
+  # Loop over regimes
+  for(r in 1:x$regim){
+    out[[r]] <- list()
+    # Posterior inclusion probabilities for SSVS if present
+    if(x$ssvs) zeta <- rowMeans(x$chains[[r]]$zeta) else zeta <- rep(1,nrow(x$chains[[r]]$location))
+    # Extract and reshape regression coefficients
+    datos <- matrix(x$chains[[r]]$location[zeta>0.5,],nrow=sum(zeta>0.5),ncol=n.sim*k)
+    # Names of the location parameters
+    xn <- rownames(x$chains[[r]]$location)[zeta>0.5]
+    # Names of the components of the output series
+    yn <- colnames(x$data[[1]]$y)
+    out_ <- vector()
+    # Organize coefficients by response variable
+    for(i in 1:nrow(datos)){
+      temp <- matrix(datos[i,],nrow=n.sim,ncol=k,byrow=TRUE)
+      colnames(temp) <- paste0(colnames(x$data[[1]]$y),":",xn[i])
+      out_ <- cbind(out_,temp)
+    }
+    # Store location parameters as an mcmc object
+    out[[r]]$location <- mcmc(out_,thin=x$n.thin,start=x$n.burnin+1)
+    # Extract and reshape scale parameters
+    datos <-  matrix(x$chains[[r]]$scale,nrow=k,ncol=n.sim*k)
+    out_ <- vector()
+    # Store upper triangular elements of scale parameters
+    for(i in 1:k){
+      temp <- t(matrix(datos[i:k,i + seq(0,(n.sim-1)*k,k)],nrow=k-i+1,ncol=n.sim))
+      colnames(temp) <- paste0(yn[i],".",yn[i:k])
+      out_ <- cbind(out_,temp)
+    }
+    # Store scale parameters as an mcmc object
+    out[[r]]$scale <- mcmc(out_,thin=x$n.thin,start=x$n.burnin+1)
+    # Process SSVS indicators if present
+    if(x$ssvs){
+      # Indices of deterministic and lagged components
+      quien <- x$deterministic + seq(k,x$ars$p[r]*k,k)
+      namezeta <- paste0("OS.lag(",1:x$ars$p[r],")")
+      # Add exogenous series lags if present
+      if(x$ars$q[r]>0){
+        quien <- c(quien,max(quien)+seq(x$r,x$ars$q[r]*x$r,x$r))
+        namezeta <- c(namezeta,paste0("ES.lag(",1:x$ars$q[r],")"))
+      }
+      # Add threshold series lags if present
+      if(x$ars$d[r]>0){
+        quien <- c(quien,max(quien)+seq(1,x$ars$d[r],1))
+        namezeta <- c(namezeta,paste0("TS.lag(",1:x$ars$d[r],")"))
+      }
+      temp <- matrix(x$chains[[r]]$zeta[quien,],length(quien),n.sim)
+      rownames(temp) <- namezeta
+      # Store SSVS indicators as an mcmc object
+      out[[r]]$zeta <- mcmc(t(temp),thin=x$n.thin,start=x$n.burnin+1)
+    }
+  }
+  # Store extra parameters as an mcmc object if present
+  if(!(x$dist %in% c("Skew-normal","Gaussian","Laplace"))){
+    datos <-  matrix(x$chains$extra,nrow=nrow(x$chains$extra),ncol=n.sim)
+    out_ <- t(datos)
+    if(nrow(datos)==1) colnames(out_) <- "nu" else colnames(out_) <- paste("nu",1:nrow(datos))
+    out$extra <- mcmc(out_,thin=x$n.thin,start=x$n.burnin+1)
+  }
+  # Store skewness parameters as an mcmc object if present
+  if(x$dist %in% c("Skew-normal","Skew-Student-t")){
+    datos <-  matrix(x$chains$delta,nrow=nrow(x$chains$delta),ncol=n.sim)
+    out_ <- t(datos)
+    if(nrow(datos)==1) colnames(out_) <- "delta" else colnames(out_) <- paste("delta",1:nrow(datos))
+    out$skewness <- mcmc(out_,thin=x$n.thin,start=x$n.burnin+1)
+  }
+  # Store thresholds and delay parameters as mcmc objects if present
+  if(x$regim > 1){
+    datos <-  matrix(x$chains$thresholds,nrow=nrow(x$chains$thresholds),ncol=n.sim)
+    out_ <- t(datos)
+    colnames(out_) <- paste0("Threshold.",1:nrow(datos))
+    out$thresholds <- mcmc(out_,thin=x$n.thin,start=x$n.burnin+1)
+    out_ <- matrix(x$chains$h,nrow=n.sim,ncol=1)
+    colnames(out_) <- "delay"
+    out$delay <- mcmc(out_,thin=x$n.thin,start=x$n.burnin+1)
+  }
   # MCMC metadata
   out$thin <- x$n.thin
   out$start <- x$n.burnin+1
   out$end <- max(seq(x$n.burnin + 1,length.out=x$n.sim,by=x$n.thin))
   out$sz <- x$n.sim
   out$regim <- x$ars$nregim
-  # Containers for chains of location and scale parameters
-  out$location <- list()
-  out$scale <- list()
-  if(x$ssvs) out$zeta <- list()
-  # Loop over regimes
-  for(r in 1:x$regim){
-      # Posterior inclusion probabilities for SSVS if present
-      if(x$ssvs) zeta <- rowMeans(x$chains[[r]]$zeta) else zeta <- rep(1,nrow(x$chains[[r]]$location))
-      # Extract and reshape regression coefficients
-      datos <- matrix(x$chains[[r]]$location[zeta>0.5,],nrow=sum(zeta>0.5),ncol=n.sim*k)
-      out_ <- vector()
-      # Organize coefficients by response variable
-      for(i in 1:k){
-          temp <- t(matrix(datos[,seq(i,n.sim*k,k)],nrow=nrow(datos),ncol=n.sim))
-          colnames(temp) <- paste0(yn[i],":",rownames(x$chains[[r]]$location)[zeta>0.5])
-          out_ <- cbind(out_,temp)
-      }
-      # Store location parameters as an mcmc object
-      out$location[[r]] <- mcmc(out_,thin=x$n.thin,start=x$n.burnin+1)
-      # Extract and reshape scale parameters
-      datos <-  matrix(x$chains[[r]]$scale,nrow=k,ncol=n.sim*k)
-      out_ <- vector()
-      # Store upper triangular elements of scale parameters
-      for(i in 1:k){
-          for(j in i:k){
-              temp <- t(matrix(datos[i,seq(j,n.sim*k,k)],nrow=1,ncol=n.sim))
-              colnames(temp) <- paste0(yn[i],".",yn[j])
-              out_ <- cbind(out_,temp)
-          }
-      }
-      # Store scale parameters as an mcmc object
-      out$scale[[r]] <- mcmc(out_,thin=x$n.thin,start=x$n.burnin+1)
-      # Process SSVS indicators if present
-      if(x$ssvs){
-         # Indices of deterministic and lagged components
-         quien <- x$deterministic + seq(k,x$ars$p[r]*k,k)
-         namezeta <- paste0("OS.lag(",1:x$ars$p[r],")")
-         # Add exogenous series lags if present
-         if(x$ars$q[r]>0){
-            quien <- c(quien,max(quien)+seq(x$r,x$ars$q[r]*x$r,x$r))
-            namezeta <- c(namezeta,paste0("ES.lag(",1:x$ars$q[r],")"))
-         }
-         # Add threshold series lags if present
-         if(x$ars$d[r]>0){
-            quien <- c(quien,max(quien)+seq(1,x$ars$d[r],1))
-            namezeta <- c(namezeta,paste0("TS.lag(",1:x$ars$d[r],")"))
-         }
-         temp <- matrix(x$chains[[r]]$zeta[quien,],length(quien),n.sim)
-         rownames(temp) <- namezeta
-         # Store SSVS indicators as an mcmc object
-         out$zeta[[r]] <- mcmc(t(temp),thin=x$n.thin,start=x$n.burnin+1)
-      }
-  }
-  # Store extra parameters as an mcmc object if present
-  if(!(x$dist %in% c("Skew-normal","Gaussian","Laplace"))){
-     datos <-  matrix(x$chains$extra,nrow=nrow(x$chains$extra),ncol=n.sim)
-     out_ <- t(datos)
-     if(nrow(datos)==1) colnames(out_) <- "nu" else colnames(out_) <- paste("nu",1:nrow(datos))
-     out$extra <- mcmc(out_,thin=x$n.thin,start=x$n.burnin+1)
-  }
-  # Store skewness parameters as an mcmc object if present
-  if(x$dist %in% c("Skew-normal","Skew-Student-t")){
-     datos <-  matrix(x$chains$delta,nrow=nrow(x$chains$delta),ncol=n.sim)
-     out_ <- t(datos)
-     if(nrow(datos)==1) colnames(out_) <- "delta" else colnames(out_) <- paste("delta",1:nrow(datos))
-     out$skewness <- mcmc(out_,thin=x$n.thin,start=x$n.burnin+1)
-  }
-  # Store thresholds and delay parameters as mcmc objects if present
-  if(x$regim > 1){
-     datos <-  matrix(x$chains$thresholds,nrow=nrow(x$chains$thresholds),ncol=n.sim)
-     out_ <- t(datos)
-     if(nrow(datos)==1) colnames(out_) <- "threshold" else colnames(out_) <- paste0("Threshold.",1:nrow(datos))
-     out$thresholds <- mcmc(out_,thin=x$n.thin,start=x$n.burnin+1)
-     out_ <- matrix(x$chains$h,nrow=n.sim,ncol=1)
-     colnames(out_) <- "delay"
-     out$delay <- mcmc(out_,thin=x$n.thin,start=x$n.burnin+1)
-  }
   # Assign class and return
   class(out) <- "mtarmcmc"
   return(out)
@@ -510,28 +525,28 @@ print.summtarmcmc <- function(x,...,digits=max(3,getOption("digits")-2)){
   message("\n Sample size per chain = ",x$sz,"\n\n")
   # Print threshold parameters if the model has multiple regimes
   if(!is.null(x$thresholds)){
-     message("\nThresholds:\n")
-     print(x$thresholds,digits=digits)
+    message("\nThresholds:\n")
+    print(x$thresholds,digits=digits)
   }
   # Loop over regimes and print regime-specific parameters
   for(j in 1:x$regim){
-      message("\n\nRegime ",j,"\n")
-      # Print location parameters
-      message("\n\nAutoregressive coefficients:\n")
-      print(x$location[[j]],digits=digits)
-      # Print scale parameters
-      message("\n\nScale parameter:\n")
-      print(x$scale[[j]],digits=digits)
+    message("\n\nRegime ",j,"\n")
+    # Print location parameters
+    message("\n\nAutoregressive coefficients:\n")
+    print(x[[j]]$location,digits=digits)
+    # Print scale parameters
+    message("\n\nScale parameter:\n")
+    print(x[[j]]$scale,digits=digits)
   }
   # Print skewness parameters if present
   if(!is.null(x$skewness)){
-     message("\n\nSkewness parameter:\n")
-     print(x$skewness,digits=digits)
+    message("\n\nSkewness parameter:\n")
+    print(x$skewness,digits=digits)
   }
   # Print extra parameters if present
   if(!is.null(x$extra)){
-     message("\n\nExtra parameter:\n")
-     print(x$extra,digits=digits)
+    message("\n\nExtra parameter:\n")
+    print(x$extra,digits=digits)
   }
 }
 #'
@@ -540,12 +555,6 @@ print.summtarmcmc <- function(x,...,digits=max(3,getOption("digits")-2)){
 #' @export
 summary.mtarmcmc <- function(object,...,quantiles=c(0.025,0.25,0.5,0.75,0.975)){
   out <- list()
-  # Store basic MCMC information
-  out$start <- object$start
-  out$end <- object$end
-  out$thin <- object$thin
-  out$sz <- object$sz
-  out$regim <- object$regim
   # Number of requested quantiles
   q <- length(quantiles)
   # Helper function to compute summary statistics and quantiles
@@ -555,31 +564,35 @@ summary.mtarmcmc <- function(object,...,quantiles=c(0.025,0.25,0.5,0.75,0.975)){
     names(x2) <- c("Mean","Sd","Sd(Mean)",paste0(round(quantiles*100,digits=1),"%"))
     return(x2)
   }
-  # Summarize threshold parameters if present
-  if(!is.null(object$thresholds)){
-     out$thresholds <- t(apply(object$thresholds,2,myfunc))
-     rownames(out$thresholds) <- colnames(object$thresholds)
-  }
-  # Initialize lists for regime-specific location and scale summaries
-  out$location <- list()
-  out$scale <- list()
   # Loop over regimes and summarize location and scale parameters
   for(j in 1:object$regim){
-      out$location[[j]] <- t(apply(object$location[[j]],2,myfunc))
-      rownames(out$location[[j]]) <- colnames(object$location[[j]])
-      out$scale[[j]] <- t(apply(object$scale[[j]],2,myfunc))
-      rownames(out$scale[[j]]) <- colnames(object$scale[[j]])
+    out[[j]] <- list()
+    out[[j]]$location <- t(apply(object[[j]]$location,2,myfunc))
+    rownames(out[[j]]$location) <- colnames(object[[j]]$location)
+    out[[j]]$scale <- t(apply(object[[j]]$scale,2,myfunc))
+    rownames(out[[j]]$scale) <- colnames(object[[j]]$scale)
+  }
+  # Summarize threshold parameters if present
+  if(!is.null(object$thresholds)){
+    out$thresholds <- t(apply(object$thresholds,2,myfunc))
+    rownames(out$thresholds) <- colnames(object$thresholds)
   }
   # Summarize skewness parameters if present
   if(!is.null(object$skewness)){
-     out$skewness <- t(apply(object$skewness,2,myfunc))
-     rownames(out$skewness) <- colnames(object$skewness)
+    out$skewness <- t(apply(object$skewness,2,myfunc))
+    rownames(out$skewness) <- colnames(object$skewness)
   }
   # Summarize extra distributional parameters if present
   if(!is.null(object$extra)){
-     out$extra <- t(apply(object$extra,2,myfunc))
-     rownames(out$extra) <- colnames(object$extra)
+    out$extra <- t(apply(object$extra,2,myfunc))
+    rownames(out$extra) <- colnames(object$extra)
   }
+  # Store basic MCMC information
+  out$start <- object$start
+  out$end <- object$end
+  out$thin <- object$thin
+  out$sz <- object$sz
+  out$regim <- object$regim
   # Assign class to the summary object and return it
   class(out) <- "summtarmcmc"
   return(out)
@@ -591,30 +604,30 @@ summary.mtarmcmc <- function(object,...,quantiles=c(0.025,0.25,0.5,0.75,0.975)){
 plot.mtarmcmc <- function(x, trace=TRUE, density=TRUE, smooth=FALSE, bwf, auto.layout=TRUE, ask=dev.interactive(), ...){
   # Loop over regimes to plot regime-specific parameters
   for(j in 1:x$regim){
-      # Open a new graphics device for location parameters
-      dev.new()
-      message(paste("\nAutoregressive coefficients Regime",j,"\n"))
-      plot(x$location[[j]], trace=trace, density=density, smooth=smooth, bwf,
-           auto.layout=auto.layout, ask=ask, ...)
-      # Open a new graphics device for scale parameters
-      dev.new()
-      message(paste("\nScale parameter Regime",j,"\n"))
-      plot(x$scale[[j]], trace=trace, density=density, smooth=smooth, bwf,
-           auto.layout=auto.layout, ask=ask, ...)
+    # Open a new graphics device for location parameters
+    dev.new()
+    message(paste("\nAutoregressive coefficients Regime",j,"\n"))
+    plot(x[[j]]$location, trace=trace, density=density, smooth=smooth, bwf,
+         auto.layout=auto.layout, ask=ask, ...)
+    # Open a new graphics device for scale parameters
+    dev.new()
+    message(paste("\nScale parameter Regime",j,"\n"))
+    plot(x[[j]]$scale, trace=trace, density=density, smooth=smooth, bwf,
+         auto.layout=auto.layout, ask=ask, ...)
   }
   # Plot skewness parameters if present
   if(!is.null(x$skewness)){
-     dev.new()
-     message("\nSkewness parameter\n")
-     plot(x$skewness, trace=trace, density=density, smooth=smooth, bwf,
-          auto.layout=auto.layout, ask=ask, ...)
+    dev.new()
+    message("\nSkewness parameter\n")
+    plot(x$skewness, trace=trace, density=density, smooth=smooth, bwf,
+         auto.layout=auto.layout, ask=ask, ...)
   }
   # Plot extra parameters if present
   if(!is.null(x$extra)){
-     dev.new()
-     message("\nExtra parameter\n")
-     plot(x$extra, trace=trace, density=density, smooth=smooth, bwf,
-          auto.layout=auto.layout, ask=ask, ...)
+    dev.new()
+    message("\nExtra parameter\n")
+    plot(x$extra, trace=trace, density=density, smooth=smooth, bwf,
+         auto.layout=auto.layout, ask=ask, ...)
   }
 }
 #'
@@ -633,7 +646,7 @@ plot.mtarmcmc <- function(x, trace=TRUE, density=TRUE, smooth=FALSE, bwf, auto.l
 #' data(returns)
 #' fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
 #'              subset={Date<="2015-12-07"}, dist="Student-t",
-#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100, n.sim=200,
+#'              ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
 #'              n.thin=2, ssvs=TRUE)
 #' coda::HPDinterval(fit1)
 #'
@@ -641,83 +654,60 @@ plot.mtarmcmc <- function(x, trace=TRUE, density=TRUE, smooth=FALSE, bwf, auto.l
 #' data(riverflows)
 #' fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
 #'              subset={Date<="2009-02-13"}, dist="Laplace",
-#'              ars=ars(nregim=3,p=5), n.burnin=100, n.sim=200, n.thin=2)
+#'              ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
 #' coda::HPDinterval(fit2)
 #'
 #' ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 #' data(iceland.rf)
 #' fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
 #'              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
-#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=100, n.sim=200,
+#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
 #'              n.thin=2, dist="Slash")
 #' coda::HPDinterval(fit3)
 #'
 #' ###### Example 4: U.S. stock returns
 #' data(US.returns)
 #' fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=100,
-#'              n.sim=200, n.thin=2, dist="Student-t")
+#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
+#'              n.sim=2000, n.thin=2, dist="Student-t")
 #' coda::HPDinterval(fit4)
 #' }
 #'
 HPDinterval.mtar <- function(obj, prob=0.95, ...){
   # Convert the mtar object to an mcmc object
   obj2 <- as.mcmc(obj)
-  # Remove components not needed for HPD interval output
-  obj2$regim <- obj2$sz <- obj2$end <- obj2$start <- obj2$thin <- obj2$delay <- NULL
-  # Compute HPD intervals for thresholds if they are present
-  if(!is.null(obj2$thresholds)){
-     obj2$thresholds <- HPDinterval(obj2$thresholds,prob=prob, ...)
-     attr(obj2$thresholds,"Probability") <- NULL
-  }
-  # Initialize temporary objects to merge location parameters across regimes
-  temp <- data.frame(ns=NA)
-  temp2 <- matrix(NA,ncol(obj2$scale[[1]]),1)
-  rownames(temp2) <- colnames(obj2$scale[[1]])
-  # Helper vectors used to reorder and relabel coefficients
-  cc <- c(colnames(obj$data[[1]]$y),":Time",":Season")
-  cc2 <- c(paste0(1:ncol(obj$data[[1]]$y),colnames(obj$data[[1]]$y)),":.1Time",":.2Season")
+  obj3 <- list()
   # Loop over regimes to compute HPD intervals for location and scale parameters
   for(j in 1:obj$ars$nregim){
-      # HPD intervals for location parameters
-      obj2$location[[j]] <- HPDinterval(obj2$location[[j]],prob=prob, ...)
-      obj2$location[[j]] <- data.frame(ns=rownames(obj2$location[[j]]),ps=obj2$location[[j]])
-      # Merge parameters across regimes
-      temp <- merge(temp,obj2$location[[j]],by.x="ns",by.y="ns",all.x=TRUE,all.y=TRUE)
-      # HPD intervals for scale parameters
-      obj2$scale[[j]] <- HPDinterval(obj2$scale[[j]],prob=prob, ...)
-      temp2 <- cbind(temp2,obj2$scale[[j]])
+    obj3[[j]] <- list()
+    # HPD intervals for location parameters
+    obj3[[j]]$location <- HPDinterval(obj2[[j]]$location,prob=prob, ...)
+    attr(obj3[[j]]$location,"Probability") <- NULL
+    # HPD intervals for scale parameters
+    obj3[[j]]$scale <- HPDinterval(obj2[[j]]$scale,prob=prob, ...)
+    attr(obj3[[j]]$scale,"Probability") <- NULL
   }
-  # Remove placeholder rows
-  temp <- temp[!is.na(temp[,1]),]
-  for(jj in 1:(length(cc))) temp[,1] <- gsub(cc[jj],cc2[jj],temp[,1])
-  temp <- temp[sort(temp[,1],index=TRUE)$ix,]
-  # Temporary renaming to ensure correct ordering of location parameters
-  for(jj in 1:(length(cc))) temp[,1] <- gsub(cc2[jj],cc[jj],temp[,1])
-  # Store location HPD intervals as a matrix
-  obj2$location <- as.matrix(temp[,-1])
-  rownames(obj2$location) <- temp[,1]
-  # Store scale HPD intervals as a matrix
-  obj2$scale <- matrix(temp2[,-1],nrow(temp2),2*obj$ars$nregim)
-  rownames(obj2$scale) <- rownames(temp2)
-  # Set column names for lower and upper bounds by regime
-  colnames(obj2$location) <- colnames(obj2$scale) <- rep(c("lower","upper"),obj$ars$nregim)
-  colnames(obj2$location) <- colnames(obj2$scale) <- sort(c(paste0("Regime ",1:obj$ars$nregim,":lower"),paste0("Regime ",1:obj$ars$nregim,":upper")))
+  # Compute HPD intervals for thresholds if they are present
+  if(!is.null(obj2$thresholds)){
+    obj3$thresholds <- HPDinterval(obj2$thresholds,prob=prob, ...)
+    attr(obj3$thresholds,"Probability") <- NULL
+  }
   # Compute HPD intervals for skewness parameters if present
   if(!is.null(obj2$skewness)){
-     obj2$skewness <- HPDinterval(obj2$skewness,prob=prob, ...)
-     attr(obj2$skewness,"Probability") <- NULL
+    obj3$skewness <- HPDinterval(obj2$skewness,prob=prob, ...)
+    attr(obj3$skewness,"Probability") <- NULL
   }
   # Compute HPD intervals for extra parameters if present
   if(!is.null(obj2$extra)){
-     obj2$extra <- HPDinterval(obj2$extra,prob=prob, ...)
-     attr(obj2$extra,"Probability") <- NULL
+    obj3$extra <- HPDinterval(obj2$extra,prob=prob, ...)
+    attr(obj3$extra,"Probability") <- NULL
   }
   # Store the probability level used for the HPD intervals
-  obj2$prob <- prob
+  obj3$prob <- prob
+  obj3$regim <- obj2$regim
   # Set class for the HPD interval object
-  class(obj2) <- "HDPmtar"
-  return(obj2)
+  class(obj3) <- "HDPmtar"
+  return(obj3)
 }
 
 #' @method print HDPmtar
@@ -727,24 +717,28 @@ print.HDPmtar <- function(x, digits=max(3, getOption("digits") - 2), ...){
   message("\nProbability = ",x$prob,"\n\n")
   # Print HPD intervals for threshold parameters if they are present
   if(!is.null(x$thresholds)){
-     message("Thresholds:\n")
-     print(x$thresholds,digits=digits,na.print="")
+    message("Thresholds:\n")
+    print(x$thresholds,digits=digits,na.print="")
   }
-  # Print HPD intervals for location parameters
-  message("\n\nAutoregressive coefficients:\n")
-  print(x$location,digits=digits,na.print="")
-  # Print HPD intervals for scale parameters
-  message("\n\nScale parameter:\n")
-  print(x$scale,digits=digits,na.print="")
+  # Loop over regimes and print regime-specific HPD intervals
+  for(j in 1:x$regim){
+    message("\n\nRegime ",j,"\n")
+    # Print location parameters
+    message("\n\nAutoregressive coefficients:\n")
+    print(x[[j]]$location,digits=digits)
+    # Print scale parameters
+    message("\n\nScale parameter:\n")
+    print(x[[j]]$scale,digits=digits)
+  }
   # Print HPD intervals for skewness parameters if they are present
   if(!is.null(x$skewness)){
-     message("\n\nSkewness parameter:\n")
-     print(x$skewness,digits=digits,na.print="")
+    message("\n\nSkewness parameter:\n")
+    print(x$skewness,digits=digits,na.print="")
   }
   # Print HPD intervals for extra parameters if they are present
   if(!is.null(x$extra)){
-     message("\n\nExtra parameter:\n")
-     print(x$extra,digits=digits,na.print="")
+    message("\n\nExtra parameter:\n")
+    print(x$extra,digits=digits,na.print="")
   }
 }
 

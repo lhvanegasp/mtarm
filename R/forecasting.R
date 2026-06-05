@@ -14,17 +14,11 @@
 #' required credible intervals. By default, \code{credible} is set to \code{0.95}.
 #' @param out.of.sample An optional logical indicator. If \code{TRUE} then the log-score,
 #' Energy-Score (ES), Absolute Error (AE), Absolute Percentage Error (APE), Squared Error (SE),
-#'  are computed
-#' as measures of predictive accuracy. In this case, \code{newdata} must include the observed
+#'  are computed as measures of predictive accuracy. In this case, \code{newdata} must include the observed
 #' values of the output series.
+#' @param rolling An optional positive integer specifying the rolling-window size used for forecasting
+#' with fixed parameters. By default, \code{rolling = NULL}, indicating that rolling-window forecasting is not performed.
 #'
-#' @return A list containing the forecast summaries and, when requested, measures of predictive accuracy.
-#'
-#' \tabular{ll}{
-#' \code{ypred}   \tab a matrix with the results of the forecasting,\cr
-#' \tab \cr
-#' \code{summary} \tab a matrix with the mean and credible intervals of the forecasting,\cr
-#' }
 #' @references Nieto, F.H. (2005) Modeling Bivariate Threshold Autoregressive Processes in the Presence of Missing Data.
 #'             Communications in Statistics - Theory and Methods, 34, 905-930.
 #' @references Romero, L.V. and Calderon, S.A. (2021) Bayesian estimation of a multivariate TAR model when the noise
@@ -54,7 +48,7 @@
 #' data(riverflows)
 #' fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
 #'              subset={Date<="2009-02-13"}, dist="Laplace",
-#'              ars=ars(nregim=3,p=5), n.burnin=100, n.sim=200, n.thin=2)
+#'              ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
 #' p2 <- predict(fit2, newdata=subset(riverflows,Date>"2009-02-13"), n.ahead=60,
 #'               credible=0.8, out.of.sample=TRUE)
 #' with(p2,summary)
@@ -65,7 +59,7 @@
 #' data(iceland.rf)
 #' fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
 #'              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
-#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=100, n.sim=200,
+#'              ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
 #'              n.thin=2, dist="Slash")
 #' p3 <- predict(fit3, newdata=subset(iceland.rf,Date>"1974-11-06"), n.ahead=55,
 #'               credible=0.8, out.of.sample=TRUE)
@@ -76,8 +70,8 @@
 #' ###### Example 4: U.S. stock returns
 #' data(US.returns)
 #' fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=100,
-#'              n.sim=200, n.thin=2, dist="Student-t")
+#'              row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
+#'              n.sim=2000, n.thin=2, dist="Student-t")
 #' p4 <- predict(fit4, newdata=subset(US.returns,Date>"2025-11-28"),n.ahead=100,
 #'               credible=0.8, out.of.sample=TRUE)
 #' with(p4,summary)
@@ -88,23 +82,28 @@
 #' @method predict mtar
 #' @export
 #'
-predict.mtar <- function(object,...,newdata,n.ahead=NULL,row.names,credible=0.95,out.of.sample=FALSE){
+predict.mtar <- function(object,...,newdata,n.ahead=NULL,row.names,credible=0.95,out.of.sample=FALSE,rolling=NULL){
   # Number of regimes in the fitted model
   regim <- object$regim
   # Check if newdata is required (TAR models or models with exogenous variables)
   if(((regim>1 & is.null(object$setar)) | max(object$ars$q) > 0) & missing(newdata))
-     stop("The argument 'newdata' is required!",call.=FALSE)
+    stop("The argument 'newdata' is required!",call.=FALSE)
   # Check validity of forecast horizon
   if(is.null(n.ahead))
-     stop("The argument 'n.ahead' is required!",call.=FALSE)
+    stop("The argument 'n.ahead' is required!",call.=FALSE)
   if(n.ahead<=0 | n.ahead!=floor(n.ahead))
-     stop("The value of the argument 'n.ahead' must be a positive integer!",call.=FALSE)
+    stop("The value of the argument 'n.ahead' must be a positive integer!",call.=FALSE)
+  if(!is.null(rolling)){
+    if(rolling<=0 | rolling!=floor(rolling) | rolling>n.ahead)
+      stop("'rolling' must be a positive integer <= 'n.ahead'",call.=FALSE)
+    if(!out.of.sample) stop("The 'rolling' argument is only relevant when 'out.of.sample' is TRUE",call.=FALSE)
+  }
   # Check validity of credible level
   if(credible <=0 | credible >=1)
-     stop("The value of the argument 'credible' must be within the interval (0,1)!",call.=FALSE)
+    stop("The value of the argument 'credible' must be within the interval (0,1)!",call.=FALSE)
   # newdata is required if out-of-sample predictive accuracy is requested
   if(out.of.sample & missing(newdata))
-     stop("The argument 'new data' is required for out-of-sample forecast accuracy measures!",call.=FALSE)
+    stop("The argument 'new data' is required for out-of-sample forecast accuracy measures!",call.=FALSE)
   # Helper function to generate innovations from the specified distribution
   gendist <- function(dist,Sigma,extra,delta){
     Sigma <- as.matrix(Sigma)
@@ -121,39 +120,40 @@ predict.mtar <- function(object,...,newdata,n.ahead=NULL,row.names,credible=0.95
   }
   # Build model frame for newdata if provided
   if(!missing(newdata)){
-     mmf <- match.call(expand.dots = FALSE)
-     m <- match(c("newdata","row.names"), names(mmf), 0)
-     mmf <- mmf[c(1,m)]
-     mmf$drop.unused.levels <- TRUE
-     names(mmf)[names(mmf)=="newdata"] <- "data"
-     mmf[[1]] <- as.name("model.frame")
-     mmf <- eval(mmf, parent.frame())
-     if(!missingArg(row.names)) row.names <- as.vector(as.character(model.extract(mmf,row.names)))
+    mmf <- match.call(expand.dots = FALSE)
+    m <- match(c("newdata","row.names"), names(mmf), 0)
+    mmf <- mmf[c(1,m)]
+    mmf$drop.unused.levels <- TRUE
+    names(mmf)[names(mmf)=="newdata"] <- "data"
+    mmf[[1]] <- as.name("model.frame")
+    mmf$formula <- Formula(object$formula)
+    mmf <- eval(mmf, parent.frame())
+    if(!missingArg(row.names)) row.names <- as.vector(as.character(model.extract(mmf,row.names)))
   }
   # Build threshold variable for multi-regime models
   if(regim>1 & is.null(object$setar)){
-     mz <- model.part(Formula(object$formula), data = mmf, rhs = 2, terms = TRUE)
-     Z <- model.matrix(mz, data = mmf)
-     if(attr(terms(mz),"intercept")){
-        Znames <- colnames(Z)
-        Z <- as.matrix(Z[,-1])
-     }
-     if(nrow(Z)<n.ahead)
-        stop(paste0("The data.frame 'newdata' must have at least ",n.ahead," rows!"),call.=FALSE)
-     Z <- rbind(matrix(object$threshold.series[-c(1:object$ps),],nrow(object$threshold.series)-object$ps,1),matrix(Z[1:n.ahead,],n.ahead,1))
+    mz <- model.part(Formula(object$formula), data = mmf, rhs = 2, terms = TRUE)
+    Z <- model.matrix(mz, data = mmf)
+    if(attr(terms(mz),"intercept")){
+      Znames <- colnames(Z)
+      Z <- as.matrix(Z[,-1])
+    }
+    if(nrow(Z)<n.ahead)
+      stop(paste0("The data.frame 'newdata' must have at least ",n.ahead," rows!"),call.=FALSE)
+    Z <- rbind(matrix(object$threshold.series[-c(1:object$ps),],nrow(object$threshold.series)-object$ps,1),matrix(Z[1:n.ahead,],n.ahead,1))
   }
   # Build exogenous regressors if present
   if(max(object$ars$q) > 0){
-     mx2 <- model.part(Formula(object$formula), data = mmf, rhs = 3, terms = TRUE)
-     X2 <- model.matrix(mx2, data = mmf)
-     if(attr(terms(mx2),"intercept")){
-        X2names <- colnames(X2)
-        X2 <- as.matrix(X2[,-1])
-        colnames(X2) <- X2names[-1]
-     }
-     if(nrow(X2)<n.ahead)
-        stop(paste0("The data.frame 'newdata' must have at least ",n.ahead," rows!"),call.=FALSE)
-     X2 <- rbind(matrix(object$exogenous.series[-c(1:object$ps),],nrow(object$exogenous.series)-object$ps,ncol(object$exogenous.series)),matrix(X2[1:n.ahead,],n.ahead,ncol(object$exogenous.series)))
+    mx2 <- model.part(Formula(object$formula), data = mmf, rhs = 3, terms = TRUE)
+    X2 <- model.matrix(mx2, data = mmf)
+    if(attr(terms(mx2),"intercept")){
+      X2names <- colnames(X2)
+      X2 <- as.matrix(X2[,-1])
+      colnames(X2) <- X2names[-1]
+    }
+    if(nrow(X2)<n.ahead)
+      stop(paste0("The data.frame 'newdata' must have at least ",n.ahead," rows!"),call.=FALSE)
+    X2 <- rbind(matrix(object$exogenous.series[-c(1:object$ps),],nrow(object$exogenous.series)-object$ps,ncol(object$exogenous.series)),matrix(X2[1:n.ahead,],n.ahead,ncol(object$exogenous.series)))
   }
   # Extract observed output series and its dimensions
   y <- object$data[[1]]$y
@@ -162,28 +162,38 @@ predict.mtar <- function(object,...,newdata,n.ahead=NULL,row.names,credible=0.95
   k <- ncol(y)
   # Storage matrix for simulated paths
   ysim <- rbind(matrix(y,n,k*object$n.sim),matrix(0,n.ahead,k*object$n.sim))
+  predi <- function(x){
+    x <- matrix(x,1,length(x))
+    ks <- seq(credible,1,length=object$n.sim*(1-credible))
+    lis <- t(apply(x,1,quantile,probs=ks-credible))
+    lss <- t(apply(x,1,quantile,probs=ks))
+    dif <- apply(abs(lss-lis),1,which.min)
+    out_ <- c(ifelse(object$dist %in% c("Skew-normal","Skew-Student-t"),median(x),mean(x)),lis[dif],lss[dif])
+    names(out_) <- paste0(name[i],c(".Mean",".Lower",".Upper"))
+    return(out_)
+  }
   # Define likelihood for out-of-sample predictive evaluation
   if(out.of.sample){
-     Lik <- function(dist,y,M,Sigma,delta,log,nu){
-       Sigma <- as.matrix(Sigma)
-       resu <- matrix(y-M,1,k)
-       if(dist %in% c("Skew-normal","Skew-Student-t")){
-          A <- chol2inv(chol(Sigma + as.vector(delta^2)*diag(k)))
-          out <- resu%*%tcrossprod(A,resu)
-          muv <- resu%*%(A*matrix(delta,k,k,byrow=TRUE))
-          Sigmav <- diag(k) - matrix(delta,k,k)*A*matrix(delta,k,k,byrow=TRUE)
-          if(dist=="Skew-normal"){
-             out <- out + k*log(2*pi)
-             if(k > 1) out <- out - 2*log(max(.Machine$double.xmin,pmvnorm(lower=-as.numeric(muv),upper=rep(Inf,k),sigma=Sigmav)))
-             else out <- out - 2*log(max(.Machine$double.xmin,pnorm(-muv/sqrt(Sigmav),lower.tail=FALSE)))
-          }
-          if(dist=="Skew-Student-t"){
-             out <- (nu+k)*log(1 + out/nu) - 2*lgamma((nu+k)/2) + 2*lgamma(nu/2) + k*log(nu*pi)
-             muv <- muv*matrix(sqrt((nu + k)/(nu + out)),nrow(muv),k)
-             if(k > 1) out <- out - 2*log(max(.Machine$double.xmin,pmvt(lower=-as.numeric(muv),upper=rep(Inf,k),sigma=Sigmav,df=round(nu,0)+k)))
-             else out <- out - 2*log(max(.Machine$double.xmin,pt(-muv/sqrt(Sigmav),df=nu,lower.tail=FALSE)))
-          }
-       }else{
+    Lik <- function(dist,y,M,Sigma,delta,log,nu){
+      Sigma <- as.matrix(Sigma)
+      resu <- matrix(y-M,1,k)
+      if(dist %in% c("Skew-normal","Skew-Student-t")){
+        A <- chol2inv(chol(Sigma + as.vector(delta^2)*diag(k)))
+        out <- resu%*%tcrossprod(A,resu)
+        muv <- resu%*%(A*matrix(delta,k,k,byrow=TRUE))
+        Sigmav <- diag(k) - matrix(delta,k,k)*A*matrix(delta,k,k,byrow=TRUE)
+        if(dist=="Skew-normal"){
+          out <- out + k*log(2*pi)
+          if(k > 1) out <- out - 2*log(max(.Machine$double.xmin,pmvnorm(lower=-as.numeric(muv),upper=rep(Inf,k),sigma=Sigmav)))
+          else out <- out - 2*log(max(.Machine$double.xmin,pnorm(-muv/sqrt(Sigmav),lower.tail=FALSE)))
+        }
+        if(dist=="Skew-Student-t"){
+          out <- (nu+k)*log(1 + out/nu) - 2*lgamma((nu+k)/2) + 2*lgamma(nu/2) + k*log(nu*pi)
+          muv <- muv*matrix(sqrt((nu + k)/(nu + out)),nrow(muv),k)
+          if(k > 1) out <- out - 2*log(max(.Machine$double.xmin,pmvt(lower=-as.numeric(muv),upper=rep(Inf,k),sigma=Sigmav,df=round(nu,0)+k)))
+          else out <- out - 2*log(max(.Machine$double.xmin,pt(-muv/sqrt(Sigmav),df=nu,lower.tail=FALSE)))
+        }
+      }else{
         out <- resu%*%tcrossprod(chol2inv(chol(Sigma)),resu)
         out <- switch(dist,
                       "Gaussian"={out},
@@ -193,22 +203,22 @@ predict.mtar <- function(object,...,newdata,n.ahead=NULL,row.names,credible=0.95
                       "Slash"={ifelse(out==0,-2*log(nu/(nu+k)),-2*lgamma((k+nu)/2) + (k+nu)*log(out/2) -2*log((nu/2)*pgamma(1,shape=(k+nu)/2,rate=out/2)))},
                       "Hyperbolic"={-2*log(besselK(nu*sqrt(1+out),(2-k)/2)) -((2-k)/2)*log(1+out) - k*log(nu) +2*log(besselK(nu,1))})
         out <- out + k*log(2*pi)
-       }
-       out <- -(out + log(det(Sigma)))/2
-       if(log) out <- out + sum(y)
-       return(exp(out))
-     }
+      }
+      out <- -(out + log(det(Sigma)))/2
+      if(log) out <- out + sum(y)
+      return(exp(out))
+    }
     # Build true future observations for evaluation
     mx <- model.part(Formula(object$formula), data = mmf, rhs = 1, terms = TRUE)
     D <- model.matrix(mx, data = mmf)
     if(attr(terms(mx),"intercept")){
-       Dnames <- colnames(D)
-       D <- matrix(D[,-1],ncol=length(Dnames)-1)
-       colnames(D) <- Dnames[-1]
+      Dnames <- colnames(D)
+      D <- matrix(D[,-1],ncol=length(Dnames)-1)
+      colnames(D) <- Dnames[-1]
     }
     ytrue <- D
     if(nrow(ytrue)<n.ahead)
-       stop(paste0("The data.frame 'newdata' must have at least ",n.ahead," rows!"),call.=FALSE)
+      stop(paste0("The data.frame 'newdata' must have at least ",n.ahead," rows!"),call.=FALSE)
     else ytrue <- matrix(D[1:n.ahead,],n.ahead,k)
     if(object$log) ytrue <- log(ytrue)
     prek <- matrix(0,n.ahead,object$n.sim)
@@ -221,20 +231,94 @@ predict.mtar <- function(object,...,newdata,n.ahead=NULL,row.names,credible=0.95
          "linear"={Xd <- matrix(cbind(1,t.ids),n,2)},
          "quadratic"={Xd <- matrix(cbind(1,t.ids,t.ids^2),n,3)})
   if(!is.null(object$nseason)){
-     Itil <- matrix(diag(object$nseason)[,-1],object$nseason,object$nseason-1)
-     Xd <- cbind(Xd,t(matrix(apply(t.ids,1,function(x) Itil[x%%object$nseason + 1,]),object$nseason-1,n.ahead)))
+    Itil <- matrix(diag(object$nseason)[,-1],object$nseason,object$nseason-1)
+    Xd <- cbind(Xd,t(matrix(apply(t.ids,1,function(x) Itil[x%%object$nseason + 1,]),object$nseason-1,n.ahead)))
   }
   if(!object$Intercept) Xd <- Xd[,-1]
-  # Main simulation loop over posterior draws
-  for(i in 1:object$n.sim){
+
+  nano_ <- list(...)
+  if(is.null(nano_$stop)){
+    # Main simulation loop over posterior draws
+    for(i in 1:object$n.sim){
       if(regim > 1){
-         h <- object$chains$h[i]
-         thresholds <- object$chains$thresholds[,i]
+        h <- object$chains$h[i]
+        thresholds <- object$chains$thresholds[,i]
       }
       for(j in (n+1):(n+n.ahead)){
+        if(regim > 1){
+          if(!is.null(object$setar)) iz <- ysim[j-h,(i-1)*k + object$setar] else iz <- Z[j-h]
+          regs <- cut(iz,breaks=c(-Inf,sort(thresholds),Inf),labels=FALSE)
+        }else regs <- 1
+        X <- Xd[j-n,]
+        for(l in 1:object$ars$p[regs]) X <- c(X,ysim[j-l,((i-1)*k+1):(i*k)])
+        if(object$ars$q[regs] > 0) for(l in 1:object$ars$q[regs]) X <- c(X,X2[j-l,])
+        if(object$ars$d[regs] > 0) for(l in 1:object$ars$d[regs]) X <- c(X,Z[j-l,])
+        if(object$ssvs) zetai <- object$chains[[regs]]$zeta[,i] else zetai <- rep(1,length(X))
+        M <- matrix(X[zetai==1],1,sum(zetai))%*%object$chains[[regs]]$location[zetai==1,((i-1)*k+1):(i*k)]
+        if(object$dist %in% c("Gaussian","Laplace","Skew-normal")) extrai <- NULL else extrai <- object$chains$extra[,i]
+        if(object$dist %in% c("Skew-normal","Skew-Student-t")) deltai <- object$chains$delta[,i] else deltai <- rep(0,k)
+        ysim[j,((i-1)*k+1):(i*k)] <- M + gendist(object$dist,object$chains[[regs]]$scale[,((i-1)*k+1):(i*k)],extrai,deltai)
+        if(out.of.sample & is.null(rolling)){
+          prek[j-n,i] <- Lik(object$dist,ytrue[j,],M,object$chains[[regs]]$scale[,((i-1)*k+1):(i*k)],deltai,object$log,extrai)
+        }
+      }
+    }
+    # Remove in-sample observations and reshape simulations
+    ysim <- matrix(tail(ysim,n.ahead),n.ahead,k*object$n.sim)
+    colnames(ysim) <- rep(colnames(y),object$n.sim)
+    if(object$log) ysim <- exp(ysim)
+    # Compute point forecasts and highest density intervals
+    out_ <- vector()
+    # Apply summary function to each series
+    for(i in 1:k) out_ <- cbind(out_,t(apply(matrix(ysim[,seq(i,k*object$n.sim,k)],n.ahead,object$n.sim),1,predi)))
+    if(missingArg(row.names)) row.names <- 1:n.ahead
+    rownames(ysim) <- rownames(out_) <- row.names[1:n.ahead]
+    # Build output object
+    out__ <- list(summary=out_,output.series=object$data[[1]]$y,rownames=!is.null(object$call$row.names))
+    class(out__) <- "predict_mtar"
+    # Add out-of-sample accuracy measures if requested
+    if(out.of.sample & is.null(rolling)){
+      out__$LS <- matrix(-log(rowMeans(prek)),n.ahead,1)
+      if(object$log) ytrue <- exp(ytrue)
+      ytrues <- matrix(tail(ytrue,n.ahead),n.ahead,k)
+      out__$ES <- vector()
+      for(js in 1:n.ahead){
+        XX <- matrix(ysim[js,],object$n.sim,k,byrow=TRUE)
+        out__$ES <- c(out__$ES,sum(sqrt(rowSums((XX - matrix(ytrues[js,],object$n.sim,k,byrow=TRUE))^2)))/object$n.sim - sum(dist(XX))/(2*object$n.sim^2))
+      }
+      out__$ES <- matrix(out__$ES,n.ahead,1)
+      out__$AE <- matrix(abs(out_[,seq(1,3*k,3)] - ytrues),n.ahead,k)
+      out__$APE <- 100*matrix(abs((out_[,seq(1,3*k,3)] - ytrues)/ytrues),n.ahead,k)
+      out__$SE <- matrix((out_[,seq(1,3*k,3)] - ytrues)^2,n.ahead,k)
+      out__$Width <- matrix(out_[,seq(3,3*k,3)] - out_[,seq(2,3*k,3)],n.ahead,k)
+      out__$CR <- matrix((out_[,seq(3,3*k,3)]>=ytrues)*(out_[,seq(2,3*k,3)]<=ytrues),n.ahead,k)
+      rownames(out__$AE) <- rownames(out__$LS) <- rownames(out__$APE) <- rownames(out__$SE) <- rownames(out_)
+      colnames(out__$LS) <- "Log.Score"
+      colnames(out__$AE) <- paste0(colnames(y),sep=".","AE")
+      colnames(out__$APE) <- paste0(colnames(y),sep=".","APE")
+      colnames(out__$SE) <- paste0(colnames(y),sep=".","SE")
+      colnames(out__$Width) <- paste0(colnames(y),sep=".","Width")
+      colnames(out__$CR) <- paste0(colnames(y),sep=".","CR")
+      colnames(out__$ES) <- "Energy.Score"
+    }
+  }else out__ <- list()
+  if(out.of.sample & !is.null(rolling)){
+    out2__ <- list()
+    out2__$LS <- out2__$ES <- out2__$AE <- out2__$APE <- out2__$SE <- out2__$Width <- out2__$CR <- vector()
+    for(ns in 0:(n.ahead-1)){
+      window <- min(rolling,n.ahead-ns)
+      ytrues <- matrix(ytrue[(n+ns+1):(n+ns+window),],window,k)
+      prek <- matrix(0,window,object$n.sim)
+      ysim <- rbind(matrix(ytrue[1:(n+ns),],n+ns,k*object$n.sim),matrix(0,window,k*object$n.sim))
+      for(i in 1:object$n.sim){
+        if(regim > 1){
+          h <- object$chains$h[i]
+          thresholds <- object$chains$thresholds[,i]
+        }
+        for(j in (n+ns+1):(n+ns+window)){
           if(regim > 1){
-             if(!is.null(object$setar)) iz <- ysim[j-h,(i-1)*k + object$setar] else iz <- Z[j-h]
-             regs <- cut(iz,breaks=c(-Inf,sort(thresholds),Inf),labels=FALSE)
+            if(!is.null(object$setar)) iz <- ysim[j-h,(i-1)*k + object$setar] else iz <- Z[j-h]
+            regs <- cut(iz,breaks=c(-Inf,sort(thresholds),Inf),labels=FALSE)
           }else regs <- 1
           X <- Xd[j-n,]
           for(l in 1:object$ars$p[regs]) X <- c(X,ysim[j-l,((i-1)*k+1):(i*k)])
@@ -245,63 +329,40 @@ predict.mtar <- function(object,...,newdata,n.ahead=NULL,row.names,credible=0.95
           if(object$dist %in% c("Gaussian","Laplace","Skew-normal")) extrai <- NULL else extrai <- object$chains$extra[,i]
           if(object$dist %in% c("Skew-normal","Skew-Student-t")) deltai <- object$chains$delta[,i] else deltai <- rep(0,k)
           ysim[j,((i-1)*k+1):(i*k)] <- M + gendist(object$dist,object$chains[[regs]]$scale[,((i-1)*k+1):(i*k)],extrai,deltai)
-          if(out.of.sample){
-             prek[j-n,i] <- Lik(object$dist,ytrue[j,],M,object$chains[[regs]]$scale[,((i-1)*k+1):(i*k)],deltai,object$log,extrai)
-          }
+          prek[j-n-ns,i] <- Lik(object$dist,ytrues[j-n-ns,],M,object$chains[[regs]]$scale[,((i-1)*k+1):(i*k)],deltai,object$log,extrai)
+        }
       }
-  }
-  # Remove in-sample observations and reshape simulations
-  ysim <- matrix(ysim[-c(1:n),],n.ahead,k*object$n.sim)
-  colnames(ysim) <- rep(colnames(y),object$n.sim)
-  if(object$log) ysim <- exp(ysim)
-  # Compute point forecasts and highest density intervals
-  out_ <- vector()
-  predi <- function(x){
-     x <- matrix(x,1,length(x))
-     ks <- seq(credible,1,length=object$n.sim*(1-credible))
-     lis <- t(apply(x,1,quantile,probs=ks-credible))
-     lss <- t(apply(x,1,quantile,probs=ks))
-     dif <- apply(abs(lss-lis),1,which.min)
-     out_ <- c(ifelse(object$dist %in% c("Skew-normal","Skew-Student-t"),median(x),mean(x)),lis[dif],lss[dif])
-     names(out_) <- paste0(name[i],c(".Mean",".Lower",".Upper"))
-     return(out_)
-  }
-  # Apply summary function to each series
-  for(i in 1:k) out_ <- cbind(out_,t(apply(matrix(ysim[,seq(i,k*object$n.sim,k)],n.ahead,object$n.sim),1,predi)))
-  if(missingArg(row.names)) row.names <- 1:n.ahead
-  rownames(ysim) <- rownames(out_) <- row.names[1:n.ahead]
-  # Build output object
-  out__ <- list(summary=out_,output.series=object$data[[1]]$y,rownames=!is.null(object$call$row.names))
-  class(out__) <- "predict_mtar"
-  # Add out-of-sample accuracy measures if requested
-  if(out.of.sample){
-     out__$LS <- matrix(-log(rowMeans(prek)),n.ahead,1)
-     if(object$log) ytrue <- exp(ytrue)
-     ytrue <- matrix(ytrue[-c(1:n),],n.ahead,k)
-     out__$ES <- vector()
-     for(js in 1:n.ahead){
-         XX <- matrix(ysim[js,],object$n.sim,k,byrow=TRUE)
-         out__$ES <- c(out__$ES,sum(sqrt(rowSums((XX - matrix(ytrue[js,],object$n.sim,k,byrow=TRUE))^2)))/object$n.sim - sum(dist(XX))/(2*object$n.sim^2))
-     }
-     out__$ES <- matrix(out__$ES,n.ahead,1)
-     out__$AE <- matrix(abs(out_[,seq(1,3*k,3)] - ytrue),nrow(ytrue),k)
-     out__$APE <- 100*matrix(abs((out_[,seq(1,3*k,3)] - ytrue)/ytrue),nrow(ytrue),k)
-     out__$SE <- matrix((out_[,seq(1,3*k,3)] - ytrue)^2,nrow(ytrue),k)
-     out__$Width <- matrix(out_[,seq(3,3*k,3)] - out_[,seq(2,3*k,3)],nrow(ytrue),k)
-     out__$CR <- matrix((out_[,seq(3,3*k,3)]>=ytrue)*(out_[,seq(2,3*k,3)]<=ytrue),nrow(ytrue),k)
-     rownames(out__$AE) <- rownames(out__$LS) <- rownames(out__$APE) <- rownames(out__$SE) <- rownames(out_)
-     colnames(out__$LS) <- "Log.Score"
-     colnames(out__$AE) <- paste0(colnames(y),sep=".","AE")
-     colnames(out__$APE) <- paste0(colnames(y),sep=".","APE")
-     colnames(out__$SE) <- paste0(colnames(y),sep=".","SE")
-     colnames(out__$Width) <- paste0(colnames(y),sep=".","Width")
-     colnames(out__$CR) <- paste0(colnames(y),sep=".","CoverageRate")
-     colnames(out__$ES) <- "Energy.Score"
+      ysim <- tail(ysim,window)
+      ES <- vector()
+      for(js in 1:window){
+        XX <- matrix(ysim[js,],object$n.sim,k,byrow=TRUE)
+        ES <- c(ES,sum(sqrt(rowSums((XX - matrix(ytrues[js,],object$n.sim,k,byrow=TRUE))^2)))/object$n.sim - sum(dist(XX))/(2*object$n.sim^2))
+      }
+      out2__$LS <- rbind(out2__$LS,matrix(c(-log(rowMeans(prek)),rep(NA,rolling-window)),1,rolling))
+      out2__$ES <- rbind(out2__$ES,matrix(c(ES,rep(NA,rolling-window)),1,rolling))
+      out_ <- vector()
+      for(i in 1:k) out_ <- cbind(out_,t(apply(matrix(ysim[,seq(i,k*object$n.sim,k)],window,object$n.sim),1,predi)))
+      out2__$AE <- rbind(out2__$AE,matrix(t(rbind(abs(out_[,seq(1,3*k,3)]-ytrues),matrix(NA,rolling-window,k))),1,rolling*k))
+      out2__$APE <- rbind(out2__$APE,matrix(t(rbind(abs((out_[,seq(1,3*k,3)]-ytrues)/ytrues),matrix(NA,rolling-window,k))),1,rolling*k))
+      out2__$SE <- out2__$AE^2
+      out2__$Width <- rbind(out2__$Width,matrix(t(rbind(matrix(out_[,seq(3,3*k,3)]-out_[,seq(2,3*k,3)],window,k),matrix(NA,rolling-window,k))),1,rolling*k))
+      out2__$CR <- rbind(out2__$CR,matrix(t(rbind((out_[,seq(3,3*k,3)]>=ytrues)*(out_[,seq(2,3*k,3)]<=ytrues),matrix(NA,rolling-window,k))),1,rolling*k))
+    }
+    colnames(out2__$LS) <- colnames(out2__$ES) <- paste0(1:rolling,"-step-ahead")
+    rownames(out2__$LS) <- rownames(out2__$ES) <- NULL
+    colnames(out2__$AE) <- colnames(out2__$APE) <- colnames(out2__$SE) <- colnames(out2__$Width) <- colnames(out2__$CR) <- as.vector(outer(colnames(y),paste0("-",1:rolling),paste0))
+    rownames(out2__$AE) <- rownames(out2__$APE) <- rownames(out2__$SE) <- rownames(out2__$Width) <- rownames(out2__$CR) <- NULL
+    out__$LS <- out2__$LS
+    out__$ES <- out2__$ES
+    out__$AE <- out2__$AE
+    out__$APE <- 100*out2__$APE
+    out__$SE <- out2__$SE
+    out__$Width <- out2__$Width
+    out__$CR <- out2__$CR
   }
   # Return prediction object
   return(out__)
 }
-
 #' @method plot predict_mtar
 #' @export
 plot.predict_mtar <- function(x,...,last,historical=list(),forecasts=list(),forecasts.PI=list()){
@@ -389,15 +450,14 @@ plot.predict_mtar <- function(x,...,last,historical=list(),forecasts=list(),fore
 #' @param n.ahead A positive integer specifying the number of steps ahead to forecast.
 #' @param credible An optional numeric value in \eqn{(0,1)} specifying the level of the
 #' required prediction intervals. By default, \code{credible} is set to \code{0.95}.
-#' @param by.component An optional logical argument. If \code{TRUE}, the predictive
-#' accuracy measures are computed separately for each component of the multivariate
-#' output series. By default, \code{by.component} is set to \code{TRUE}.
+#' @param rolling An optional positive integer specifying the rolling-window size used for forecasting.
+#' By default, \code{rolling = NULL}, indicating that rolling-window forecasting is not performed.
 #' @param FUN An optional function used to summarize the \code{n.ahead} values computed
 #' for each predictive accuracy measure. By default, \code{FUN} is set to \code{mean}.
 #' @method out_of_sample mtar
 #' @export
 #'
-out_of_sample.mtar <- function(...,newdata,n.ahead=NULL,credible=0.95,by.component=TRUE,FUN=mean){
+out_of_sample.mtar <- function(...,newdata,n.ahead=NULL,credible=0.95,FUN=mean,rolling=NULL){
   # Collect all fitted mtar models passed through ...
   another <- list(...)
   # Store the original function call
@@ -405,57 +465,48 @@ out_of_sample.mtar <- function(...,newdata,n.ahead=NULL,credible=0.95,by.compone
   # Number of components of the output series
   k <- ncol(another[[1]]$data[[1]]$y)
   if(is.null(n.ahead)) stop("The argument 'n.ahead' is required!",call.=FALSE)
-  # Initialize output matrix:
-  # rows = number of models, columns depend on whether results are by component
-  out <- matrix(0,length(another),ifelse(by.component,5*k+2,7))
-  # Vector to store row names (model identifiers)
-  outnames <- vector()
-  # Loop over each model
-  for(ii in 1:length(another)){
-      # Obtain out-of-sample predictions and accuracy measures
-      temp <- predict(another[[ii]],newdata=newdata,n.ahead=n.ahead,credible=credible,out.of.sample=TRUE)
-      # Average log predictive score
-      out[ii,1] <- apply(temp$LS,2,FUN)
-      out[ii,2] <- apply(temp$ES,2,FUN)
-      if(by.component){
-         # Mean Absolute Error by component
-         out[ii,3:(k+2)] <- apply(temp$AE,2,FUN)
-         # Mean Absolute Percentage Error by component
-         out[ii,(k+3):(2*k+2)] <- apply(temp$APE,2,FUN)
-         # Mean Squared Error by component
-         out[ii,(2*k+3):(3*k+2)] <- apply(temp$SE,2,FUN)
-         # Mean Width by component
-         out[ii,(3*k+3):(4*k+2)] <- apply(temp$Width,2,FUN)
-         # Coverage rate by component
-         out[ii,(4*k+3):(5*k+2)] <- 100*apply(temp$CR,2,FUN)
-      }else{
-         # Overall Mean Absolute Error
-         out[ii,3] <- FUN(apply(temp$AE,1,mean))
-         # Overall Mean Absolute Percentage Error
-         out[ii,4] <- FUN(apply(temp$APE,1,mean))
-         # Overall Mean Squared Error
-         out[ii,5] <- FUN(apply(temp$SE,1,mean))
-         # Overall average Width
-         out[ii,6] <- FUN(apply(temp$Width,1,mean))
-         # Overall Coverage rate
-         out[ii,7] <- FUN(apply(temp$CR,1,mean))
-      }
-      # Use the model call as the row name
-      outnames[ii] <- as.character(call.[ii+1])
+  funame <- deparse(substitute(FUN))
+  # Initialize output list:
+  out <- list()
+  # Building column names
+  name <- c("Log.Score","Energy.Score")
+  me <- c("AE","APE","SE","Width","CR")
+  for(i in 1:length(me)) name <- c(name,paste0(colnames(another[[1]]$data[[1]]$y),sep=".",me[i]))
+  # Building row names
+  namec <- vector()
+  for(i in 1:length(another)) namec <- c(namec,as.character(call.[i+1]))
+  # Loop over each object of class mtar in the list
+  for(i in 1:length(another)){
+    # Obtain out-of-sample predictions and accuracy measures
+    temp <- predict(another[[i]],newdata=newdata,n.ahead=n.ahead,credible=credible,out.of.sample=TRUE,rolling=rolling,stop=if(is.null(rolling)) NULL else TRUE)
+    for(r in 1:ifelse(is.null(rolling),1,rolling)){
+      if(i==1) out[[r]] <- matrix(0,length(another),5*k+2)
+      # Log-score and Energy-score
+      out[[r]][i,1] <- FUN(na.omit(temp$LS[,r]))
+      # Energy-score
+      out[[r]][i,2] <- FUN(na.omit(temp$ES[,r]))
+      # Absolute Error by component
+      out[[r]][i,3:(k+2)] <- apply(matrix(na.omit(temp$AE[,((r-1)*k + 1):(r*k)]),ncol=k),2,FUN)
+      # Absolute Percentage Error by component
+      out[[r]][i,(k+3):(2*k+2)] <- apply(matrix(na.omit(temp$APE[,((r-1)*k + 1):(r*k)]),ncol=k),2,FUN)
+      # Squared Error by component
+      out[[r]][i,(2*k+3):(3*k+2)] <- apply(matrix(na.omit(temp$SE[,((r-1)*k + 1):(r*k)]),ncol=k),2,FUN)
+      # Width by component
+      out[[r]][i,(3*k+3):(4*k+2)] <- apply(matrix(na.omit(temp$Width[,((r-1)*k + 1):(r*k)]),ncol=k),2,FUN)
+      # Coverage rate by component
+      out[[r]][i,(4*k+3):(5*k+2)] <- apply(matrix(na.omit(temp$CR[,((r-1)*k + 1):(r*k)]),ncol=k),2,FUN)
+      # Assigning row names
+      rownames(out[[r]]) <- namec
+      # Assigning col names
+      colnames(out[[r]]) <- name
+    }
   }
-  # Assign row names to the output matrix
-  rownames(out) <- outnames
-  # Assign column names depending on the output format
-  if(!by.component) colnames(out) <- c("Log.Score","Energy.Score","AE","APE","SE","Width","CoverageRate")
-  else{
-    name <- c("Log.Score","Energy.Score")
-    me <- c("AE","APE","SE","Width","CoverageRate")
-    for(i in 1:length(me)) name <- c(name,paste0(colnames(another[[1]]$data[[1]]$y),sep=".",me[i]))
-    colnames(out) <- name
-  }
+  if(is.null(rolling)) out <- out[[1]]
+  else names(out) <- paste0(1:rolling,"-step-ahead")
   # Return the out-of-sample evaluation results
   return(out)
 }
+
 #' @title Computing Out-of-Sample predictive accuracy measures
 #' @description Computes Out-of-Sample predictive accuracy measures for an object of class \code{listmtar}.
 #' @param x An object of class \code{listmtar} returned by the routine \code{mtar_grid()}.
@@ -465,12 +516,11 @@ out_of_sample.mtar <- function(...,newdata,n.ahead=NULL,credible=0.95,by.compone
 #' @param n.ahead A positive integer specifying the number of steps ahead to forecast.
 #' @param credible An optional numeric value in \eqn{(0,1)} specifying the level of the
 #' required prediction intervals. By default, \code{credible} is set to \code{0.95}.
-#' @param by.component An optional logical argument. If \code{TRUE}, the predictive
-#' accuracy measures are computed separately for each component of the multivariate
-#' output series. By default, \code{by.component} is set to \code{TRUE}.
 #' @param FUN An optional function used to summarize the \code{n.ahead} values computed
 #' for each predictive accuracy measure. By default, \code{FUN} is set to \code{mean}.
 #' @param ... optional arguments to FUN.
+#' @param rolling An optional positive integer specifying the rolling-window size used for forecasting.
+#' By default, \code{rolling = NULL}, indicating that rolling-window forecasting is not performed.
 #' @method out_of_sample listmtar
 #' @export
 #'
@@ -481,20 +531,20 @@ out_of_sample.mtar <- function(...,newdata,n.ahead=NULL,credible=0.95,by.compone
 #' fit1 <- mtar_grid(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
 #'                   subset={Date<="2015-12-07"}, dist=c("Gaussian","Student-t",
 #'                   "Slash","Laplace"), nregim.min=2, nregim.max=3, p.min=2,
-#'                   p.max=2, n.burnin=100, n.sim=200, n.thin=2,
+#'                   p.max=2, n.burnin=1000, n.sim=2000, n.thin=2,
 #'                   plan_strategy="multisession")
 #' oos1 <- out_of_sample(fit1, newdata=subset(returns, Date>"2015-12-07"),
-#'                       n.ahead=75, by.component=TRUE, FUN=median)
+#'                       n.ahead=75, FUN=median)
 #' oos1
 #'
 #' ###### Example 2: Rainfall and two river flows in Colombia
 #' data(riverflows)
 #' fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
 #'                   row.names=Date, subset={Date<="2009-02-13"},dist="Laplace",
-#'                   nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=100,
-#'                   n.sim=200, n.thin=2, plan_strategy="multisession")
+#'                   nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=1000,
+#'                   n.sim=2000, n.thin=2, plan_strategy="multisession")
 #' oos2 <- out_of_sample(fit2, newdata=subset(riverflows, Date>"2009-02-13"),
-#'                       n.ahead=60, by.component=TRUE, FUN=median)
+#'                       n.ahead=60, FUN=median)
 #' oos2
 #'
 #' ###### Example 3: Temperature, precipitation, and two river flows in Iceland
@@ -503,10 +553,10 @@ out_of_sample.mtar <- function(...,newdata,n.ahead=NULL,credible=0.95,by.compone
 #'                   data=iceland.rf,subset={Date<="1974-11-06"},row.names=Date,
 #'                   dist=c("Slash","Student-t"), nregim.min=1, nregim.max=2,
 #'                   p.min=15, p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,
-#'                   n.burnin=100, n.sim=200, n.thin=2,
+#'                   n.burnin=1000, n.sim=2000, n.thin=2,
 #'                   plan_strategy="multisession")
 #' oos3 <- out_of_sample(fit3, newdata=subset(iceland.rf, Date>"1974-11-06"),
-#'                       n.ahead=55, by.component=TRUE, FUN=median)
+#'                       n.ahead=55, FUN=median)
 #' oos3
 #'
 #' ###### Example 4: U.S. stock returns
@@ -514,65 +564,56 @@ out_of_sample.mtar <- function(...,newdata,n.ahead=NULL,credible=0.95,by.compone
 #' fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
 #'                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
 #'                   nregim.min=2, nregim.max=2, p.min=3, p.max=3, d.min=3,
-#'                   d.max=3, n.burnin=100, n.sim=200, n.thin=2,
-#'                   plan_strategy="sequential")
+#'                   d.max=3, n.burnin=1000, n.sim=2000, n.thin=2,
+#'                   plan_strategy="multisession")
 #' oos4 <- out_of_sample(fit4, newdata=subset(US.returns, Date>"2025-11-28"),
-#'                       n.ahead=100, by.component=TRUE, FUN=median)
+#'                       n.ahead=100, FUN=median)
 #' oos4
 #' }
 #'
 #'
-out_of_sample.listmtar <- function(x,newdata,n.ahead=NULL,credible=0.95,by.component=FALSE,FUN=mean,...){
+out_of_sample.listmtar <- function(x,newdata,n.ahead=NULL,credible=0.95,FUN=mean,rolling=NULL,...){
   # Number of components of the output series
   k <- ncol(x[[1]]$data[[1]]$y)
-  # Initialize output matrix:
-  # rows = number of models, columns depend on whether results are by component
-  out <- matrix(0,length(x),ifelse(by.component,5*k+2,7))
   if(is.null(n.ahead)) stop("The argument 'n.ahead' is required!",call.=FALSE)
   funame <- deparse(substitute(FUN))
+  # Initialize output list:
+  out <- list()
+  # Building column names
+  name <- c("Log.Score","Energy.Score")
+  me <- c("AE","APE","SE","Width","CR")
+  for(i in 1:length(me)) name <- c(name,paste0(colnames(x[[1]]$data[[1]]$y),sep=".",me[i]))
   # Loop over each object of class mtar in the list
   for(i in 1:length(x)){
-      # Obtain out-of-sample predictions and accuracy measures
-      temp <- predict(x[[i]],newdata=newdata,n.ahead=n.ahead,credible=credible,out.of.sample=TRUE)
-      # Average log predictive score
-      out[i,1] <- FUN(temp$LS,...)
-      out[i,2] <- FUN(temp$ES,...)
-      if(by.component){
-         # Mean Absolute Error by component (averaged over horizons)
-         out[i,3:(k+2)] <- apply(temp$AE,2,FUN,...)
-         # Mean Absolute Percentage Error by component (averaged over horizons)
-         out[i,(k+3):(2*k+2)] <- apply(temp$APE,2,FUN,...)
-         # Mean Squared Error by component (averaged over horizons)
-         out[i,(2*k+3):(3*k+2)] <- apply(temp$SE,2,FUN,...)
-         # Mean Width by component
-         out[i,(3*k+3):(4*k+2)] <- apply(temp$Width,2,FUN,...)
-         # Coverage rate by component
-         out[i,(4*k+3):(5*k+2)] <- apply(temp$CR,2,FUN,...)
-      }else{
-         # Overall Mean Absolute Error
-         out[i,3] <- FUN(apply(temp$AE,1,FUN,...),...)
-         # Overall Mean Absolute Percentage Error
-         out[i,4] <- FUN(apply(temp$APE,1,FUN,...),...)
-         # Overall Mean Squared Error
-         out[i,5] <- FUN(apply(temp$SE,1,FUN,...),...)
-         # Overall average Width
-         out[i,6] <- FUN(apply(temp$Width,1,FUN,...),...)
-         # Overall Coverage rate
-         out[i,7] <- FUN(apply(temp$CR,1,FUN,...),...)
-      }
+    # Obtain out-of-sample predictions and accuracy measures
+    temp <- predict(x[[i]],newdata=newdata,n.ahead=n.ahead,credible=credible,out.of.sample=TRUE,rolling=rolling,stop=if(is.null(rolling)) NULL else TRUE)
+    for(r in 1:ifelse(is.null(rolling),1,rolling)){
+      if(i==1) out[[r]] <- matrix(0,length(x),5*k+2)
+      # Log-score and Energy-score
+      out[[r]][i,1] <- FUN(na.omit(temp$LS[,r]),...)
+      # Energy-score
+      out[[r]][i,2] <- FUN(na.omit(temp$ES[,r]),...)
+      # Absolute Error by component
+      out[[r]][i,3:(k+2)] <- apply(matrix(na.omit(temp$AE[,((r-1)*k + 1):(r*k)]),ncol=k),2,FUN,...)
+      # Absolute Percentage Error by component
+      out[[r]][i,(k+3):(2*k+2)] <- apply(matrix(na.omit(temp$APE[,((r-1)*k + 1):(r*k)]),ncol=k),2,FUN,...)
+      # Squared Error by component
+      out[[r]][i,(2*k+3):(3*k+2)] <- apply(matrix(na.omit(temp$SE[,((r-1)*k + 1):(r*k)]),ncol=k),2,FUN,...)
+      # Width by component
+      out[[r]][i,(3*k+3):(4*k+2)] <- apply(matrix(na.omit(temp$Width[,((r-1)*k + 1):(r*k)]),ncol=k),2,FUN,...)
+      # Coverage rate by component
+      out[[r]][i,(4*k+3):(5*k+2)] <- apply(matrix(na.omit(temp$CR[,((r-1)*k + 1):(r*k)]),ncol=k),2,FUN,...)
+      # Assigning row names
+      rownames(out[[r]]) <- names(x)
+      # Assigning col names
+      colnames(out[[r]]) <- name
+    }
   }
-  # Assign row names using the names of the model list
-  rownames(out) <- names(x)
-  # Assign column names depending on the output format
-  if(!by.component) colnames(out) <- paste0(c("Log.Score","Energy.Score","AE","APE","SE","Width","CoverageRate"),".",funame)
-  else{
-    name <- c("Log.Score","Energy.Score")
-    me <- c("AE","APE","SE","Width","CoverageRate")
-    for(i in 1:length(me)) name <- c(name,paste0(colnames(x[[1]]$data[[1]]$y),sep=".",me[i]))
-    colnames(out) <- name
-  }
+  if(is.null(rolling)) out <- out[[1]]
+  else names(out) <- paste0(1:rolling,"-step-ahead")
   # Return the out-of-sample evaluation results
   return(out)
 }
+
 #'
 #'

@@ -73,7 +73,7 @@
 #' str(out1)
 #'
 #' fit1 <- mtar(~ Y1 + Y2 + Y3 | Z, data=out1, ars=myars, dist=dist,
-#'              n.burn=200, n.sim=300, n.thin=2)
+#'              n.burn=2000, n.sim=3000, n.thin=2)
 #' summary(fit1)
 #'
 #' ###### Simulation of a trivariate VAR model
@@ -93,7 +93,7 @@
 #' str(out2)
 #'
 #' fit2 <- mtar(~ Y1 + Y2 + Y3, data=out2, ars=myars, dist=dist,
-#'              n.burn=200, n.sim=300, n.thin=2)
+#'              n.burn=2000, n.sim=3000, n.thin=2)
 #' summary(fit2)
 #'
 ###### Simulation of a trivariate SETAR model with two regimes
@@ -114,7 +114,7 @@
 #' str(out3)
 #'
 #' fit3 <- mtar(~ Y1 + Y2 + Y3, data=out3, ars=myars, dist=dist,
-#'              n.burn=200, n.sim=300, n.thin=2, setar=2)
+#'              n.burn=2000, n.sim=3000, n.thin=2, setar=2)
 #' summary(fit3)
 #'
 #' }
@@ -152,11 +152,13 @@ simtar <- function(n,k=2,ars=ars(),Intercept=TRUE,trend=c("none","linear","quadr
      }
      if(!is.null(a$skewness)) skewness <- a$skewness
      if(!is.null(a$extra)) extra <- a$extra
+     ssvs <- parms$ssvs
      parms <- a
   }else{
     # Match the selected distribution and trend options
     dist <- match.arg(dist)
     trend <- match.arg(trend)
+    ssvs <- FALSE
     # Check logical arguments for validity and correct length
     if(!is.logical(Intercept) | length(Intercept)!= 1) stop("'Intercept' must be a single logical value",call.=FALSE)
     if(!is.logical(Verbose) | length(Verbose)!= 1) stop("'Verbose' must be a single logical value",call.=FALSE)
@@ -275,6 +277,7 @@ simtar <- function(n,k=2,ars=ars(),Intercept=TRUE,trend=c("none","linear","quadr
       parms2 <- vector()
       name <- name0
       count <- 0
+      if(!ssvs) parms[[i]]$zeta <- rep(1,ars$p[i]+ars$q[i]+ars$d[i])
       if(ncol(parms[[i]]$location)!=k | nrow(parms[[i]]$location)!=(ncol(Xd)+ars$p[i]*k+ars$q[i]*r+ars$d[i]))
          stop(paste0("The dimension of the location matrix in regime ",i," must be ",(deterministic+ars$p[i]*k+ars$q[i]*r+ars$d[i]),"X",k,"!"),call.=FALSE)
       if(ncol(Xd)>0){
@@ -283,20 +286,20 @@ simtar <- function(n,k=2,ars=ars(),Intercept=TRUE,trend=c("none","linear","quadr
          count <- count + ncol(Xd)
       }
       for(ii in 1:ars$p[i]){
-          parms2 <- cbind(parms2,t(parms[[i]]$location[(count+1):(count+k),]),NA)
+          parms2 <- cbind(parms2,t(matrix(parms[[i]]$location[(count+1):(count+k),],k,k)*ifelse(parms[[i]]$zeta[ii]>=0.5,1,0)),NA)
           name <- c(name,c(paste0("phi_",ii),rep("",k-1)),"")
           count <- count + k
       }
       if(ars$q[i]>0){
          for(ii in 1:ars$q[i]){
-             parms2 <- cbind(parms2,t(parms[[i]]$location[(count+1):(count+r),]),NA)
+             parms2 <- cbind(parms2,t(matrix(parms[[i]]$location[(count+1):(count+r),],r,k)*ifelse(parms[[i]]$zeta[ars$p+ii]>=0.5,1,0)),NA)
              name <- c(name,c(paste0("beta_",ii),rep("",r-1)),"")
              count <- count + r
          }
       }
       if(ars$d[i]>0){
          for(ii in 1:ars$d[i]){
-             parms2 <- cbind(parms2,t(parms[[i]]$location[(count+1):(count+1),]),NA)
+             parms2 <- cbind(parms2,t(matrix(parms[[i]]$location[(count+1):(count+1),],1,k)*ifelse(parms[[i]]$zeta[ars$p+ars$q+ii]>=0.5,1,0)),NA)
              name <- c(name,paste0("delta_",ii),"")
              count <- count + 1
          }

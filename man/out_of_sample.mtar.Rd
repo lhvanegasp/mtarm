@@ -9,8 +9,8 @@
   newdata,
   n.ahead = NULL,
   credible = 0.95,
-  by.component = TRUE,
-  FUN = mean
+  FUN = mean,
+  rolling = NULL
 )
 }
 \arguments{
@@ -25,12 +25,11 @@ model), and the realized values of the output series.}
 \item{credible}{An optional numeric value in \eqn{(0,1)} specifying the level of the
 required prediction intervals. By default, \code{credible} is set to \code{0.95}.}
 
-\item{by.component}{An optional logical argument. If \code{TRUE}, the predictive
-accuracy measures are computed separately for each component of the multivariate
-output series. By default, \code{by.component} is set to \code{TRUE}.}
-
 \item{FUN}{An optional function used to summarize the \code{n.ahead} values computed
 for each predictive accuracy measure. By default, \code{FUN} is set to \code{mean}.}
+
+\item{rolling}{An optional positive integer specifying the rolling-window size used for forecasting.
+By default, \code{rolling = NULL}, indicating that rolling-window forecasting is not performed.}
 }
 \description{
 Computes Out-of-Sample predictive accuracy measures for two or more objects of class \code{mtar}.
