@@ -92,7 +92,7 @@ fits <- mtar_grid(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
                   data=iceland.rf, subset={Date<="1974-11-06"}, 					      
                   row.names=Date, nregim.min=2, nregim.max=2, p.min=15,  				
                   p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,  					      
-                  n.burnin=3000, n.sim=3000, n.thin=2, ssvs=TRUE,
+                  n.burnin=5000, n.sim=4000, n.thin=2, ssvs=TRUE,
                   dist=c("Gaussian","Student-t","Laplace"),
                   plan_strategy="multisession")
 
@@ -136,31 +136,38 @@ for(i in 1:length(oos2)){
 }                            
 ```
 
+### Summary of the best model
+
+```{r}
+summary(fits[["Laplace.2.15.4.2"]])
+```
+
 ### Residuals
 
 ```{r fig.width=9, fig.height=5}
-res <- residuals(fits$`Laplace.2.15.4.2`)  
+res <- residuals(fits[["Laplace.2.15.4.2"]])  
 ```
 
 ```{r fig.width=9, fig.height=5}
 par(mfrow=c(1,2)) 
-qqnorm(res$full, pch=20, col="blue", main="") 
+qqnorm(res[["full"]], pch=20, col="blue", main="") 
 abline(0, 1, lty=3) 
-hist(res$full, freq=FALSE, xlab="Quantile-type residual", ylab="Density", main="") 
+hist(res[["full"]], freq=FALSE, xlab="Quantile-type residual",
+     ylab="Density", main="") 
 curve(dnorm(x), col="blue", add=TRUE)
 ```
 
 ```{r fig.width=9, fig.height=5}
 par(mfrow=c(1,2))  
-acf(res$full, col="blue", main="")
-pacf(res$full, col="blue", main="")
+acf(res[["full"]], col="blue", main="")
+pacf(res[["full"]], col="blue", main="")
 ```
 
 ### Forecasting
 
 ```{r}
-pred <- predict(fits$`Laplace.2.15.4.2`, newdata=newdata, n.ahead=nrow(newdata),
-                row.names=Date, credible=0.8)
+pred <- predict(fits[["Laplace.2.15.4.2"]], newdata=newdata,
+                n.ahead=nrow(newdata), row.names=Date, credible=0.8)
 
 head(pred$summary)
 tail(pred$summary)
@@ -169,7 +176,7 @@ tail(pred$summary)
 ### Summary statistics
 
 ```{r}
-fitmcmc <- coda::as.mcmc(fits$`Laplace.2.15.4.2`)
+fitmcmc <- coda::as.mcmc(fits[["Laplace.2.15.4.2"]])
 summary(fitmcmc)
 ```
 
@@ -178,12 +185,12 @@ summary(fitmcmc)
 #### Geweke statistic
 
 ```{r}
-geweke_diagTAR(fits$`Laplace.2.15.4.2`)
+geweke_diagTAR(fits[["Laplace.2.15.4.2"]])
 
 ```
 
 #### Effective sample size
 
 ```{r}
-effectiveSize_TAR(fits$`Laplace.2.15.4.2`) 
+effectiveSize_TAR(fits[["Laplace.2.15.4.2"]]) 
 ```

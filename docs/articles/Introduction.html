@@ -201,7 +201,7 @@ and Laplace error distributions.</p>
 <span>                  data<span class="op">=</span><span class="va">iceland.rf</span>, subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"1974-11-06"</span><span class="op">}</span>,                           </span>
 <span>                  row.names<span class="op">=</span><span class="va">Date</span>, nregim.min<span class="op">=</span><span class="fl">2</span>, nregim.max<span class="op">=</span><span class="fl">2</span>, p.min<span class="op">=</span><span class="fl">15</span>,                 </span>
 <span>                  p.max<span class="op">=</span><span class="fl">15</span>, q.min<span class="op">=</span><span class="fl">4</span>, q.max<span class="op">=</span><span class="fl">4</span>, d.min<span class="op">=</span><span class="fl">2</span>, d.max<span class="op">=</span><span class="fl">2</span>,                           </span>
-<span>                  n.burnin<span class="op">=</span><span class="fl">3000</span>, n.sim<span class="op">=</span><span class="fl">3000</span>, n.thin<span class="op">=</span><span class="fl">2</span>, ssvs<span class="op">=</span><span class="cn">TRUE</span>,</span>
+<span>                  n.burnin<span class="op">=</span><span class="fl">5000</span>, n.sim<span class="op">=</span><span class="fl">4000</span>, n.thin<span class="op">=</span><span class="fl">2</span>, ssvs<span class="op">=</span><span class="cn">TRUE</span>,</span>
 <span>                  dist<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gaussian"</span>,<span class="st">"Student-t"</span>,<span class="st">"Laplace"</span><span class="op">)</span>,</span>
 <span>                  plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span>
 <span></span>
@@ -240,15 +240,15 @@ Watanabe-Akaike Information Criterion (WAIC) <span class="citation">(Watanabe 20
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/DIC.html">DIC</a></span><span class="op">(</span><span class="va">fits</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                          DIC</span></span>
-<span><span class="co">#&gt; Gaussian.2.15.4.2  10091.728</span></span>
-<span><span class="co">#&gt; Laplace.2.15.4.2    6870.422</span></span>
-<span><span class="co">#&gt; Student-t.2.15.4.2  7566.796</span></span>
+<span><span class="co">#&gt; Gaussian.2.15.4.2  10060.438</span></span>
+<span><span class="co">#&gt; Laplace.2.15.4.2    6976.339</span></span>
+<span><span class="co">#&gt; Student-t.2.15.4.2  7532.597</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/WAIC.html">WAIC</a></span><span class="op">(</span><span class="va">fits</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                         WAIC</span></span>
-<span><span class="co">#&gt; Gaussian.2.15.4.2  10398.890</span></span>
-<span><span class="co">#&gt; Laplace.2.15.4.2    8289.334</span></span>
-<span><span class="co">#&gt; Student-t.2.15.4.2  7618.343</span></span></code></pre></div>
+<span><span class="co">#&gt; Gaussian.2.15.4.2  10404.091</span></span>
+<span><span class="co">#&gt; Laplace.2.15.4.2    8200.455</span></span>
+<span><span class="co">#&gt; Student-t.2.15.4.2  7642.630</span></span></code></pre></div>
 </div>
 <div class="section level5">
 <h5 id="out-of-sample-with-standard-h-step-ahead-forecasting">Out-of-sample with standard
@@ -267,9 +267,9 @@ the observed and forecasted values for the last 55 observations.</p>
 <span><span class="va">oos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/out_of_sample.html">out_of_sample</a></span><span class="op">(</span><span class="va">fits</span>, newdata<span class="op">=</span><span class="va">newdata</span>, n.ahead<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">)</span>, FUN<span class="op">=</span><span class="va">median</span><span class="op">)</span> </span>
 <span><span class="va">oos</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">5</span>,<span class="fl">6</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;                    Log.Score Energy.Score Jokulsa.APE Vatnsdalsa.APE</span></span>
-<span><span class="co">#&gt; Gaussian.2.15.4.2   3.809826     2.818781    5.464108       32.20760</span></span>
-<span><span class="co">#&gt; Laplace.2.15.4.2    3.263099     1.845109    3.932707       17.06734</span></span>
-<span><span class="co">#&gt; Student-t.2.15.4.2  3.560311     2.394057    3.552284       21.29055</span></span></code></pre></div>
+<span><span class="co">#&gt; Gaussian.2.15.4.2   3.797904     2.811035    5.652454       32.49836</span></span>
+<span><span class="co">#&gt; Laplace.2.15.4.2    3.242485     1.833367    3.823622       15.61231</span></span>
+<span><span class="co">#&gt; Student-t.2.15.4.2  3.545381     2.456398    3.676001       20.90241</span></span></code></pre></div>
 </div>
 <div class="section level5">
 <h5 id="out-of-sample-with-rolling-origin-forecasting-and-fixed-parameters">Out-of-sample with rolling-origin forecasting and fixed
@@ -287,147 +287,248 @@ parameters<a class="anchor" aria-label="anchor" href="#out-of-sample-with-rollin
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  1 -step-ahead</span></span>
 <span><span class="co">#&gt;                    Log.Score Energy.Score Jokulsa.APE Vatnsdalsa.APE</span></span>
-<span><span class="co">#&gt; Gaussian.2.15.4.2  2.5848801    1.2858163    1.473978       7.141664</span></span>
-<span><span class="co">#&gt; Laplace.2.15.4.2   1.3291750    0.7867373    0.942096       4.513561</span></span>
-<span><span class="co">#&gt; Student-t.2.15.4.2 0.9990159    0.7453130    1.026292       5.487411</span></span>
+<span><span class="co">#&gt; Gaussian.2.15.4.2   2.584186    1.2773363   1.5798016       7.274053</span></span>
+<span><span class="co">#&gt; Laplace.2.15.4.2    1.296487    0.7563662   0.9070033       4.779227</span></span>
+<span><span class="co">#&gt; Student-t.2.15.4.2  1.020333    0.7762098   0.9009402       5.917259</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  2 -step-ahead</span></span>
 <span><span class="co">#&gt;                    Log.Score Energy.Score Jokulsa.APE Vatnsdalsa.APE</span></span>
-<span><span class="co">#&gt; Gaussian.2.15.4.2   3.037145     1.631372    2.334850      11.463158</span></span>
-<span><span class="co">#&gt; Laplace.2.15.4.2    2.126701     1.132147    1.539121       5.434709</span></span>
-<span><span class="co">#&gt; Student-t.2.15.4.2  1.937540     1.171560    1.412842       6.953775</span></span>
+<span><span class="co">#&gt; Gaussian.2.15.4.2   3.032747     1.639617    2.301814      11.871226</span></span>
+<span><span class="co">#&gt; Laplace.2.15.4.2    2.093742     1.085154    1.556983       5.577137</span></span>
+<span><span class="co">#&gt; Student-t.2.15.4.2  1.968642     1.213108    1.447799       6.566068</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  3 -step-ahead</span></span>
 <span><span class="co">#&gt;                    Log.Score Energy.Score Jokulsa.APE Vatnsdalsa.APE</span></span>
-<span><span class="co">#&gt; Gaussian.2.15.4.2   3.214346     1.846055    2.816591      15.107053</span></span>
-<span><span class="co">#&gt; Laplace.2.15.4.2    2.411231     1.275624    2.020383       6.556706</span></span>
-<span><span class="co">#&gt; Student-t.2.15.4.2  2.246767     1.411644    1.932489       7.722336</span></span>
+<span><span class="co">#&gt; Gaussian.2.15.4.2   3.223748     1.850762    2.926733      14.934488</span></span>
+<span><span class="co">#&gt; Laplace.2.15.4.2    2.378543     1.239162    2.010924       6.609058</span></span>
+<span><span class="co">#&gt; Student-t.2.15.4.2  2.305891     1.466251    1.926638       8.003508</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  4 -step-ahead</span></span>
 <span><span class="co">#&gt;                    Log.Score Energy.Score Jokulsa.APE Vatnsdalsa.APE</span></span>
-<span><span class="co">#&gt; Gaussian.2.15.4.2   3.355270     1.968928    3.409630      17.605848</span></span>
-<span><span class="co">#&gt; Laplace.2.15.4.2    2.615647     1.401618    2.371651       6.702571</span></span>
-<span><span class="co">#&gt; Student-t.2.15.4.2  2.564320     1.622701    2.452800       7.260001</span></span>
+<span><span class="co">#&gt; Gaussian.2.15.4.2   3.333167     1.968623    3.509917      17.344735</span></span>
+<span><span class="co">#&gt; Laplace.2.15.4.2    2.566196     1.361887    2.329828       6.406729</span></span>
+<span><span class="co">#&gt; Student-t.2.15.4.2  2.616427     1.691429    2.414252       7.173568</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  5 -step-ahead</span></span>
 <span><span class="co">#&gt;                    Log.Score Energy.Score Jokulsa.APE Vatnsdalsa.APE</span></span>
-<span><span class="co">#&gt; Gaussian.2.15.4.2   3.419370     2.083328    3.764518      19.203017</span></span>
-<span><span class="co">#&gt; Laplace.2.15.4.2    2.752003     1.481746    2.681036       7.042845</span></span>
-<span><span class="co">#&gt; Student-t.2.15.4.2  2.763560     1.791679    2.783440       9.773941</span></span></code></pre></div>
+<span><span class="co">#&gt; Gaussian.2.15.4.2   3.405086     2.079208    3.701430      19.487190</span></span>
+<span><span class="co">#&gt; Laplace.2.15.4.2    2.703894     1.457582    2.616441       7.007454</span></span>
+<span><span class="co">#&gt; Student-t.2.15.4.2  2.828487     1.838202    2.802228       9.591203</span></span></code></pre></div>
 </div>
+</div>
+<div class="section level4">
+<h4 id="summary-of-the-best-model">Summary of the best model<a class="anchor" aria-label="anchor" href="#summary-of-the-best-model"></a>
+</h4>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fits</span><span class="op">[[</span><span class="st">"Laplace.2.15.4.2"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sample size          : 1026 time points (1972-01-16 to 1974-11-06)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Output Series (OS)   : Jokulsa    |    Vatnsdalsa</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Threshold Series (TS): Temperature with a estimated delay equal to 0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Exogenous Series (ES): Precipitation</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Error Distribution   : Laplace</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Number of regimes    : 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Deterministics       : Intercept</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Autoregressive orders: 15 in each regime</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Maximum lags for ES  : 4 in each regime</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Maximum lags for TS  : 2 in each regime</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Thresholds (Mean, HDI.Lower, HDI.Upper)</span></span>
+<span><span class="co">#&gt;                                                         </span></span>
+<span><span class="co">#&gt; Regime 1 (-Inf,-0.44847] (-Inf,-0.49438] (-Inf,-0.40256]</span></span>
+<span><span class="co">#&gt; Regime 2  (-0.44847,Inf)  (-0.49438,Inf)  (-0.40256,Inf)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Regime1:</span></span>
+<span><span class="co">#&gt;      OS.lag(1) OS.lag(2) OS.lag(3) OS.lag(4) OS.lag(5) OS.lag(6) OS.lag(7)</span></span>
+<span><span class="co">#&gt; SSVS         1         1      0.04      0.28      0.02      0.43      0.01</span></span>
+<span><span class="co">#&gt;      OS.lag(8) OS.lag(9) OS.lag(10) OS.lag(11) OS.lag(12) OS.lag(13) OS.lag(14)</span></span>
+<span><span class="co">#&gt; SSVS         0      0.02        0.2       0.02          0       0.01       0.22</span></span>
+<span><span class="co">#&gt;      OS.lag(15) ES.lag(1) ES.lag(2) ES.lag(3) ES.lag(4) TS.lag(1) TS.lag(2)</span></span>
+<span><span class="co">#&gt; SSVS       0.12         0         0         0         0      0.03      0.05</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Autoregressive coefficients</span></span>
+<span><span class="co">#&gt;                        Mean  2(1-PD)  HDI.Lower HDI.Upper             Mean</span></span>
+<span><span class="co">#&gt; (Intercept)         4.52327   0.00001   3.51623   5.56107    |     1.21217</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 1)     0.77101   0.00001   0.65580   0.87775    |    -0.08284</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 1)  0.29727   0.00001   0.17679   0.41320    |     1.08650</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 2)    -0.00333   0.90550  -0.06202   0.05971    |     0.04302</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 2) -0.24739   0.00200  -0.36654  -0.12501    |    -0.21791</span></span>
+<span><span class="co">#&gt;                     2(1-PD)  HDI.Lower HDI.Upper</span></span>
+<span><span class="co">#&gt; (Intercept)          0.00050   0.73774   1.67706</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 1)      0.00050  -0.12881  -0.03549</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 1)   0.00001   0.98105   1.18322</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 2)      0.01150   0.00927   0.07605</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 2)   0.00001  -0.30260  -0.13781</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Scale parameter (Mean, HDI.Lower, HDI.Upper)</span></span>
+<span><span class="co">#&gt;            Jokulsa Vatnsdalsa      Jokulsa Vatnsdalsa      Jokulsa Vatnsdalsa</span></span>
+<span><span class="co">#&gt; Jokulsa    0.15963    0.02514    . 0.12522    0.01188    . 0.20057    0.03827</span></span>
+<span><span class="co">#&gt; Vatnsdalsa 0.02514    0.06126    . 0.01188    0.04583    . 0.03827    0.07652</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Regime2:</span></span>
+<span><span class="co">#&gt;      OS.lag(1) OS.lag(2) OS.lag(3) OS.lag(4) OS.lag(5) OS.lag(6) OS.lag(7)</span></span>
+<span><span class="co">#&gt; SSVS         1         1      0.65         0         0         0         0</span></span>
+<span><span class="co">#&gt;      OS.lag(8) OS.lag(9) OS.lag(10) OS.lag(11) OS.lag(12) OS.lag(13) OS.lag(14)</span></span>
+<span><span class="co">#&gt; SSVS         0         0          0          0          0          0          0</span></span>
+<span><span class="co">#&gt;      OS.lag(15) ES.lag(1) ES.lag(2) ES.lag(3) ES.lag(4) TS.lag(1) TS.lag(2)</span></span>
+<span><span class="co">#&gt; SSVS          0         0         0         0         0         1         1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Autoregressive coefficients</span></span>
+<span><span class="co">#&gt;                        Mean  2(1-PD)  HDI.Lower HDI.Upper             Mean</span></span>
+<span><span class="co">#&gt; (Intercept)         1.59507   0.00200   0.69771   2.59283    |     0.56925</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 1)     1.07990   0.00001   1.00905   1.15349    |    -0.00026</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 1)  0.57932   0.00050   0.33541   0.81015    |     1.16172</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 2)    -0.20992   0.00001  -0.31271  -0.11674    |     0.00344</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 2) -0.51318   0.02100  -1.00275  -0.05125    |    -0.34241</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 3)    -0.01469   0.58150  -0.06674   0.04094    |    -0.01004</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 3)  0.33952   0.00150   0.15257   0.61809    |     0.16776</span></span>
+<span><span class="co">#&gt; Temperature.lag(1)  1.11876   0.00001   0.90525   1.34375    |     0.05031</span></span>
+<span><span class="co">#&gt; Temperature.lag(2) -0.65916   0.00001  -0.85308  -0.45923    |    -0.05447</span></span>
+<span><span class="co">#&gt;                     2(1-PD)  HDI.Lower HDI.Upper</span></span>
+<span><span class="co">#&gt; (Intercept)          0.00001   0.32663   0.79163</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 1)      0.98150  -0.01345   0.01326</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 1)   0.00001   1.09323   1.23958</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 2)      0.71200  -0.01303   0.02141</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 2)   0.00001  -0.50961  -0.15745</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 3)      0.08550  -0.02103   0.00082</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 3)   0.00001   0.10495   0.26135</span></span>
+<span><span class="co">#&gt; Temperature.lag(1)   0.01650   0.01020   0.09275</span></span>
+<span><span class="co">#&gt; Temperature.lag(2)   0.00300  -0.09647  -0.01850</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Scale parameter (Mean, HDI.Lower, HDI.Upper)</span></span>
+<span><span class="co">#&gt;            Jokulsa Vatnsdalsa      Jokulsa Vatnsdalsa      Jokulsa Vatnsdalsa</span></span>
+<span><span class="co">#&gt; Jokulsa    5.55932    0.32459    . 4.60081    0.20358    . 6.52985    0.44953</span></span>
+<span><span class="co">#&gt; Vatnsdalsa 0.32459    0.31072    . 0.20358    0.26144    . 0.44953    0.36323</span></span>
+<span><span class="co">#&gt; </span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="residuals">Residuals<a class="anchor" aria-label="anchor" href="#residuals"></a>
 </h4>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fits</span><span class="op">$</span><span class="va">`Laplace.2.15.4.2`</span><span class="op">)</span>  </span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span> </span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/qqnorm.html" class="external-link">qqnorm</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">full</span>, pch<span class="op">=</span><span class="fl">20</span>, col<span class="op">=</span><span class="st">"blue"</span>, main<span class="op">=</span><span class="st">""</span><span class="op">)</span> </span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, lty<span class="op">=</span><span class="fl">3</span><span class="op">)</span> </span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">full</span>, freq<span class="op">=</span><span class="cn">FALSE</span>, xlab<span class="op">=</span><span class="st">"Quantile-type residual"</span>, ylab<span class="op">=</span><span class="st">"Density"</span>, main<span class="op">=</span><span class="st">""</span><span class="op">)</span> </span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/curve.html" class="external-link">curve</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dnorm</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"blue"</span>, add<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Introduction_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="864"></p>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">fits</span><span class="op">[[</span><span class="st">"Laplace.2.15.4.2"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>  </span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>  </span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/acf.html" class="external-link">acf</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">full</span>, col<span class="op">=</span><span class="st">"blue"</span>, main<span class="op">=</span><span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/acf.html" class="external-link">pacf</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">full</span>, col<span class="op">=</span><span class="st">"blue"</span>, main<span class="op">=</span><span class="st">""</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/qqnorm.html" class="external-link">qqnorm</a></span><span class="op">(</span><span class="va">res</span><span class="op">[[</span><span class="st">"full"</span><span class="op">]</span><span class="op">]</span>, pch<span class="op">=</span><span class="fl">20</span>, col<span class="op">=</span><span class="st">"blue"</span>, main<span class="op">=</span><span class="st">""</span><span class="op">)</span> </span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, lty<span class="op">=</span><span class="fl">3</span><span class="op">)</span> </span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">res</span><span class="op">[[</span><span class="st">"full"</span><span class="op">]</span><span class="op">]</span>, freq<span class="op">=</span><span class="cn">FALSE</span>, xlab<span class="op">=</span><span class="st">"Quantile-type residual"</span>,</span>
+<span>     ylab<span class="op">=</span><span class="st">"Density"</span>, main<span class="op">=</span><span class="st">""</span><span class="op">)</span> </span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/curve.html" class="external-link">curve</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dnorm</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"blue"</span>, add<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Introduction_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="864"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>  </span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/acf.html" class="external-link">acf</a></span><span class="op">(</span><span class="va">res</span><span class="op">[[</span><span class="st">"full"</span><span class="op">]</span><span class="op">]</span>, col<span class="op">=</span><span class="st">"blue"</span>, main<span class="op">=</span><span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/acf.html" class="external-link">pacf</a></span><span class="op">(</span><span class="va">res</span><span class="op">[[</span><span class="st">"full"</span><span class="op">]</span><span class="op">]</span>, col<span class="op">=</span><span class="st">"blue"</span>, main<span class="op">=</span><span class="st">""</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Introduction_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="864"></p>
 </div>
 <div class="section level4">
 <h4 id="forecasting">Forecasting<a class="anchor" aria-label="anchor" href="#forecasting"></a>
 </h4>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fits</span><span class="op">$</span><span class="va">`Laplace.2.15.4.2`</span>, newdata<span class="op">=</span><span class="va">newdata</span>, n.ahead<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">)</span>,</span>
-<span>                row.names<span class="op">=</span><span class="va">Date</span>, credible<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fits</span><span class="op">[[</span><span class="st">"Laplace.2.15.4.2"</span><span class="op">]</span><span class="op">]</span>, newdata<span class="op">=</span><span class="va">newdata</span>,</span>
+<span>                n.ahead<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">)</span>, row.names<span class="op">=</span><span class="va">Date</span>, credible<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span>
 <span><span class="co">#&gt;            Jokulsa.Mean Jokulsa.Lower Jokulsa.Upper Vatnsdalsa.Mean</span></span>
-<span><span class="co">#&gt; 1974-11-07     20.91140      12.80920      28.17211        6.836796</span></span>
-<span><span class="co">#&gt; 1974-11-08     21.29486      10.76801      31.23515        7.040683</span></span>
-<span><span class="co">#&gt; 1974-11-09     22.95505      14.42491      30.70915        7.334842</span></span>
-<span><span class="co">#&gt; 1974-11-10     24.01130      17.16736      30.07457        7.387014</span></span>
-<span><span class="co">#&gt; 1974-11-11     24.96303      19.75744      30.42388        7.447525</span></span>
-<span><span class="co">#&gt; 1974-11-12     25.14406      20.90753      30.00710        7.275621</span></span>
+<span><span class="co">#&gt; 1974-11-07     20.90878     13.411187      28.81527        6.834375</span></span>
+<span><span class="co">#&gt; 1974-11-08     21.05299      9.664738      34.06857        6.934579</span></span>
+<span><span class="co">#&gt; 1974-11-09     22.72315     13.680595      33.14910        7.217351</span></span>
+<span><span class="co">#&gt; 1974-11-10     23.78405     16.298941      31.40126        7.299724</span></span>
+<span><span class="co">#&gt; 1974-11-11     24.83764     19.000067      31.43418        7.428469</span></span>
+<span><span class="co">#&gt; 1974-11-12     25.07040     19.866111      30.16559        7.256866</span></span>
 <span><span class="co">#&gt;            Vatnsdalsa.Lower Vatnsdalsa.Upper</span></span>
-<span><span class="co">#&gt; 1974-11-07         4.834481         8.544910</span></span>
-<span><span class="co">#&gt; 1974-11-08         4.204605         9.600125</span></span>
-<span><span class="co">#&gt; 1974-11-09         4.673395         9.982111</span></span>
-<span><span class="co">#&gt; 1974-11-10         4.792595         9.827108</span></span>
-<span><span class="co">#&gt; 1974-11-11         4.909666         9.923223</span></span>
-<span><span class="co">#&gt; 1974-11-12         4.763787         9.632388</span></span>
+<span><span class="co">#&gt; 1974-11-07         5.021734         8.633821</span></span>
+<span><span class="co">#&gt; 1974-11-08         4.189863        10.025282</span></span>
+<span><span class="co">#&gt; 1974-11-09         4.336131        10.182200</span></span>
+<span><span class="co">#&gt; 1974-11-10         4.351673        10.005718</span></span>
+<span><span class="co">#&gt; 1974-11-11         4.559769        10.052750</span></span>
+<span><span class="co">#&gt; 1974-11-12         4.612109         9.806307</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">pred</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span>
 <span><span class="co">#&gt;            Jokulsa.Mean Jokulsa.Lower Jokulsa.Upper Vatnsdalsa.Mean</span></span>
-<span><span class="co">#&gt; 1974-12-26     25.63590      23.02109      28.31537        5.893641</span></span>
-<span><span class="co">#&gt; 1974-12-27     25.64585      22.83112      28.17814        5.883682</span></span>
-<span><span class="co">#&gt; 1974-12-28     25.64959      22.88285      28.28398        5.878568</span></span>
-<span><span class="co">#&gt; 1974-12-29     25.62580      23.01030      28.36634        5.895742</span></span>
-<span><span class="co">#&gt; 1974-12-30     25.63322      23.01880      28.37717        5.894161</span></span>
-<span><span class="co">#&gt; 1974-12-31     25.57800      23.06069      28.35969        5.883065</span></span>
+<span><span class="co">#&gt; 1974-12-26     25.60095      22.71138      27.99992        5.865634</span></span>
+<span><span class="co">#&gt; 1974-12-27     25.57809      22.96257      28.18443        5.862626</span></span>
+<span><span class="co">#&gt; 1974-12-28     25.58518      23.04160      28.28370        5.857756</span></span>
+<span><span class="co">#&gt; 1974-12-29     25.60750      22.95674      28.14790        5.865459</span></span>
+<span><span class="co">#&gt; 1974-12-30     25.60785      22.88612      28.06214        5.865358</span></span>
+<span><span class="co">#&gt; 1974-12-31     25.62957      22.97055      28.22797        5.842145</span></span>
 <span><span class="co">#&gt;            Vatnsdalsa.Lower Vatnsdalsa.Upper</span></span>
-<span><span class="co">#&gt; 1974-12-26         3.815598         8.070009</span></span>
-<span><span class="co">#&gt; 1974-12-27         3.690674         7.966998</span></span>
-<span><span class="co">#&gt; 1974-12-28         3.771796         8.062414</span></span>
-<span><span class="co">#&gt; 1974-12-29         3.840831         8.146696</span></span>
-<span><span class="co">#&gt; 1974-12-30         3.914748         8.263871</span></span>
-<span><span class="co">#&gt; 1974-12-31         3.866102         8.156226</span></span></code></pre></div>
+<span><span class="co">#&gt; 1974-12-26         3.861787         8.194346</span></span>
+<span><span class="co">#&gt; 1974-12-27         3.630560         8.033291</span></span>
+<span><span class="co">#&gt; 1974-12-28         3.604011         7.983446</span></span>
+<span><span class="co">#&gt; 1974-12-29         3.631105         8.013411</span></span>
+<span><span class="co">#&gt; 1974-12-30         3.659647         8.036238</span></span>
+<span><span class="co">#&gt; 1974-12-31         3.650581         7.946888</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="summary-statistics">Summary statistics<a class="anchor" aria-label="anchor" href="#summary-statistics"></a>
 </h4>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fitmcmc</span> <span class="op">&lt;-</span> <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">as.mcmc</a></span><span class="op">(</span><span class="va">fits</span><span class="op">$</span><span class="va">`Laplace.2.15.4.2`</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fitmcmc</span> <span class="op">&lt;-</span> <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">as.mcmc</a></span><span class="op">(</span><span class="va">fits</span><span class="op">[[</span><span class="st">"Laplace.2.15.4.2"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fitmcmc</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Iterations = 3001:8999</span></span>
+<span><span class="co">#&gt;  Iterations = 5001:12999</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Thinning interval = 2</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Sample size per chain = 3000</span></span>
+<span><span class="co">#&gt;  Sample size per chain = 4000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Thresholds:</span></span>
-<span><span class="co">#&gt;                 Mean      Sd Sd(Mean)     2.5%     25%      50%    75%   97.5%</span></span>
-<span><span class="co">#&gt; Threshold.1 -0.26807 0.28762   0.1895 -0.49291 -0.4613 -0.42827 0.1127 0.29606</span></span>
+<span><span class="co">#&gt;                 Mean       Sd  Sd(Mean)     2.5%    25%      50%      75%</span></span>
+<span><span class="co">#&gt; Threshold.1 -0.44847 0.029051 0.0012974 -0.49545 -0.472 -0.44829 -0.42508</span></span>
+<span><span class="co">#&gt;                97.5%</span></span>
+<span><span class="co">#&gt; Threshold.1 -0.40322</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regime 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Autoregressive coefficients:</span></span>
-<span><span class="co">#&gt;                                     Mean       Sd  Sd(Mean)      2.5%       25%</span></span>
-<span><span class="co">#&gt; Jokulsa:(Intercept)            4.6808246 0.658957 0.1291049  3.639842  4.212007</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:(Intercept)         1.3118271 0.300288 0.0578317  0.774932  1.099911</span></span>
-<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 1)        0.7629627 0.063672 0.0091609  0.632143  0.720872</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 1)    -0.0858687 0.025331 0.0023472 -0.135550 -0.103154</span></span>
-<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 1)     0.3002716 0.064406 0.0045659  0.171115  0.261286</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 1)  1.0630063 0.063540 0.0099084  0.920381  1.025682</span></span>
-<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 2)       -0.0038116 0.031617 0.0016285 -0.065825 -0.024490</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 2)     0.0444125 0.017465 0.0010745  0.010548  0.032779</span></span>
-<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 2)    -0.2428660 0.065413 0.0054429 -0.365016 -0.288654</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 2) -0.2075183 0.045937 0.0035199 -0.294643 -0.236304</span></span>
-<span><span class="co">#&gt;                                      50%       75%     97.5%</span></span>
-<span><span class="co">#&gt; Jokulsa:(Intercept)            4.5662684  5.066312  6.107967</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:(Intercept)         1.2859815  1.501912  1.947414</span></span>
-<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 1)        0.7680902  0.808427  0.874458</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 1)    -0.0856541 -0.068605 -0.037718</span></span>
-<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 1)     0.3013330  0.342037  0.423870</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 1)  1.0686021  1.106575  1.171048</span></span>
-<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 2)       -0.0043538  0.016069  0.056809</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 2)     0.0446529  0.056312  0.078089</span></span>
-<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 2)    -0.2442959 -0.199370 -0.115274</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 2) -0.2096967 -0.180682 -0.105762</span></span>
+<span><span class="co">#&gt;                                     Mean       Sd   Sd(Mean)       2.5%</span></span>
+<span><span class="co">#&gt; Jokulsa:(Intercept)            4.5232663 0.549390 0.03784471  3.5989013</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:(Intercept)         1.2121652 0.241025 0.00957483  0.7403184</span></span>
+<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 1)        0.7710093 0.057605 0.00348468  0.6476008</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 1)    -0.0828399 0.024016 0.00080667 -0.1323538</span></span>
+<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 1)     0.2972719 0.060628 0.00144518  0.1793622</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 1)  1.0865026 0.052748 0.00229988  0.9746227</span></span>
+<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 2)       -0.0033294 0.032301 0.00073881 -0.0641367</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 2)     0.0430238 0.017330 0.00044453  0.0097343</span></span>
+<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 2)    -0.2473945 0.062512 0.00284661 -0.3665407</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 2) -0.2179087 0.041992 0.00200789 -0.2988589</span></span>
+<span><span class="co">#&gt;                                     25%        50%       75%     97.5%</span></span>
+<span><span class="co">#&gt; Jokulsa:(Intercept)            4.159868  4.4710058  4.819705  5.740136</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:(Intercept)         1.056449  1.2096344  1.367168  1.679998</span></span>
+<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 1)        0.738650  0.7758695  0.808087  0.873081</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 1)    -0.098745 -0.0824465 -0.066779 -0.037354</span></span>
+<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 1)     0.258489  0.2966336  0.335548  0.416860</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 1)  1.054176  1.0897296  1.123070  1.178829</span></span>
+<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 2)       -0.023571 -0.0036904  0.016285  0.058267</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 2)     0.031575  0.0431486  0.054271  0.077065</span></span>
+<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 2)    -0.288748 -0.2482934 -0.205662 -0.125011</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 2) -0.246201 -0.2181547 -0.190029 -0.133153</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Scale parameter:</span></span>
-<span><span class="co">#&gt;                          Mean       Sd  Sd(Mean)     2.5%      25%      50%</span></span>
-<span><span class="co">#&gt; Jokulsa.Jokulsa       0.18382 0.043839 0.0180089 0.127405 0.153957 0.168919</span></span>
-<span><span class="co">#&gt; Jokulsa.Vatnsdalsa    0.03069 0.011277 0.0032732 0.014508 0.022732 0.028326</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.Vatnsdalsa 0.06837 0.013612 0.0044437 0.047568 0.059037 0.065245</span></span>
+<span><span class="co">#&gt;                           Mean        Sd   Sd(Mean)     2.5%     25%      50%</span></span>
+<span><span class="co">#&gt; Jokulsa.Jokulsa       0.159631 0.0195985 0.00063185 0.120718 0.14839 0.159857</span></span>
+<span><span class="co">#&gt; Jokulsa.Vatnsdalsa    0.025142 0.0067334 0.00020919 0.012864 0.02056 0.024963</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.Vatnsdalsa 0.061264 0.0081488 0.00030448 0.043378 0.05672 0.061545</span></span>
 <span><span class="co">#&gt;                            75%    97.5%</span></span>
-<span><span class="co">#&gt; Jokulsa.Jokulsa       0.210458 0.281575</span></span>
-<span><span class="co">#&gt; Jokulsa.Vatnsdalsa    0.036888 0.058298</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.Vatnsdalsa 0.076762 0.099438</span></span>
+<span><span class="co">#&gt; Jokulsa.Jokulsa       0.171538 0.197237</span></span>
+<span><span class="co">#&gt; Jokulsa.Vatnsdalsa    0.029217 0.039574</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.Vatnsdalsa 0.066154 0.075921</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regime 2</span></span>
@@ -436,54 +537,54 @@ parameters<a class="anchor" aria-label="anchor" href="#out-of-sample-with-rollin
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Autoregressive coefficients:</span></span>
 <span><span class="co">#&gt;                                     Mean        Sd   Sd(Mean)       2.5%</span></span>
-<span><span class="co">#&gt; Jokulsa:(Intercept)            1.5281362 0.5168835 0.04418385  0.4532091</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:(Intercept)         0.5433903 0.1341078 0.01399387  0.2925832</span></span>
-<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 1)        1.0798086 0.0371404 0.00119443  1.0135299</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 1)    -0.0012335 0.0072211 0.00074398 -0.0153351</span></span>
-<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 1)     0.5896772 0.1302774 0.00449465  0.3335543</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 1)  1.1917907 0.0646773 0.01861489  1.1053604</span></span>
-<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 2)       -0.2109753 0.0458756 0.00144610 -0.3075803</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 2)     0.0034427 0.0085415 0.00027266 -0.0128431</span></span>
-<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 2)    -0.4916813 0.2767540 0.06194954 -1.0007906</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 2) -0.3548694 0.0918406 0.01456995 -0.5156868</span></span>
-<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 3)       -0.0118103 0.0272395 0.00399632 -0.0676460</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 3)    -0.0095950 0.0061699 0.00112238 -0.0202678</span></span>
-<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 3)     0.3783795 0.1200705 0.01426297  0.1584724</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 3)  0.1634618 0.0467303 0.00910015  0.0958836</span></span>
-<span><span class="co">#&gt; Jokulsa:Temperature.lag(1)     1.1416817 0.1129518 0.00697565  0.9093445</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Temperature.lag(1)  0.0492981 0.0205556 0.00055516  0.0080734</span></span>
-<span><span class="co">#&gt; Jokulsa:Temperature.lag(2)    -0.6763926 0.1069777 0.00690553 -0.8822961</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Temperature.lag(2) -0.0542592 0.0200831 0.00055057 -0.0937323</span></span>
-<span><span class="co">#&gt;                                      25%        50%        75%      97.5%</span></span>
-<span><span class="co">#&gt; Jokulsa:(Intercept)            1.2061600  1.5448521  1.8664917  2.5195412</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:(Intercept)         0.4565581  0.5421615  0.6277940  0.7932286</span></span>
-<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 1)        1.0533589  1.0773869  1.1032631  1.1564953</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 1)    -0.0059899 -0.0011776  0.0036425  0.0126003</span></span>
-<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 1)     0.5021599  0.5927170  0.6780890  0.8496727</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 1)  1.1451238  1.1760497  1.2229807  1.3544113</span></span>
-<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 2)       -0.2383652 -0.2109524 -0.1834071 -0.1187178</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 2)    -0.0019253  0.0029078  0.0084281  0.0219362</span></span>
-<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 2)    -0.7017220 -0.5102216 -0.2625981 -0.0179990</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 2) -0.4214391 -0.3680277 -0.2831826 -0.1797927</span></span>
-<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 3)       -0.0262279 -0.0190080  0.0096407  0.0373081</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 3)    -0.0147908 -0.0104029 -0.0040885  0.0017226</span></span>
-<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 3)     0.3173357  0.3802099  0.4566453  0.6022998</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 3)  0.1380112  0.1560011  0.1968263  0.2584063</span></span>
-<span><span class="co">#&gt; Jokulsa:Temperature.lag(1)     1.0674440  1.1441608  1.2213619  1.3512223</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Temperature.lag(1)  0.0358429  0.0495348  0.0632154  0.0881845</span></span>
-<span><span class="co">#&gt; Jokulsa:Temperature.lag(2)    -0.7473684 -0.6799000 -0.6055185 -0.4633394</span></span>
-<span><span class="co">#&gt; Vatnsdalsa:Temperature.lag(2) -0.0676340 -0.0542198 -0.0403236 -0.0159961</span></span>
+<span><span class="co">#&gt; Jokulsa:(Intercept)            1.5950744 0.4866782 0.01254526  0.6240658</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:(Intercept)         0.5692453 0.1224997 0.00295270  0.3364976</span></span>
+<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 1)        1.0798968 0.0378132 0.00112223  1.0133909</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 1)    -0.0002585 0.0069370 0.00030599 -0.0141654</span></span>
+<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 1)     0.5793169 0.1243080 0.00676481  0.3383020</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 1)  1.1617172 0.0386841 0.00105752  1.0961299</span></span>
+<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 2)       -0.2099242 0.0479443 0.00139261 -0.3114447</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 2)     0.0034406 0.0087519 0.00023009 -0.0128809</span></span>
+<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 2)    -0.5131848 0.2747070 0.04090219 -1.0067886</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 2) -0.3424101 0.1074206 0.01728081 -0.5180202</span></span>
+<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 3)       -0.0146910 0.0266602 0.00174071 -0.0683328</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 3)    -0.0100354 0.0053239 0.00030481 -0.0200775</span></span>
+<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 3)     0.3395239 0.1303270 0.01273838  0.1434232</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 3)  0.1677631 0.0448169 0.00567434  0.1002395</span></span>
+<span><span class="co">#&gt; Jokulsa:Temperature.lag(1)     1.1187577 0.1113354 0.00323477  0.8863310</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Temperature.lag(1)  0.0503070 0.0213888 0.00070939  0.0082298</span></span>
+<span><span class="co">#&gt; Jokulsa:Temperature.lag(2)    -0.6591592 0.1022778 0.00300431 -0.8515034</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Temperature.lag(2) -0.0544666 0.0200279 0.00045545 -0.0944949</span></span>
+<span><span class="co">#&gt;                                      25%         50%        75%      97.5%</span></span>
+<span><span class="co">#&gt; Jokulsa:(Intercept)            1.2784933  1.60116882  1.9243651  2.5313755</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:(Intercept)         0.4883506  0.56613505  0.6468881  0.8061825</span></span>
+<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 1)        1.0524123  1.07711812  1.1037520  1.1610065</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 1)    -0.0047912 -0.00016617  0.0044499  0.0129182</span></span>
+<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 1)     0.4956837  0.58138921  0.6646114  0.8166703</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 1)  1.1341441  1.15792894  1.1855017  1.2474463</span></span>
+<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 2)       -0.2387094 -0.20861005 -0.1806942 -0.1149627</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 2)    -0.0023298  0.00289562  0.0089215  0.0216544</span></span>
+<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 2)    -0.7234544 -0.54535055 -0.2675414 -0.0519351</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 2) -0.4244335 -0.37135912 -0.2316756 -0.1621547</span></span>
+<span><span class="co">#&gt; Jokulsa:Jokulsa.lag( 3)       -0.0294963 -0.01349073  0.0050789  0.0397651</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Jokulsa.lag( 3)    -0.0137969 -0.01098968 -0.0070192  0.0019572</span></span>
+<span><span class="co">#&gt; Jokulsa:Vatnsdalsa.lag( 3)     0.2448703  0.30820270  0.4250323  0.6138676</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Vatnsdalsa.lag( 3)  0.1297460  0.16243302  0.2004100  0.2599303</span></span>
+<span><span class="co">#&gt; Jokulsa:Temperature.lag(1)     1.0462141  1.12098133  1.1958726  1.3269358</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Temperature.lag(1)  0.0357892  0.05017823  0.0647723  0.0918519</span></span>
+<span><span class="co">#&gt; Jokulsa:Temperature.lag(2)    -0.7301034 -0.66166113 -0.5907202 -0.4554723</span></span>
+<span><span class="co">#&gt; Vatnsdalsa:Temperature.lag(2) -0.0678179 -0.05427415 -0.0408837 -0.0157641</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Scale parameter:</span></span>
-<span><span class="co">#&gt;                          Mean       Sd  Sd(Mean)    2.5%     25%     50%</span></span>
-<span><span class="co">#&gt; Jokulsa.Jokulsa       5.61616 0.506019 0.0254867 4.65332 5.28288 5.60880</span></span>
-<span><span class="co">#&gt; Jokulsa.Vatnsdalsa    0.31196 0.065002 0.0026105 0.18728 0.26881 0.31013</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.Vatnsdalsa 0.30304 0.026140 0.0015971 0.25437 0.28510 0.30206</span></span>
-<span><span class="co">#&gt;                           75%   97.5%</span></span>
-<span><span class="co">#&gt; Jokulsa.Jokulsa       5.95399 6.61387</span></span>
-<span><span class="co">#&gt; Jokulsa.Vatnsdalsa    0.35485 0.44285</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.Vatnsdalsa 0.32012 0.35739</span></span></code></pre></div>
+<span><span class="co">#&gt;                          Mean       Sd  Sd(Mean)    2.5%     25%    50%     75%</span></span>
+<span><span class="co">#&gt; Jokulsa.Jokulsa       5.55932 0.498163 0.0110922 4.63424 5.21730 5.5437 5.88450</span></span>
+<span><span class="co">#&gt; Jokulsa.Vatnsdalsa    0.32459 0.063650 0.0018542 0.20704 0.28026 0.3223 0.36611</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.Vatnsdalsa 0.31072 0.026534 0.0012651 0.26365 0.29227 0.3097 0.32780</span></span>
+<span><span class="co">#&gt;                         97.5%</span></span>
+<span><span class="co">#&gt; Jokulsa.Jokulsa       6.57001</span></span>
+<span><span class="co">#&gt; Jokulsa.Vatnsdalsa    0.45742</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.Vatnsdalsa 0.36590</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="convergence-diagnostics">Convergence diagnostics<a class="anchor" aria-label="anchor" href="#convergence-diagnostics"></a>
@@ -491,83 +592,33 @@ parameters<a class="anchor" aria-label="anchor" href="#out-of-sample-with-rollin
 <div class="section level5">
 <h5 id="geweke-statistic">Geweke statistic<a class="anchor" aria-label="anchor" href="#geweke-statistic"></a>
 </h5>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/geweke_diagTAR.html">geweke_diagTAR</a></span><span class="op">(</span><span class="va">fits</span><span class="op">$</span><span class="va">`Laplace.2.15.4.2`</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/geweke_diagTAR.html">geweke_diagTAR</a></span><span class="op">(</span><span class="va">fits</span><span class="op">[[</span><span class="st">"Laplace.2.15.4.2"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Fraction in 1st window = 0.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Fraction in 2nd window = 0.5</span></span>
 <span><span class="co">#&gt; Thresholds:</span></span>
 <span><span class="co">#&gt; Threshold.1 </span></span>
-<span><span class="co">#&gt;      36.927</span></span>
+<span><span class="co">#&gt;     -1.0478</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regime 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Autoregressive coefficients:</span></span>
-<span><span class="co">#&gt;                    Jokulsa Vatnsdalsa</span></span>
-<span><span class="co">#&gt; (Intercept)         0.5708    6.98895</span></span>
-<span><span class="co">#&gt; Jokulsa.lag( 1)     4.4295    1.99673</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.lag( 1)  6.9359  -14.45981</span></span>
-<span><span class="co">#&gt; Jokulsa.lag( 2)    -5.4249    0.87996</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.lag( 2) -3.3493    7.60875</span></span>
+<span><span class="co">#&gt;                      Jokulsa Vatnsdalsa</span></span>
+<span><span class="co">#&gt; (Intercept)        -1.060107   -0.87372</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 1)     0.386917    0.28273</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 1) -1.207216    0.86248</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 2)    -0.033279   -1.02879</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 2)  1.527347    0.56702</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Scale parameter:</span></span>
 <span><span class="co">#&gt;            Jokulsa Vatnsdalsa</span></span>
-<span><span class="co">#&gt; Jokulsa     54.447     41.605</span></span>
-<span><span class="co">#&gt; Vatnsdalsa  41.605     30.340</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Regime 2</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Autoregressive coefficients:</span></span>
-<span><span class="co">#&gt;                    Jokulsa Vatnsdalsa</span></span>
-<span><span class="co">#&gt; (Intercept)        -8.7876  -14.15374</span></span>
-<span><span class="co">#&gt; Jokulsa.lag( 1)     1.6798  -16.36745</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.lag( 1) -0.5173   28.43093</span></span>
-<span><span class="co">#&gt; Jokulsa.lag( 2)    -4.4888   -4.29973</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.lag( 2)  8.9888    3.37201</span></span>
-<span><span class="co">#&gt; Jokulsa.lag( 3)    33.2376   26.64616</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.lag( 3) -2.9253  -27.31831</span></span>
-<span><span class="co">#&gt; Temperature.lag(1)  9.4932    1.92462</span></span>
-<span><span class="co">#&gt; Temperature.lag(2) -8.9037   -0.13241</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Scale parameter:</span></span>
-<span><span class="co">#&gt;            Jokulsa Vatnsdalsa</span></span>
-<span><span class="co">#&gt; Jokulsa     8.4993    -8.3598</span></span>
-<span><span class="co">#&gt; Vatnsdalsa -8.3598   -10.0820</span></span></code></pre></div>
-</div>
-<div class="section level5">
-<h5 id="effective-sample-size">Effective sample size<a class="anchor" aria-label="anchor" href="#effective-sample-size"></a>
-</h5>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/effectiveSize_TAR.html">effectiveSize_TAR</a></span><span class="op">(</span><span class="va">fits</span><span class="op">$</span><span class="va">`Laplace.2.15.4.2`</span><span class="op">)</span> </span>
-<span><span class="co">#&gt; Thresholds:</span></span>
-<span><span class="co">#&gt; Threshold.1 </span></span>
-<span><span class="co">#&gt;      2.3036</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Regime 1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Autoregressive coefficients:</span></span>
-<span><span class="co">#&gt;                    Jokulsa Vatnsdalsa</span></span>
-<span><span class="co">#&gt; (Intercept)         26.051     26.962</span></span>
-<span><span class="co">#&gt; Jokulsa.lag( 1)     48.309    116.472</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.lag( 1) 198.980     41.124</span></span>
-<span><span class="co">#&gt; Jokulsa.lag( 2)    376.949    264.179</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.lag( 2) 144.435    170.319</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Scale parameter:</span></span>
-<span><span class="co">#&gt;            Jokulsa Vatnsdalsa</span></span>
-<span><span class="co">#&gt; Jokulsa     5.9257     11.871</span></span>
-<span><span class="co">#&gt; Vatnsdalsa 11.8707      9.383</span></span>
+<span><span class="co">#&gt; Jokulsa    0.42197     1.1215</span></span>
+<span><span class="co">#&gt; Vatnsdalsa 1.12153     1.6051</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regime 2</span></span>
@@ -576,21 +627,71 @@ parameters<a class="anchor" aria-label="anchor" href="#out-of-sample-with-rollin
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Autoregressive coefficients:</span></span>
 <span><span class="co">#&gt;                     Jokulsa Vatnsdalsa</span></span>
-<span><span class="co">#&gt; (Intercept)         136.854     91.840</span></span>
-<span><span class="co">#&gt; Jokulsa.lag( 1)     966.883     94.207</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.lag( 1)  840.130     12.072</span></span>
-<span><span class="co">#&gt; Jokulsa.lag( 2)    1006.389    981.342</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.lag( 2)   19.958     39.733</span></span>
-<span><span class="co">#&gt; Jokulsa.lag( 3)      46.460     30.219</span></span>
-<span><span class="co">#&gt; Vatnsdalsa.lag( 3)   70.868     26.369</span></span>
-<span><span class="co">#&gt; Temperature.lag(1)  262.191   1370.953</span></span>
-<span><span class="co">#&gt; Temperature.lag(2)  239.990   1330.544</span></span>
+<span><span class="co">#&gt; (Intercept)         3.16200     1.9862</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 1)    -2.50578     2.7219</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 1)  4.21032     1.9330</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 2)     4.44698     2.8767</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 2) -3.74674    -3.5346</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 3)    -1.61489     1.8916</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 3)  3.15800     2.7724</span></span>
+<span><span class="co">#&gt; Temperature.lag(1)  0.92370    -2.4338</span></span>
+<span><span class="co">#&gt; Temperature.lag(2)  0.53083     2.3683</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Scale parameter:</span></span>
+<span><span class="co">#&gt;             Jokulsa Vatnsdalsa</span></span>
+<span><span class="co">#&gt; Jokulsa    -0.58186    -2.3230</span></span>
+<span><span class="co">#&gt; Vatnsdalsa -2.32302    -2.1004</span></span></code></pre></div>
+</div>
+<div class="section level5">
+<h5 id="effective-sample-size">Effective sample size<a class="anchor" aria-label="anchor" href="#effective-sample-size"></a>
+</h5>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/effectiveSize_TAR.html">effectiveSize_TAR</a></span><span class="op">(</span><span class="va">fits</span><span class="op">[[</span><span class="st">"Laplace.2.15.4.2"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; Thresholds:</span></span>
+<span><span class="co">#&gt; Threshold.1 </span></span>
+<span><span class="co">#&gt;      501.38</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Regime 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Autoregressive coefficients:</span></span>
+<span><span class="co">#&gt;                    Jokulsa Vatnsdalsa</span></span>
+<span><span class="co">#&gt; (Intercept)         210.74     633.67</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 1)     273.27     886.40</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 1) 1759.98     526.02</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 2)    1911.51    1519.92</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 2)  482.25     437.37</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Scale parameter:</span></span>
 <span><span class="co">#&gt;            Jokulsa Vatnsdalsa</span></span>
-<span><span class="co">#&gt; Jokulsa     394.19     620.00</span></span>
-<span><span class="co">#&gt; Vatnsdalsa  620.00     267.87</span></span></code></pre></div>
+<span><span class="co">#&gt; Jokulsa      962.1    1036.11</span></span>
+<span><span class="co">#&gt; Vatnsdalsa  1036.1     716.23</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Regime 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Autoregressive coefficients:</span></span>
+<span><span class="co">#&gt;                     Jokulsa Vatnsdalsa</span></span>
+<span><span class="co">#&gt; (Intercept)        1504.959   1721.196</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 1)    1135.324    513.953</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 1)  337.666   1338.098</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 2)    1185.257   1446.768</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 2)   45.107     38.641</span></span>
+<span><span class="co">#&gt; Jokulsa.lag( 3)     234.569    305.070</span></span>
+<span><span class="co">#&gt; Vatnsdalsa.lag( 3)  104.674     62.381</span></span>
+<span><span class="co">#&gt; Temperature.lag(1) 1184.625    909.068</span></span>
+<span><span class="co">#&gt; Temperature.lag(2) 1158.977   1933.732</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Scale parameter:</span></span>
+<span><span class="co">#&gt;            Jokulsa Vatnsdalsa</span></span>
+<span><span class="co">#&gt; Jokulsa     2017.0    1178.38</span></span>
+<span><span class="co">#&gt; Vatnsdalsa  1178.4     439.88</span></span></code></pre></div>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-GneitingEtAl2008TEST" class="csl-entry">
 Gneiting, Tilmann, Laura I. Stanberry, Eric P. Grimit, Leonhard Held,
