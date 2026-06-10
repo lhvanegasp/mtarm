@@ -53,8 +53,85 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9">
-Estimation, inference and forecasting using the Bayesian approach for multivariate threshold autoregressive (TAR) models in which the distribution used to describe the noise process belongs to the class of Gaussian variance mixtures.
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header"><h1 id="mtarm-multivariate-threshold-autoregressive-tar-models">mtarm: Multivariate Threshold Autoregressive (TAR) models<a class="anchor" aria-label="anchor" href="#mtarm-multivariate-threshold-autoregressive-tar-models"></a>
+</h1></div>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p><code>mtarm</code> is an R package for Bayesian estimation, inference, model comparison, and forecasting in multivariate Threshold Autoregressive (TAR) models. The package supports multiple innovation distributions, automatic variable selection through Stochastic Search Variable Selection (SSVS), and both standard forecasting and rolling-origin forecast evaluation. The package accommodates multivariate TAR models with exogenous variables and allows for flexible error specifications, including Gaussian, Student-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>, skew-normal, skew-Student-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>, Laplace, slash, contaminated normal, and symmetric hyperbolic distributions.</p>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>Install the development version from GitHub:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"lhvanegasp/mtarm"</span><span class="op">)</span></span></code></pre></div>
+<p>Load the package:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lhvanegasp.github.io/mtarm/">mtarm</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="main-features">Main Features<a class="anchor" aria-label="anchor" href="#main-features"></a>
+</h2>
+<ul>
+<li><p>Bayesian estimation of all model parameters in multivariate TAR models, except for the number of regimes.</p></li>
+<li><p>Support for multiple threshold regimes and exogenous variables.</p></li>
+<li><p>Automatic variable selection through Stochastic Search Variable Selection (SSVS).</p></li>
+<li><p>Flexible innovation distributions, including heavy-tailed and skewed alternatives.</p></li>
+<li><p>Standard forecasting and rolling-origin forecast evaluation.</p></li>
+<li><p>Model comparison using the Deviance Information Criterion (DIC), Watanabe-Akaike Information Criterion (WAIC), log-score (LS), Energy Score (ES), Absolute Percentage Error (APE), and related predictive measures.</p></li>
+<li><p>Residual diagnostics based on quantile-type residuals.</p></li>
+<li><p>Integration with the <code>coda</code> package for convergence assessment and posterior analysis.</p></li>
+<li><p>Parallel model estimation and specification search through <code><a href="reference/mtar_grid.html">mtar_grid()</a></code>.</p></li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
+</h2>
+<p>The following example illustrates how a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">TAR</mtext><mo stretchy="false" form="prefix">(</mo><mn>3</mn><mo>;</mo><mi>p</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\text{TAR}(3;p=(1,1,2))</annotation></semantics></math> Student-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math> model can be fitted on a bivariate output series:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lhvanegasp.github.io/mtarm/">mtarm</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">returns</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mtar.html">mtar</a></span><span class="op">(</span><span class="op">~</span> <span class="va">COLCAP</span> <span class="op">+</span> <span class="va">BOVESPA</span> <span class="op">|</span> <span class="va">SP500</span>, data<span class="op">=</span><span class="va">returns</span>, row.names<span class="op">=</span><span class="va">Date</span>,</span>
+<span>            subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2015-12-07"</span><span class="op">}</span>, dist<span class="op">=</span><span class="st">"Student-t"</span>,</span>
+<span>            ars<span class="op">=</span><span class="fu"><a href="reference/ars.html">ars</a></span><span class="op">(</span>nregim<span class="op">=</span><span class="fl">3</span>,p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>, n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>,</span>
+<span>            n.thin<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+<p>Generate forecasts:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">newdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">returns</span>, <span class="va">Date</span><span class="op">&gt;</span><span class="st">"2015-12-07"</span><span class="op">)</span></span>
+<span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, newdata<span class="op">=</span><span class="va">newdata</span>, n.ahead<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">)</span>, credible<span class="op">=</span><span class="fl">0.95</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pred</span><span class="op">[[</span><span class="st">"summary"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<p>Additional examples and detailed explanations are available in the package website:</p>
+<p><a href="https://lhvanegasp.github.io/mtarm/" class="uri">https://lhvanegasp.github.io/mtarm/</a></p>
+<p>Reference manual:</p>
+<p><a href="https://lhvanegasp.github.io/mtarm/reference/" class="uri">https://lhvanegasp.github.io/mtarm/reference/</a></p>
+<p>Articles and vignettes:</p>
+<p><a href="https://lhvanegasp.github.io/mtarm/articles/" class="uri">https://lhvanegasp.github.io/mtarm/articles/</a></p>
+</div>
+<div class="section level2">
+<h2 id="reproducibility">Reproducibility<a class="anchor" aria-label="anchor" href="#reproducibility"></a>
+</h2>
+<p>For reproducible analyses, users are encouraged to set a random seed before model estimation:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">6666</span><span class="op">)</span></span></code></pre></div>
+<p>All examples included in the documentation website and package vignettes can be reproduced directly from the source code distributed with the package.</p>
+</div>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
+<p>If you use <code>mtarm</code> in academic work, please cite the corresponding package paper:</p>
+<p>Vanegas, L. H., et al. <em>mtarm: Bayesian Multivariate Threshold Autoregressive Models in R</em>.</p>
+</div>
+</div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
