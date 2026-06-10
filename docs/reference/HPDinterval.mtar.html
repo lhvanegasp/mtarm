@@ -77,7 +77,7 @@ the intervals. By default, <code>prob</code> is set to <code>0.95</code>.</p></d
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">returns</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="mtar.html">mtar</a></span><span class="op">(</span><span class="op">~</span> <span class="va">COLCAP</span> <span class="op">+</span> <span class="va">BOVESPA</span> <span class="op">|</span> <span class="va">SP500</span>, data<span class="op">=</span><span class="va">returns</span>, row.names<span class="op">=</span><span class="va">Date</span>,</span></span>
 <span class="r-in"><span>             subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2015-12-07"</span><span class="op">}</span>, dist<span class="op">=</span><span class="st">"Student-t"</span>,</span></span>
-<span class="r-in"><span>             ars<span class="op">=</span><span class="fu"><a href="ars.html">ars</a></span><span class="op">(</span>nregim<span class="op">=</span><span class="fl">3</span>,p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>, n.burnin<span class="op">=</span><span class="fl">100</span>, n.sim<span class="op">=</span><span class="fl">200</span>,</span></span>
+<span class="r-in"><span>             ars<span class="op">=</span><span class="fu"><a href="ars.html">ars</a></span><span class="op">(</span>nregim<span class="op">=</span><span class="fl">3</span>,p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>, n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>,</span></span>
 <span class="r-in"><span>             n.thin<span class="op">=</span><span class="fl">2</span>, ssvs<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/HPDinterval.html" class="external-link">HPDinterval</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -85,340 +85,450 @@ the intervals. By default, <code>prob</code> is set to <code>0.95</code>.</p></d
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Thresholds:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  lower      upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Threshold.1 -0.0016244 -0.0012438</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Threshold.2  0.0045418  0.0046668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Threshold.1 -0.0105420 -0.0049244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Threshold.2  0.0095292  0.0110304</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Regime 1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                        Regime 1:lower Regime 1:upper Regime 2:lower</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:(Intercept)         -0.0038301     -0.0022509    -0.00038381</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:COLCAP.lag(1)        0.0428114      0.2431400    -0.00930639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:COLCAP.lag(2)                                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:BOVESPA.lag(1)       0.0140646      0.1328157     0.03708749</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:BOVESPA.lag(2)                                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:(Intercept)        -0.0085679     -0.0064163    -0.00084100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:COLCAP.lag(1)      -0.0969727      0.1548475    -0.09450420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:COLCAP.lag(2)                                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:BOVESPA.lag(1)     -0.0756523      0.0817256    -0.08680531</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:BOVESPA.lag(2)                                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                        Regime 2:upper Regime 3:lower Regime 3:upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:(Intercept)         0.00083243      0.0026245      0.0040569</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:COLCAP.lag(1)       0.14430244     -0.0368875      0.1478033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:COLCAP.lag(2)                      -0.0283047      0.1471497</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:BOVESPA.lag(1)      0.13583069      0.0400391      0.1569754</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:BOVESPA.lag(2)                     -0.1242541     -0.0059647</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:(Intercept)        0.00096980      0.0069095      0.0092296</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:COLCAP.lag(1)      0.12767120      0.0419791      0.3428645</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:COLCAP.lag(2)                     -0.1528390      0.1258414</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:BOVESPA.lag(1)     0.04339523     -0.1468148      0.0746957</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:BOVESPA.lag(2)                    -0.1939853     -0.0349060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             lower      upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:(Intercept)     -0.0097865 -0.0046935</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:(Intercept)    -0.0175248 -0.0104906</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:COLCAP.lag(1)    0.0714910  0.4955079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:COLCAP.lag(1)  -0.3362183  0.1521801</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:BOVESPA.lag(1)  -0.0064880  0.2706587</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:BOVESPA.lag(1) -0.0491111  0.3261144</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale parameter:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 Regime 1:lower Regime 1:upper Regime 2:lower Regime 2:upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP.COLCAP       5.1682e-05     7.1970e-05     3.3409e-05     4.5744e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP.BOVESPA      2.2689e-05     4.3157e-05     5.3769e-06     1.5186e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA.BOVESPA     1.0709e-04     1.4737e-04     6.1744e-05     8.4321e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 Regime 3:lower Regime 3:upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP.COLCAP       4.2753e-05     5.9508e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP.BOVESPA      1.5483e-05     3.3092e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA.BOVESPA     1.0495e-04     1.4555e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      lower      upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP.COLCAP   5.7862e-05 1.0095e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP.BOVESPA  1.9654e-05 5.9056e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA.BOVESPA 1.0877e-04 1.8919e-04</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Regime 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              lower      upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:(Intercept)     -0.00033615 0.00060734</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:(Intercept)    -0.00106372 0.00047654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:COLCAP.lag(1)    0.00818074 0.11625723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:COLCAP.lag(1)  -0.02070697 0.13605005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:BOVESPA.lag(1)   0.04220101 0.11025610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:BOVESPA.lag(1) -0.09427521 0.01043800</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale parameter:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      lower      upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP.COLCAP   3.7111e-05 4.7470e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP.BOVESPA  9.7003e-06 1.8399e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA.BOVESPA 8.0153e-05 1.0202e-04</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Regime 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             lower      upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:(Intercept)      0.0050632  0.0082017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:(Intercept)     0.0127336  0.0177791</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:COLCAP.lag(1)   -0.0704008  0.2227840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:COLCAP.lag(1)  -0.0635717  0.3455599</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:BOVESPA.lag(1)  -0.1371853  0.0996818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:BOVESPA.lag(1) -0.3955939 -0.0604130</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:COLCAP.lag(2)   -0.0755365  0.2143032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:COLCAP.lag(2)  -0.2657331  0.1382123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP:BOVESPA.lag(2)  -0.1589451  0.0413391</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA:BOVESPA.lag(2) -0.2036336  0.1165574</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale parameter:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      lower      upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP.COLCAP   4.3426e-05 7.5928e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> COLCAP.BOVESPA  6.4743e-06 3.8754e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> BOVESPA.BOVESPA 9.7007e-05 1.6814e-04</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extra parameter:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     lower  upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> nu 4.7391 6.5521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nu 4.5431 7.3165</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 2: Rainfall and two river flows in Colombia</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">riverflows</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="mtar.html">mtar</a></span><span class="op">(</span><span class="op">~</span> <span class="va">Bedon</span> <span class="op">+</span> <span class="va">LaPlata</span> <span class="op">|</span> <span class="va">Rainfall</span>, data<span class="op">=</span><span class="va">riverflows</span>, row.names<span class="op">=</span><span class="va">Date</span>,</span></span>
 <span class="r-in"><span>             subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2009-02-13"</span><span class="op">}</span>, dist<span class="op">=</span><span class="st">"Laplace"</span>,</span></span>
-<span class="r-in"><span>             ars<span class="op">=</span><span class="fu"><a href="ars.html">ars</a></span><span class="op">(</span>nregim<span class="op">=</span><span class="fl">3</span>,p<span class="op">=</span><span class="fl">5</span><span class="op">)</span>, n.burnin<span class="op">=</span><span class="fl">100</span>, n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             ars<span class="op">=</span><span class="fu"><a href="ars.html">ars</a></span><span class="op">(</span>nregim<span class="op">=</span><span class="fl">3</span>,p<span class="op">=</span><span class="fl">5</span><span class="op">)</span>, n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/HPDinterval.html" class="external-link">HPDinterval</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Probability = 0.95</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Thresholds:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               lower   upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Threshold.1  3.0555  3.4272</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Threshold.2 10.0114 10.0166</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Threshold.1  3.0287  3.8155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Threshold.2 10.0000 10.0149</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Regime 1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                        Regime 1:lower Regime 1:upper Regime 2:lower</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:(Intercept)            1.089772      1.4998943      1.3259498</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(1)           0.482409      0.6441843      0.4774448</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(2)          -0.030082      0.1122147     -0.0268180</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(3)          -0.027407      0.0857252     -0.1532360</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(4)          -0.034059      0.0909020     -0.0143516</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(5)           0.021448      0.1348567     -0.0642091</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(1)         0.020743      0.0714711     -0.0045662</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(2)        -0.040640      0.0021742     -0.0560527</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(3)        -0.017216      0.0220017     -0.0346755</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(4)        -0.031534      0.0038988     -0.0203794</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(5)        -0.020667      0.0080394     -0.0220366</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:(Intercept)          2.736487      3.9127521      5.3889658</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(1)        -0.051574      0.3491683     -0.1194771</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(2)        -0.223885      0.1055845     -0.2117400</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(3)        -0.131851      0.1840651     -0.2818465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(4)        -0.274890      0.0692383      0.0045357</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(5)         0.015945      0.2879224     -0.4432197</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(1)       0.545524      0.7049934      0.4540068</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(2)      -0.125712     -0.0083714     -0.0504552</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(3)       0.010711      0.1139856     -0.0132595</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(4)      -0.044584      0.0629166     -0.1333765</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(5)      -0.019370      0.0767111      0.0409557</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                        Regime 2:upper Regime 3:lower Regime 3:upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:(Intercept)            2.964205      4.2351827       7.002973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(1)           0.666455      0.3140666       0.616146</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(2)           0.224160     -0.0496686       0.224077</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(3)           0.055222     -0.2182411       0.027959</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(4)           0.181956     -0.1503842       0.139549</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(5)           0.101258      0.0587178       0.311492</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(1)         0.052711      0.0125577       0.075942</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(2)         0.015635     -0.0371351       0.027788</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(3)         0.022886     -0.0072575       0.069416</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(4)         0.041919     -0.0308975       0.049126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(5)         0.032213     -0.0462165       0.017075</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:(Intercept)          9.400490     12.7723355      23.578433</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(1)         0.303983      0.1307592       1.006624</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(2)         0.264843     -0.9859781      -0.019594</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(3)         0.149880     -1.0160003       0.060029</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(4)         0.428757     -0.6210323       0.723032</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(5)        -0.030082     -0.1696050       0.725721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(1)       0.616669      0.2326526       0.461256</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(2)       0.101628     -0.0132510       0.228367</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(3)       0.118773      0.1482564       0.446112</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(4)       0.028702     -0.1512447       0.168490</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(5)       0.185263     -0.0318407       0.194895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            lower      upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:(Intercept)       1.108891 1.53216226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:(Intercept)     2.860044 4.04402149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(1)      0.482920 0.63969522</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(1)   -0.063305 0.34888959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(1)    0.016203 0.07358646</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(1)  0.554588 0.70845898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(2)     -0.019105 0.11604248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(2)   -0.237660 0.13904147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(2)   -0.045098 0.00503449</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(2) -0.136166 0.00093774</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(3)     -0.032472 0.09042262</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(3)   -0.139796 0.16376737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(3)   -0.017717 0.02469308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(3)  0.012149 0.11990613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(4)     -0.021334 0.10134620</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(4)   -0.259139 0.05819055</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(4)   -0.032318 0.00155077</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(4) -0.045775 0.05922443</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(5)      0.031486 0.13375885</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(5)    0.027727 0.27832650</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(5)   -0.019542 0.00777224</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(5) -0.017927 0.06704365</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale parameter:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 Regime 1:lower Regime 1:upper Regime 2:lower Regime 2:upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon.Bedon            0.27354        0.39351         0.8665         1.3069</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon.LaPlata          0.26386        0.48355         0.9740         1.6845</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata.LaPlata        1.82342        2.73758         5.3554         7.7358</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 Regime 3:lower Regime 3:upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon.Bedon             2.2844         3.2401</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon.LaPlata           5.5933         8.7679</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata.LaPlata        33.4590        49.6618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   lower   upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon.Bedon     0.26328 0.38948</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon.LaPlata   0.25262 0.48966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata.LaPlata 1.89676 2.77788</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Regime 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             lower     upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:(Intercept)       1.3194596  2.916638</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:(Intercept)     4.8508130  8.910132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(1)      0.4953451  0.671637</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(1)   -0.1002882  0.363021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(1)   -0.0077359  0.047793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(1)  0.4452416  0.599067</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(2)     -0.0290426  0.213174</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(2)   -0.2339122  0.253258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(2)   -0.0543574  0.014471</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(2) -0.0356174  0.108142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(3)     -0.1465706  0.067465</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(3)   -0.2800328  0.165803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(3)   -0.0396706  0.021091</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(3) -0.0282009  0.111385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(4)     -0.0039448  0.221469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(4)   -0.0148561  0.490533</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(4)   -0.0293677  0.040315</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(4) -0.1298770  0.038449</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(5)     -0.0629416  0.097919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(5)   -0.4876191 -0.092673</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(5)   -0.0259730  0.031472</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(5)  0.0437830  0.197992</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale parameter:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   lower  upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon.Bedon     0.87758 1.3019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon.LaPlata   0.97158 1.7093</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata.LaPlata 5.29540 7.8042</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Regime 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             lower     upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:(Intercept)       3.9894134  7.294559</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:(Intercept)    11.1902226 23.020733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(1)      0.3082183  0.643302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(1)    0.0618211  1.074497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(1)    0.0093636  0.076327</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(1)  0.2114032  0.464734</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(2)     -0.0640751  0.223012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(2)   -1.1002530 -0.019625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(2)   -0.0375335  0.031024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(2) -0.0098455  0.260123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(3)     -0.2215945  0.040573</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(3)   -1.0350627 -0.113238</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(3)   -0.0021404  0.073491</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(3)  0.1369960  0.447739</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(4)     -0.1471890  0.137477</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(4)   -0.5163643  0.626348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(4)   -0.0369771  0.046311</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(4) -0.1695370  0.140870</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:Bedon.lag(5)      0.0371031  0.309065</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:Bedon.lag(5)   -0.1978915  0.788498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon:LaPlata.lag(5)   -0.0475675  0.022435</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata:LaPlata.lag(5) -0.0688179  0.196537</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale parameter:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   lower   upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon.Bedon      2.2380  3.3653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bedon.LaPlata    5.3841  8.9079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> LaPlata.LaPlata 33.7646 52.2459</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 3: Temperature, precipitation, and two river flows in Iceland</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iceland.rf</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit3</span> <span class="op">&lt;-</span> <span class="fu"><a href="mtar.html">mtar</a></span><span class="op">(</span><span class="op">~</span> <span class="va">Jokulsa</span> <span class="op">+</span> <span class="va">Vatnsdalsa</span> <span class="op">|</span> <span class="va">Temperature</span> <span class="op">|</span> <span class="va">Precipitation</span>,</span></span>
 <span class="r-in"><span>             data<span class="op">=</span><span class="va">iceland.rf</span>, subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"1974-11-06"</span><span class="op">}</span>, row.names<span class="op">=</span><span class="va">Date</span>,</span></span>
-<span class="r-in"><span>             ars<span class="op">=</span><span class="fu"><a href="ars.html">ars</a></span><span class="op">(</span>nregim<span class="op">=</span><span class="fl">2</span>,p<span class="op">=</span><span class="fl">15</span>,q<span class="op">=</span><span class="fl">4</span>,d<span class="op">=</span><span class="fl">2</span><span class="op">)</span>, n.burnin<span class="op">=</span><span class="fl">100</span>, n.sim<span class="op">=</span><span class="fl">200</span>,</span></span>
+<span class="r-in"><span>             ars<span class="op">=</span><span class="fu"><a href="ars.html">ars</a></span><span class="op">(</span>nregim<span class="op">=</span><span class="fl">2</span>,p<span class="op">=</span><span class="fl">15</span>,q<span class="op">=</span><span class="fl">4</span>,d<span class="op">=</span><span class="fl">2</span><span class="op">)</span>, n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>,</span></span>
 <span class="r-in"><span>             n.thin<span class="op">=</span><span class="fl">2</span>, dist<span class="op">=</span><span class="st">"Slash"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/HPDinterval.html" class="external-link">HPDinterval</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Probability = 0.95</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Thresholds:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             lower   upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> threshold 0.41803 0.86655</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              lower  upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Threshold.1 1.1008 1.2955</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Regime 1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                 Regime 1:lower Regime 1:upper Regime 2:lower</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:(Intercept)                  2.6352803     3.66254408     -1.4637157</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 1)              0.8437907     0.92908005      0.9247668</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 2)             -0.1171200    -0.01924717     -0.2729527</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 3)             -0.0413166     0.03844913     -0.0845591</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 4)             -0.0469307     0.06133525     -0.1705010</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 5)             -0.0781850     0.04858185     -0.0556182</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 6)             -0.0243633     0.08234490     -0.1112915</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 7)             -0.0475424     0.06420384     -0.0429613</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 8)             -0.0612018     0.03199144     -0.0416531</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 9)             -0.0274422     0.05362413     -0.0407820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(10)             -0.0116928     0.05011703     -0.0977940</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(11)             -0.0494385     0.00969262     -0.0803227</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(12)             -0.0226524     0.03457533     -0.0695737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(13)             -0.0482260     0.02412159     -0.0772444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(14)             -0.0287629     0.03105070     -0.0850382</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(15)             -0.0254946     0.03399619     -0.0020238</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 1)           0.1665282     0.39398311      0.5726819</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 2)          -0.3908305    -0.11848494     -0.9391427</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 3)          -0.0090923     0.16924670     -0.4796786</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 4)          -0.1048404     0.05623135     -0.5192297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 5)          -0.1001824     0.02803130     -0.2822171</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 6)          -0.0888830     0.09212607     -0.4621238</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 7)          -0.0733733     0.08428558     -0.2222564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 8)          -0.0599098     0.06025988     -0.6075366</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 9)          -0.0864107     0.03653510     -0.1577563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(10)          -0.0105143     0.11175174     -0.4211493</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(11)          -0.0681296     0.03992450     -0.3725198</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(12)          -0.0425968     0.05942225     -0.4250372</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(13)          -0.0784026     0.03363987     -0.1404644</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(14)          -0.0381498     0.06059892     -0.0822144</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(15)          -0.0461124     0.02789297     -0.7287150</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(1)        -0.0152452     0.01725471     -0.1658716</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(2)        -0.0082416     0.02147151     -0.1021646</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(3)        -0.0253451    -0.00390403     -0.0302333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(4)         0.0089095     0.03699413     -0.0265126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Temperature.lag(1)          -0.0046867     0.03373905      0.9100702</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Temperature.lag(2)          -0.0478685    -0.01039604     -0.6999888</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:(Intercept)               0.3379556     1.12586285      0.2940713</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 1)          -0.0903184    -0.01404886     -0.0122452</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 2)           0.0208662     0.08050007      0.0031973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 3)          -0.0563779    -0.00755996     -0.0280840</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 4)          -0.0105903     0.03447163     -0.0047981</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 5)          -0.0230110     0.03593609     -0.0131507</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 6)          -0.0237673     0.03765377     -0.0038635</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 7)          -0.0298951     0.03352870     -0.0154112</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 8)          -0.0442377     0.00591719     -0.0049800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 9)          -0.0035092     0.05344896     -0.0121555</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(10)          -0.0425853    -0.00020858     -0.0062544</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(11)          -0.0097757     0.02636419     -0.0177264</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(12)          -0.0310775     0.01196345      0.0017130</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(13)          -0.0135282     0.03222243     -0.0177952</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(14)          -0.0256372     0.01167690     -0.0136469</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(15)          -0.0097672     0.01618842     -0.0033411</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 1)        1.0689326     1.25821080      1.1496467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 2)       -0.4277818    -0.21554767     -0.4633306</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 3)       -0.0070751     0.14047505      0.0467195</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 4)       -0.0736115     0.04423797     -0.1415051</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 5)       -0.0558581     0.04017088     -0.1127569</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 6)       -0.0580280     0.04183497     -0.0544863</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 7)       -0.0239461     0.05162062     -0.0950839</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 8)       -0.0273196     0.03857800     -0.1450165</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 9)       -0.0501357     0.02830978      0.0574632</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(10)       -0.0252365     0.05247966     -0.1257649</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(11)       -0.0340026     0.03723716     -0.0159824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(12)       -0.0423899     0.02643856     -0.1291236</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(13)       -0.0765034     0.00845364      0.0913001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(14)        0.0016489     0.07722171     -0.0965910</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(15)       -0.0276669     0.02490403     -0.0850782</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(1)     -0.0067250     0.01585369     -0.0149386</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(2)     -0.0059698     0.01242473     -0.0209657</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(3)     -0.0114683     0.00394847     -0.0057700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(4)     -0.0018192     0.01752300     -0.0048399</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Temperature.lag(1)       -0.0147280     0.01293785      0.0113871</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Temperature.lag(2)       -0.0225938     0.00728257     -0.0737167</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                 Regime 2:upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:(Intercept)                 1.0598e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 1)             1.0597e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 2)            -2.6839e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 3)             1.2141e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 4)            -9.9932e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 5)             1.0232e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 6)             1.3155e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 7)             5.5940e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 8)             6.3851e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 9)             9.9867e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(10)             6.9948e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(11)             7.0507e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(12)             7.0307e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(13)             8.0591e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(14)             7.8418e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(15)             9.9372e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 1)          1.3748e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 2)          1.4256e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 3)          6.4760e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 4)          3.1479e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 5)          7.0462e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 6)          2.7482e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 7)          4.6441e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 8)          8.4844e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 9)          6.6999e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(10)          2.4466e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(11)          5.2024e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(12)          3.4087e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(13)          7.7751e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(14)          6.5356e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(15)         -1.8925e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(1)       -1.9493e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(2)        1.1580e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(3)        9.6531e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(4)        1.0692e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Temperature.lag(1)          1.2490e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Temperature.lag(2)         -3.6949e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:(Intercept)              6.7064e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 1)          1.8742e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 2)          2.6314e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 3)         -3.1653e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 4)          1.5294e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 5)          5.0599e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 6)          1.1655e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 7)          2.4264e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 8)          1.3611e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 9)          5.0010e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(10)          1.3624e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(11)          3.3468e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(12)          2.0761e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(13)          1.7539e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(14)          8.1031e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(15)          9.3300e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 1)       1.3050e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 2)      -2.3812e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 3)       2.4274e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 4)       5.0025e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 5)       8.8094e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 6)       1.2427e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 7)       3.5810e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 8)      -2.6445e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 9)       2.0275e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(10)      -5.1197e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(11)       1.1949e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(12)       1.3726e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(13)       2.1269e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(14)       2.5396e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(15)       7.3882e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(1)     8.2376e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(2)     1.0166e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(3)     1.5404e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(4)     1.2294e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Temperature.lag(1)       6.5699e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Temperature.lag(2)      -1.6367e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                       lower       upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:(Intercept)              3.01216112  4.44910666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:(Intercept)           0.44668018  1.22930933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 1)          0.77506393  0.91634416</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 1)      -0.10235444 -0.02407218</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 1)       0.09998825  0.32709513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 1)    1.08389466  1.24401168</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 2)         -0.09951992 -0.00281991</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 2)       0.01689143  0.08022687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 2)      -0.30479455 -0.04746716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 2)   -0.38602776 -0.21802254</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 3)         -0.03149461  0.04139062</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 3)      -0.04881667 -0.00140318</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 3)      -0.03449313  0.09827377</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 3)   -0.01611032  0.08225878</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 4)         -0.04499217  0.04141711</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 4)      -0.01165285  0.04086384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 4)      -0.06259357  0.08832019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 4)   -0.05280651  0.05646114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 5)         -0.05363857  0.04941220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 5)      -0.02085180  0.03710989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 5)      -0.10744124  0.02592505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 5)   -0.06351926  0.02606703</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 6)         -0.02955569  0.07324768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 6)      -0.02457565  0.03424973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 6)      -0.07929339  0.04304337</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 6)   -0.03622490  0.04064777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 7)         -0.04782558  0.05946626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 7)      -0.03190665  0.02715151</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 7)      -0.04203596  0.07437360</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 7)   -0.02836016  0.04507614</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 8)         -0.05281753  0.05013904</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 8)      -0.03412357  0.01741990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 8)      -0.06173290  0.05484411</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 8)   -0.02826708  0.04573722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 9)         -0.05338480  0.03580947</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 9)      -0.00761687  0.05052029</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 9)      -0.07209249  0.05646874</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 9)   -0.04564142  0.03617924</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(10)         -0.00742436  0.06156446</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(10)      -0.03706139  0.00776789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(10)      -0.03125298  0.09160990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(10)   -0.02026314  0.06519512</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(11)         -0.04241130  0.01764877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(11)      -0.01023831  0.02735578</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(11)      -0.07431870  0.03723784</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(11)   -0.04663509  0.03196626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(12)         -0.01950480  0.03958562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(12)      -0.02673506  0.01147259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(12)      -0.04277132  0.06048036</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(12)   -0.03745907  0.03180228</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(13)         -0.05358290  0.01440206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(13)      -0.01621208  0.02280159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(13)      -0.06514952  0.03727700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(13)   -0.06104591  0.01884027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(14)         -0.02202848  0.03331771</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(14)      -0.02354132  0.01275104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(14)      -0.04550223  0.06128400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(14)   -0.00351401  0.07006321</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(15)         -0.00781469  0.04756129</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(15)      -0.01388953  0.01514017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(15)      -0.05336082  0.02749317</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(15)   -0.02156065  0.03381161</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(1)    -0.01121017  0.02457475</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(1) -0.00525892  0.01730374</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(2)    -0.00878198  0.01835785</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(2) -0.00888620  0.00843741</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(3)    -0.02269249 -0.00078006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(3) -0.01191608  0.00341215</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(4)     0.00631820  0.03176934</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(4) -0.00493681  0.01360282</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Temperature.lag(1)       0.00067557  0.04277496</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Temperature.lag(1)   -0.01051131  0.01609708</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Temperature.lag(2)      -0.05885582 -0.01694403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Temperature.lag(2)   -0.02557699  0.00072988</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale parameter:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       Regime 1:lower Regime 1:upper Regime 2:lower</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa.Jokulsa            0.0441134       0.080208       0.856745</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa.Vatnsdalsa         0.0041052       0.014284       0.018497</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa.Vatnsdalsa      0.0190521       0.033208       0.016256</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       Regime 2:upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa.Jokulsa             1.845408</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa.Vatnsdalsa          0.077260</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa.Vatnsdalsa       0.042387</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                           lower    upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa.Jokulsa       0.0487295 0.086925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa.Vatnsdalsa    0.0057223 0.016686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa.Vatnsdalsa 0.0205724 0.036612</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Regime 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                      lower       upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:(Intercept)             -1.5723999  1.17426201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:(Intercept)           0.3176978  0.68149696</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 1)          0.9468790  1.08749796</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 1)      -0.0096881  0.00479818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 1)       0.4146019  1.35134422</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 1)    1.1046851  1.24589024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 2)         -0.3015312 -0.05110430</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 2)      -0.0023161  0.02199606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 2)      -1.0766025  0.30767417</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 2)   -0.4416007 -0.25139746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 3)         -0.0953003  0.12478641</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 3)      -0.0241543  0.00054486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 3)      -0.6221723  0.68931177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 3)    0.1058766  0.27674337</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 4)         -0.1603535  0.01032929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 4)      -0.0037103  0.01476837</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 4)      -0.6506232  0.29530082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 4)   -0.1592454 -0.00126648</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 5)         -0.0385360  0.11645162</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 5)      -0.0149819  0.00371398</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 5)      -0.6203686  0.62775905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 5)   -0.0857835  0.10574123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 6)         -0.1052252  0.01974520</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 6)      -0.0047613  0.01193621</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 6)      -0.4951375  0.71809928</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 6)   -0.0707261  0.12346937</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 7)         -0.0602005  0.05638895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 7)      -0.0140332  0.00274295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 7)      -0.3470259  0.54083718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 7)   -0.1184494  0.00963466</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 8)         -0.0407069  0.07351912</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 8)      -0.0037274  0.01195866</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 8)      -0.6947072  0.21922124</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 8)   -0.1042657  0.02067240</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag( 9)         -0.0199993  0.10376144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag( 9)      -0.0098786  0.00672259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag( 9)      -0.2992893  0.55651690</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag( 9)    0.0174975  0.16059199</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(10)         -0.0984319  0.05595441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(10)      -0.0060387  0.01295489</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(10)      -0.4075627  0.36245157</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(10)   -0.1261248 -0.01086358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(11)         -0.0790049  0.07680963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(11)      -0.0158582  0.00231287</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(11)      -0.5615513  0.45983671</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(11)    0.0076393  0.14697657</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(12)         -0.0788102  0.06739931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(12)       0.0010255  0.01800121</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(12)      -0.4693305  0.46357053</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(12)   -0.1430989 -0.02646569</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(13)         -0.0890793  0.07088979</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(13)      -0.0143842  0.00160358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(13)      -0.0823032  0.90049477</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(13)    0.0725195  0.21115161</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(14)         -0.0856602  0.06853469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(14)      -0.0105884  0.00626477</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(14)      -0.3887712  0.63335348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(14)   -0.1308672  0.02422233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Jokulsa.lag(15)          0.0040650  0.09222334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Jokulsa.lag(15)      -0.0045390  0.00647517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Vatnsdalsa.lag(15)      -0.7344939 -0.11163292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Vatnsdalsa.lag(15)   -0.0644018  0.03515953</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(1)    -0.1922928 -0.03924551</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(1) -0.0128229  0.00751237</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(2)    -0.0992820  0.15022712</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(2) -0.0157662  0.01159919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(3)    -0.0162778  0.11219349</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(3) -0.0034313  0.01637317</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Precipitation.lag(4)    -0.0394901  0.09785084</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Precipitation.lag(4) -0.0059753  0.01150767</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Temperature.lag(1)       0.9292779  1.31060648</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Temperature.lag(1)   -0.0028265  0.04685542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa:Temperature.lag(2)      -0.7683949 -0.35371213</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa:Temperature.lag(2)   -0.0536449 -0.00166153</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale parameter:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                          lower    upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa.Jokulsa       0.959662 1.781023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jokulsa.Vatnsdalsa    0.024084 0.069135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Vatnsdalsa.Vatnsdalsa 0.015911 0.030668</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extra parameter:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      lower   upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> nu 0.74422 0.91488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nu 0.72757 0.89162</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 4: U.S. stock returns</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">US.returns</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="mtar.html">mtar</a></span><span class="op">(</span><span class="op">~</span> <span class="va">CCR</span> <span class="op">|</span> <span class="va">dVIX</span>, data<span class="op">=</span><span class="va">US.returns</span>, subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2025-11-28"</span><span class="op">}</span>,</span></span>
-<span class="r-in"><span>             row.names<span class="op">=</span><span class="va">Date</span>, ars<span class="op">=</span><span class="fu"><a href="ars.html">ars</a></span><span class="op">(</span>nregim<span class="op">=</span><span class="fl">2</span>,p<span class="op">=</span><span class="fl">3</span>,d<span class="op">=</span><span class="fl">3</span><span class="op">)</span>, n.burnin<span class="op">=</span><span class="fl">100</span>,</span></span>
-<span class="r-in"><span>             n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>, dist<span class="op">=</span><span class="st">"Student-t"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             row.names<span class="op">=</span><span class="va">Date</span>, ars<span class="op">=</span><span class="fu"><a href="ars.html">ars</a></span><span class="op">(</span>nregim<span class="op">=</span><span class="fl">2</span>,p<span class="op">=</span><span class="fl">3</span>,d<span class="op">=</span><span class="fl">3</span><span class="op">)</span>, n.burnin<span class="op">=</span><span class="fl">1000</span>,</span></span>
+<span class="r-in"><span>             n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>, dist<span class="op">=</span><span class="st">"Student-t"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/HPDinterval.html" class="external-link">HPDinterval</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Probability = 0.95</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Thresholds:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            lower  upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> threshold 1.8713 2.1709</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              lower  upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Threshold.1 1.1487 2.2008</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Regime 1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 Regime 1:lower Regime 1:upper Regime 2:lower Regime 2:upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:(Intercept)      0.0668979      0.1127371     -0.4113077       0.157977</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:CCR.lag(1)      -0.0743691     -0.0276331     -0.2999127      -0.028327</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:CCR.lag(2)      -0.0726077     -0.0023142     -0.2478509       0.173860</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:CCR.lag(3)      -0.0705618      0.0075159     -0.0316060       0.370194</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:dVIX.lag(1)     -0.0549186     -0.0043995     -0.1778912       0.104887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:dVIX.lag(2)     -0.0520714     -0.0034718     -0.0321339       0.173310</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:dVIX.lag(3)     -0.0025748      0.0277559     -0.0022731       0.137239</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      lower       upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:(Intercept)  0.0677208  0.11502896</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:CCR.lag(1)  -0.0780972 -0.02240717</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:CCR.lag(2)  -0.0826999  0.00020929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:CCR.lag(3)  -0.0664100  0.01755325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:dVIX.lag(1) -0.0627957 -0.00958405</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:dVIX.lag(2) -0.0486701  0.00520388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:dVIX.lag(3) -0.0011461  0.03140187</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale parameter:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         Regime 1:lower Regime 1:upper Regime 2:lower Regime 2:upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CCR.CCR         0.3385        0.39313         0.8436         1.3108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           lower   upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR.CCR 0.33502 0.40059</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Regime 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      lower     upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:(Intercept) -0.4090450 0.2460139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:CCR.lag(1)  -0.3216915 0.0067886</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:CCR.lag(2)  -0.2320086 0.1935572</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:CCR.lag(3)  -0.0481479 0.3456160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:dVIX.lag(1) -0.1451481 0.1306261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:dVIX.lag(2) -0.0804351 0.1579721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR:dVIX.lag(3) -0.0019516 0.1317174</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale parameter:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           lower  upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CCR.CCR 0.73511 1.2924</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extra parameter:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     lower  upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> nu 2.2695 2.6713</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nu 2.2401 2.6517</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

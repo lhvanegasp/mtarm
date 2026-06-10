@@ -213,542 +213,542 @@ International Journal of Forecasting.
 data(returns)
 fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
              subset={Date<="2015-12-07"}, dist="Student-t",
-             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100, n.sim=200,
+             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
              n.thin=2)
 summary(fit1)
 #> 
 #> 
-#> Sample size          :1427 time points (2010-02-04 to 2015-12-07)
+#> Sample size          : 1427 time points (2010-02-04 to 2015-12-07)
 #> 
-#> Output Series        :COLCAP    |    BOVESPA
+#> Output Series        : COLCAP    |    BOVESPA
 #> 
-#> Threshold Series     :SP500 with a estimated delay equal to 0
+#> Threshold Series     : SP500 with a estimated delay equal to 0
 #> 
-#> Error Distribution   :Student-t
+#> Error Distribution   : Student-t
 #> 
-#> Number of regimes    :3
+#> Number of regimes    : 3
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:1, 1, 2
+#> Autoregressive orders: 1, 1, 2
 #> 
 #> 
 #> 
 #> Thresholds (Mean, HDI.Lower, HDI.Upper)
 #>                                                                  
-#> Regime 1    (-Inf,-0.00152]    (-Inf,-0.00204]    (-Inf,-0.00125]
-#> Regime 2 (-0.00152,0.00892] (-0.00204,0.00686] (-0.00125,0.00958]
-#> Regime 3      (0.00892,Inf)      (0.00686,Inf)      (0.00958,Inf)
+#> Regime 1    (-Inf,-0.00873]    (-Inf,-0.01054]    (-Inf,-0.00635]
+#> Regime 2 (-0.00873,0.00882] (-0.01054,0.00754] (-0.00635,0.01099]
+#> Regime 3      (0.00882,Inf)      (0.00754,Inf)      (0.01099,Inf)
 #> 
 #> 
 #> Regime1:
 #> 
 #> Autoregressive coefficients
 #>                    Mean  2(1-PD)  HDI.Lower HDI.Upper             Mean
-#> (Intercept)    -0.00302     1e-05  -0.00394  -0.00230    |    -0.00754
-#> COLCAP.lag(1)   0.13594     1e-02   0.04049   0.22641    |     0.01290
-#> BOVESPA.lag(1)  0.07936     1e-02   0.02013   0.13868    |     0.00778
+#> (Intercept)    -0.00725   0.00001  -0.00940  -0.00491    |    -0.01408
+#> COLCAP.lag(1)   0.26154   0.00100   0.04513   0.45550    |    -0.09202
+#> BOVESPA.lag(1)  0.11626   0.06900  -0.00614   0.25309    |     0.11574
 #>                 2(1-PD)  HDI.Lower HDI.Upper
-#> (Intercept)      0.00001  -0.00870  -0.00645
-#> COLCAP.lag(1)    0.87000  -0.11076   0.15017
-#> BOVESPA.lag(1)   0.94000  -0.06999   0.10239
+#> (Intercept)      0.00001  -0.01711  -0.01069
+#> COLCAP.lag(1)    0.43700  -0.34150   0.12546
+#> BOVESPA.lag(1)   0.25200  -0.05912   0.33063
 #> 
 #> Scale parameter (Mean, HDI.Lower, HDI.Upper)
 #>         COLCAP BOVESPA      COLCAP BOVESPA      COLCAP BOVESPA
-#> COLCAP   6e-05 0.00003    .  5e-05 0.00002    .  7e-05 0.00004
-#> BOVESPA  3e-05 0.00013    .  2e-05 0.00011    .  4e-05 0.00015
+#> COLCAP   8e-05 0.00004    .  6e-05 0.00002    .  1e-04 0.00006
+#> BOVESPA  4e-05 0.00015    .  2e-05 0.00011    .  6e-05 0.00019
 #> 
 #> 
 #> Regime2:
 #> 
 #> Autoregressive coefficients
 #>                   Mean  2(1-PD)  HDI.Lower HDI.Upper             Mean  2(1-PD) 
-#> (Intercept)    0.00052     6e-02   0.00009   0.00113    |     0.00093      0.04
-#> COLCAP.lag(1)  0.06399     2e-02   0.01071   0.12243    |     0.04267      0.34
-#> BOVESPA.lag(1) 0.08466     1e-05   0.04137   0.12116    |    -0.04105      0.12
+#> (Intercept)    0.00003   0.92700  -0.00049   0.00046    |    -0.00063     0.090
+#> COLCAP.lag(1)  0.07260   0.01200   0.01594   0.13200    |     0.05586     0.189
+#> BOVESPA.lag(1) 0.07491   0.00001   0.04141   0.11573    |    -0.03851     0.154
 #>                HDI.Lower HDI.Upper
-#> (Intercept)      0.00012   0.00167
-#> COLCAP.lag(1)   -0.04113   0.12167
-#> BOVESPA.lag(1)  -0.08902   0.00959
+#> (Intercept)     -0.00142   0.00011
+#> COLCAP.lag(1)   -0.02327   0.14095
+#> BOVESPA.lag(1)  -0.09501   0.01089
 #> 
 #> Scale parameter (Mean, HDI.Lower, HDI.Upper)
 #>         COLCAP BOVESPA      COLCAP BOVESPA      COLCAP BOVESPA
 #> COLCAP   4e-05   1e-05    .  4e-05   1e-05    .  5e-05   2e-05
-#> BOVESPA  1e-05   8e-05    .  1e-05   7e-05    .  2e-05   9e-05
+#> BOVESPA  1e-05   9e-05    .  1e-05   8e-05    .  2e-05   1e-04
 #> 
 #> 
 #> Regime3:
 #> 
 #> Autoregressive coefficients
 #>                    Mean  2(1-PD)  HDI.Lower HDI.Upper             Mean
-#> (Intercept)     0.00533   0.00001   0.00382   0.00661    |     0.01242
-#> COLCAP.lag(1)   0.05001   0.45000  -0.05055   0.17135    |     0.14672
-#> BOVESPA.lag(1)  0.05843   0.19000  -0.01922   0.15954    |    -0.12672
-#> COLCAP.lag(2)   0.10214   0.08000  -0.00957   0.20267    |    -0.02289
-#> BOVESPA.lag(2) -0.09424   0.01000  -0.18375  -0.02662    |    -0.08884
+#> (Intercept)     0.00554   0.00001   0.00395   0.00753    |     0.01286
+#> COLCAP.lag(1)   0.06224   0.34200  -0.07117   0.19397    |     0.15778
+#> BOVESPA.lag(1)  0.03778   0.53100  -0.09587   0.15702    |    -0.14836
+#> COLCAP.lag(2)   0.06449   0.32200  -0.06180   0.19018    |    -0.06055
+#> BOVESPA.lag(2) -0.06843   0.12300  -0.15738   0.02002    |    -0.05214
 #>                 2(1-PD)  HDI.Lower HDI.Upper
-#> (Intercept)      0.00001   0.00986   0.01472
-#> COLCAP.lag(1)    0.12000  -0.03675   0.33298
-#> BOVESPA.lag(1)   0.10000  -0.28116   0.00284
-#> COLCAP.lag(2)    0.80000  -0.21772   0.14691
-#> BOVESPA.lag(2)   0.19000  -0.22615   0.02050
+#> (Intercept)      0.00001   0.01007   0.01704
+#> COLCAP.lag(1)    0.10500  -0.03733   0.34332
+#> BOVESPA.lag(1)   0.07100  -0.33639   0.00736
+#> COLCAP.lag(2)    0.51400  -0.25354   0.12653
+#> BOVESPA.lag(2)   0.43100  -0.19946   0.07787
 #> 
 #> Scale parameter (Mean, HDI.Lower, HDI.Upper)
 #>         COLCAP BOVESPA      COLCAP BOVESPA      COLCAP BOVESPA
-#> COLCAP   5e-05 0.00002    .  4e-05   1e-05    .  7e-05 0.00004
+#> COLCAP   6e-05 0.00002    .  4e-05   1e-05    .  7e-05 0.00004
 #> BOVESPA  2e-05 0.00013    .  1e-05   1e-04    .  4e-05 0.00016
 #> 
 #> 
 #> Extra parameter
 #>                   Mean  2(1-PD)  HDI.Lower HDI.Upper
-#> nu             5.82239      .      4.64972   6.78059
+#> nu             5.96907      .      4.67034   7.29723
 #> 
 #> 
 DIC(fit1)
 #>           DIC
-#> fit1 -18243.3
+#> fit1 -18327.9
 WAIC(fit1)
 #>           WAIC
-#> fit1 -18210.34
+#> fit1 -18237.06
 
 ###### Example 2: Rainfall and two river flows in Colombia
 data(riverflows)
 fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
              subset={Date<="2009-02-13"}, dist="Laplace",
-             ars=ars(nregim=3,p=5), n.burnin=100, n.sim=200, n.thin=2)
+             ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
 summary(fit2)
 #> 
 #> 
-#> Sample size          :1135 time points (2006-01-06 to 2009-02-13)
+#> Sample size          : 1135 time points (2006-01-06 to 2009-02-13)
 #> 
-#> Output Series        :Bedon    |    LaPlata
+#> Output Series        : Bedon    |    LaPlata
 #> 
-#> Threshold Series     :Rainfall with a estimated delay equal to 0
+#> Threshold Series     : Rainfall with a estimated delay equal to 0
 #> 
-#> Error Distribution   :Laplace
+#> Error Distribution   : Laplace
 #> 
-#> Number of regimes    :3
+#> Number of regimes    : 3
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:5 in each regime
+#> Autoregressive orders: 5 in each regime
 #> 
 #> 
 #> 
 #> Thresholds (Mean, HDI.Lower, HDI.Upper)
-#>                                                        
-#> Regime 1     (-Inf,3.03818] (-Inf,3]     (-Inf,3.14866]
-#> Regime 2 (3.03818,10.00933]   (3,10] (3.14866,10.01636]
-#> Regime 3     (10.00933,Inf) (10,Inf)     (10.01636,Inf)
+#>                                                                  
+#> Regime 1     (-Inf,3.38481]     (-Inf,3.03054]     (-Inf,3.94628]
+#> Regime 2 (3.38481,10.01528] (3.03054,10.00015] (3.94628,10.01492]
+#> Regime 3     (10.01528,Inf)     (10.00015,Inf)     (10.01492,Inf)
 #> 
 #> 
 #> Regime1:
 #> 
 #> Autoregressive coefficients
 #>                    Mean  2(1-PD)  HDI.Lower HDI.Upper             Mean
-#> (Intercept)     1.32209   0.00001   1.05594   1.51770    |     3.40013
-#> Bedon.lag(1)    0.55870   0.00001   0.48296   0.63730    |     0.14191
-#> LaPlata.lag(1)  0.04689   0.00001   0.02065   0.07072    |     0.64323
-#> Bedon.lag(2)    0.05549   0.17000  -0.01873   0.11602    |    -0.04758
-#> LaPlata.lag(2) -0.02217   0.04000  -0.04787  -0.00255    |    -0.07636
-#> Bedon.lag(3)    0.02227   0.36000  -0.03342   0.07743    |     0.02332
-#> LaPlata.lag(3)  0.00560   0.56000  -0.01657   0.02108    |     0.07059
-#> Bedon.lag(4)    0.03506   0.21000  -0.01785   0.09806    |    -0.08161
-#> LaPlata.lag(4) -0.01592   0.05000  -0.02977   0.00143    |     0.00664
-#> Bedon.lag(5)    0.08702   0.00001   0.03774   0.14396    |     0.15150
-#> LaPlata.lag(5) -0.00767   0.27000  -0.02053   0.00412    |     0.02200
+#> (Intercept)     1.33009   0.00001   1.09557   1.53952    |     3.43832
+#> Bedon.lag(1)    0.56483   0.00001   0.48897   0.64354    |     0.15357
+#> LaPlata.lag(1)  0.04643   0.00001   0.01420   0.07469    |     0.63513
+#> Bedon.lag(2)    0.05321   0.13300  -0.01232   0.13165    |    -0.04082
+#> LaPlata.lag(2) -0.02231   0.08900  -0.04702   0.00362    |    -0.07287
+#> Bedon.lag(3)    0.02684   0.36400  -0.03514   0.08120    |     0.02454
+#> LaPlata.lag(3)  0.00343   0.75600  -0.01878   0.02399    |     0.06666
+#> Bedon.lag(4)    0.03251   0.28500  -0.02796   0.09015    |    -0.09581
+#> LaPlata.lag(4) -0.01492   0.08300  -0.03265   0.00130    |     0.01004
+#> Bedon.lag(5)    0.08272   0.00001   0.02882   0.12992    |     0.15153
+#> LaPlata.lag(5) -0.00672   0.32300  -0.02048   0.00588    |     0.02375
 #>                 2(1-PD)  HDI.Lower HDI.Upper
-#> (Intercept)      0.00001   2.81289   3.97612
-#> Bedon.lag(1)     0.19000  -0.06874   0.32894
-#> LaPlata.lag(1)   0.00001   0.55967   0.71816
-#> Bedon.lag(2)     0.55000  -0.19029   0.15385
-#> LaPlata.lag(2)   0.03000  -0.13943  -0.01117
-#> Bedon.lag(3)     0.72000  -0.12503   0.17047
-#> LaPlata.lag(3)   0.02000   0.02766   0.12103
-#> Bedon.lag(4)     0.28000  -0.24015   0.06965
-#> LaPlata.lag(4)   0.81000  -0.04849   0.05180
-#> Bedon.lag(5)     0.02000   0.04656   0.29603
-#> LaPlata.lag(5)   0.29000  -0.01891   0.05739
+#> (Intercept)      0.00001   2.80227   4.02312
+#> Bedon.lag(1)     0.16700  -0.06465   0.37228
+#> LaPlata.lag(1)   0.00001   0.55973   0.72714
+#> Bedon.lag(2)     0.65800  -0.23458   0.14470
+#> LaPlata.lag(2)   0.05100  -0.13873   0.00351
+#> Bedon.lag(3)     0.74600  -0.11874   0.17026
+#> LaPlata.lag(3)   0.02100   0.01020   0.11792
+#> Bedon.lag(4)     0.24600  -0.25654   0.07884
+#> LaPlata.lag(4)   0.72300  -0.04139   0.06533
+#> Bedon.lag(5)     0.02300   0.02646   0.27862
+#> LaPlata.lag(5)   0.28500  -0.02017   0.06757
 #> 
 #> Scale parameter (Mean, HDI.Lower, HDI.Upper)
 #>           Bedon LaPlata        Bedon LaPlata        Bedon LaPlata
-#> Bedon   0.32964 0.37489    . 0.27505 0.26704    . 0.38578 0.47842
-#> LaPlata 0.37489 2.35818    . 0.26704 1.89033    . 0.47842 2.77670
+#> Bedon   0.32902 0.37083    . 0.26733 0.25761    . 0.39264 0.48484
+#> LaPlata 0.37083 2.33224    . 0.25761 1.91561    . 0.48484 2.80108
 #> 
 #> 
 #> Regime2:
 #> 
 #> Autoregressive coefficients
 #>                    Mean  2(1-PD)  HDI.Lower HDI.Upper             Mean
-#> (Intercept)     2.26994   0.00001   1.50592   3.03276    |     7.18822
-#> Bedon.lag(1)    0.58981   0.00001   0.51279   0.66750    |     0.14703
-#> LaPlata.lag(1)  0.01974   0.13000  -0.00503   0.04347    |     0.52465
-#> Bedon.lag(2)    0.08305   0.23000  -0.04822   0.21313    |    -0.01196
-#> LaPlata.lag(2) -0.01563   0.39000  -0.05552   0.01647    |     0.03616
-#> Bedon.lag(3)   -0.02530   0.68000  -0.11356   0.08146    |    -0.06016
-#> LaPlata.lag(3) -0.01119   0.40000  -0.04366   0.01430    |     0.03719
-#> Bedon.lag(4)    0.09374   0.12000  -0.01177   0.21184    |     0.23011
-#> LaPlata.lag(4)  0.00813   0.55000  -0.02252   0.03452    |    -0.04519
-#> Bedon.lag(5)    0.03147   0.40000  -0.04926   0.10812    |    -0.26456
-#> LaPlata.lag(5)  0.00345   0.77000  -0.02208   0.02892    |     0.11554
+#> (Intercept)     2.12531   0.00001   1.29059   2.90177    |     6.96312
+#> Bedon.lag(1)    0.58671   0.00001   0.49759   0.67394    |     0.15115
+#> LaPlata.lag(1)  0.02195   0.09800  -0.00394   0.04891    |     0.52599
+#> Bedon.lag(2)    0.09387   0.12500  -0.01842   0.21866    |    -0.00038
+#> LaPlata.lag(2) -0.01939   0.27300  -0.05543   0.01330    |     0.03241
+#> Bedon.lag(3)   -0.03731   0.51600  -0.14984   0.07174    |    -0.07488
+#> LaPlata.lag(3) -0.00691   0.67400  -0.03666   0.02257    |     0.04425
+#> Bedon.lag(4)    0.10320   0.09200  -0.01578   0.21923    |     0.22853
+#> LaPlata.lag(4)  0.00746   0.64300  -0.02742   0.03770    |    -0.04357
+#> Bedon.lag(5)    0.02861   0.47700  -0.05273   0.10825    |    -0.27158
+#> LaPlata.lag(5)  0.00414   0.79100  -0.02533   0.03318    |     0.11853
 #>                 2(1-PD)  HDI.Lower HDI.Upper
-#> (Intercept)      0.00001   5.45945   9.29524
-#> Bedon.lag(1)     0.21000  -0.01996   0.37878
-#> LaPlata.lag(1)   0.00001   0.46118   0.59968
-#> Bedon.lag(2)     0.93000  -0.26299   0.22335
-#> LaPlata.lag(2)   0.33000  -0.05000   0.09806
-#> Bedon.lag(3)     0.57000  -0.28721   0.17612
-#> LaPlata.lag(3)   0.31000  -0.02712   0.10755
-#> Bedon.lag(4)     0.10000  -0.02083   0.51763
-#> LaPlata.lag(4)   0.37000  -0.12449   0.04898
-#> Bedon.lag(5)     0.01000  -0.43594  -0.01945
-#> LaPlata.lag(5)   0.00001   0.03152   0.18364
+#> (Intercept)      0.00001   4.81388   9.00301
+#> Bedon.lag(1)     0.19700  -0.07044   0.39055
+#> LaPlata.lag(1)   0.00001   0.44767   0.60378
+#> Bedon.lag(2)     0.99200  -0.22237   0.27318
+#> LaPlata.lag(2)   0.40600  -0.04334   0.10237
+#> Bedon.lag(3)     0.52700  -0.30074   0.17061
+#> LaPlata.lag(3)   0.21100  -0.02292   0.11145
+#> Bedon.lag(4)     0.09000  -0.02672   0.47972
+#> LaPlata.lag(4)   0.29000  -0.11668   0.04471
+#> Bedon.lag(5)     0.00800  -0.48422  -0.07190
+#> LaPlata.lag(5)   0.00200   0.03660   0.19853
 #> 
 #> Scale parameter (Mean, HDI.Lower, HDI.Upper)
 #>           Bedon LaPlata        Bedon LaPlata        Bedon LaPlata
-#> Bedon   1.09098 1.31754    . 0.85870 0.92642    . 1.27424 1.65052
-#> LaPlata 1.31754 6.47594    . 0.92642 5.18293    . 1.65052 7.68626
+#> Bedon   1.08667 1.32717    . 0.89417 0.97258    . 1.30700 1.69886
+#> LaPlata 1.32717 6.50877    . 0.97258 5.33759    . 1.69886 7.85858
 #> 
 #> 
 #> Regime3:
 #> 
 #> Autoregressive coefficients
 #>                    Mean  2(1-PD)  HDI.Lower HDI.Upper             Mean
-#> (Intercept)     5.65600   0.00001   4.26918   7.41032    |    17.49346
-#> Bedon.lag(1)    0.46937   0.00001   0.30395   0.64870    |     0.51094
-#> LaPlata.lag(1)  0.04609   0.01000   0.01131   0.08032    |     0.33986
-#> Bedon.lag(2)    0.07206   0.39000  -0.07922   0.21348    |    -0.65192
-#> LaPlata.lag(2) -0.00026   0.99000  -0.03182   0.03121    |     0.13463
-#> Bedon.lag(3)   -0.09275   0.17000  -0.21070   0.03245    |    -0.53785
-#> LaPlata.lag(3)  0.03356   0.09000  -0.00704   0.06357    |     0.29271
-#> Bedon.lag(4)    0.00965   0.86000  -0.14820   0.12969    |     0.01497
-#> LaPlata.lag(4) -0.00266   0.90000  -0.03985   0.03601    |    -0.02605
-#> Bedon.lag(5)    0.17944   0.01000   0.02972   0.30166    |     0.30934
-#> LaPlata.lag(5) -0.01150   0.52000  -0.05409   0.02270    |     0.06851
+#> (Intercept)     5.59571   0.00001   4.09094   7.17523    |    17.07178
+#> Bedon.lag(1)    0.46845   0.00001   0.30024   0.62905    |     0.53354
+#> LaPlata.lag(1)  0.04479   0.01300   0.00844   0.07844    |     0.33063
+#> Bedon.lag(2)    0.08572   0.23900  -0.04638   0.23799    |    -0.56098
+#> LaPlata.lag(2) -0.00311   0.82900  -0.03470   0.03097    |     0.11756
+#> Bedon.lag(3)   -0.09636   0.17300  -0.21723   0.05544    |    -0.58595
+#> LaPlata.lag(3)  0.03377   0.09700  -0.00613   0.07014    |     0.28701
+#> Bedon.lag(4)    0.00504   0.94200  -0.14769   0.15111    |     0.04545
+#> LaPlata.lag(4)  0.00424   0.86800  -0.03638   0.04551    |    -0.01004
+#> Bedon.lag(5)    0.17726   0.00900   0.03771   0.31098    |     0.28121
+#> LaPlata.lag(5) -0.01373   0.41200  -0.04791   0.02298    |     0.06264
 #>                 2(1-PD)  HDI.Lower HDI.Upper
-#> (Intercept)      0.00001  11.84501  23.30991
-#> Bedon.lag(1)     0.05000   0.00780   0.98778
-#> LaPlata.lag(1)   0.00001   0.20504   0.44266
-#> Bedon.lag(2)     0.02000  -1.13823  -0.08443
-#> LaPlata.lag(2)   0.04000   0.02108   0.27133
-#> Bedon.lag(3)     0.02000  -0.93196  -0.06657
-#> LaPlata.lag(3)   0.00001   0.15843   0.46897
-#> Bedon.lag(4)     1.00000  -0.44475   0.49058
-#> LaPlata.lag(4)   0.77000  -0.19314   0.09854
-#> Bedon.lag(5)     0.30000  -0.14752   0.80064
-#> LaPlata.lag(5)   0.35000  -0.06987   0.22833
+#> (Intercept)      0.00001  11.32080  22.92139
+#> Bedon.lag(1)     0.05100  -0.03515   1.00640
+#> LaPlata.lag(1)   0.00001   0.20744   0.46923
+#> Bedon.lag(2)     0.04100  -1.06901  -0.00397
+#> LaPlata.lag(2)   0.07800  -0.00909   0.26180
+#> Bedon.lag(3)     0.02000  -1.04821  -0.11833
+#> LaPlata.lag(3)   0.00001   0.12693   0.43311
+#> Bedon.lag(4)     0.90000  -0.52190   0.64787
+#> LaPlata.lag(4)   0.87900  -0.16064   0.13955
+#> Bedon.lag(5)     0.27400  -0.21956   0.74546
+#> LaPlata.lag(5)   0.32400  -0.06354   0.19611
 #> 
 #> Scale parameter (Mean, HDI.Lower, HDI.Upper)
 #>           Bedon  LaPlata        Bedon  LaPlata        Bedon  LaPlata
-#> Bedon   2.83482  7.31792    . 2.24700  5.38749    . 3.41313  9.20141
-#> LaPlata 7.31792 43.06954    . 5.38749 34.07359    . 9.20141 52.42954
+#> Bedon   2.77922  7.19378    . 2.19919  5.34573    . 3.33842  8.94021
+#> LaPlata 7.19378 43.17053    . 5.34573 34.51030    . 8.94021 52.17702
 #> 
 #> 
 DIC(fit2)
 #>           DIC
-#> fit2 12932.92
+#> fit2 12934.62
 WAIC(fit2)
-#>          WAIC
-#> fit2 12974.95
+#>         WAIC
+#> fit2 12978.6
 
 ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 data(iceland.rf)
 fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
-             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=100, n.sim=200,
+             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
              n.thin=2, dist="Slash")
 summary(fit3)
 #> 
 #> 
-#> Sample size          :1026 time points (1972-01-16 to 1974-11-06)
+#> Sample size          : 1026 time points (1972-01-16 to 1974-11-06)
 #> 
-#> Output Series        :Jokulsa    |    Vatnsdalsa
+#> Output Series        : Jokulsa    |    Vatnsdalsa
 #> 
-#> Threshold Series (TS):Temperature with a estimated delay equal to 0
+#> Threshold Series (TS): Temperature with a estimated delay equal to 0
 #> 
-#> Exogenous Series (ES):Precipitation
+#> Exogenous Series (ES): Precipitation
 #> 
-#> Error Distribution   :Slash
+#> Error Distribution   : Slash
 #> 
-#> Number of regimes    :2
+#> Number of regimes    : 2
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:15 in each regime
+#> Autoregressive orders: 15 in each regime
 #> 
-#> Maximum lags for ES  :4 in each regime
+#> Maximum lags for ES  : 4 in each regime
 #> 
-#> Maximum lags for TS  :2 in each regime
+#> Maximum lags for TS  : 2 in each regime
 #> 
 #> 
 #> 
 #> Thresholds (Mean, HDI.Lower, HDI.Upper)
 #>                                                      
-#> Regime 1 (-Inf,0.75299] (-Inf,0.60117] (-Inf,1.06955]
-#> Regime 2  (0.75299,Inf)  (0.60117,Inf)  (1.06955,Inf)
+#> Regime 1 (-Inf,1.14536] (-Inf,1.03726] (-Inf,1.20261]
+#> Regime 2  (1.14536,Inf)  (1.03726,Inf)  (1.20261,Inf)
 #> 
 #> 
 #> Regime1:
 #> 
 #> Autoregressive coefficients
 #>                          Mean  2(1-PD)  HDI.Lower HDI.Upper             Mean
-#> (Intercept)           3.36671   0.00001   2.67869   3.93514    |     0.71384
-#> Jokulsa.lag( 1)       0.87366   0.00001   0.80282   0.92918    |    -0.05193
-#> Vatnsdalsa.lag( 1)    0.23973   0.00001   0.12442   0.35384    |     1.16746
-#> Jokulsa.lag( 2)      -0.05686   0.01000  -0.09865  -0.00505    |     0.04642
-#> Vatnsdalsa.lag( 2)   -0.22799   0.00001  -0.35510  -0.08252    |    -0.31532
-#> Jokulsa.lag( 3)       0.00135   0.88000  -0.03606   0.04026    |    -0.02760
-#> Vatnsdalsa.lag( 3)    0.07228   0.14000  -0.02673   0.17081    |     0.06451
-#> Jokulsa.lag( 4)      -0.00490   0.86000  -0.05023   0.03581    |     0.01289
-#> Vatnsdalsa.lag( 4)   -0.00872   0.95000  -0.09689   0.06243    |    -0.02257
-#> Jokulsa.lag( 5)       0.00123   0.88000  -0.05450   0.04558    |     0.00842
-#> Vatnsdalsa.lag( 5)   -0.03229   0.36000  -0.10582   0.02767    |    -0.00523
-#> Jokulsa.lag( 6)       0.01509   0.63000  -0.03523   0.07363    |     0.00175
-#> Vatnsdalsa.lag( 6)   -0.02521   0.53000  -0.09997   0.05367    |    -0.01493
-#> Jokulsa.lag( 7)       0.00843   0.77000  -0.04266   0.05585    |     0.00268
-#> Vatnsdalsa.lag( 7)    0.02163   0.43000  -0.04762   0.08974    |     0.01522
-#> Jokulsa.lag( 8)      -0.00184   0.97000  -0.05488   0.03634    |    -0.01531
-#> Vatnsdalsa.lag( 8)   -0.00672   0.77000  -0.05379   0.06063    |     0.01035
-#> Jokulsa.lag( 9)       0.00022   0.94000  -0.03633   0.04632    |     0.02187
-#> Vatnsdalsa.lag( 9)   -0.01433   0.62000  -0.07158   0.05909    |    -0.00076
-#> Jokulsa.lag(10)       0.01806   0.39000  -0.02265   0.05054    |    -0.01643
-#> Vatnsdalsa.lag(10)    0.02586   0.42000  -0.02664   0.08515    |     0.01338
-#> Jokulsa.lag(11)      -0.01092   0.49000  -0.04193   0.02038    |     0.01138
-#> Vatnsdalsa.lag(11)   -0.01085   0.68000  -0.06990   0.04984    |    -0.00184
-#> Jokulsa.lag(12)       0.00731   0.53000  -0.02163   0.03881    |    -0.01228
-#> Vatnsdalsa.lag(12)    0.00340   0.90000  -0.04638   0.04807    |    -0.00378
-#> Jokulsa.lag(13)      -0.01081   0.59000  -0.04189   0.02747    |     0.00777
-#> Vatnsdalsa.lag(13)   -0.01618   0.48000  -0.06200   0.04283    |    -0.02216
-#> Jokulsa.lag(14)       0.00047   0.97000  -0.03014   0.03262    |    -0.00882
-#> Vatnsdalsa.lag(14)    0.00896   0.73000  -0.04551   0.05523    |     0.03871
-#> Jokulsa.lag(15)       0.01925   0.18000  -0.00947   0.04323    |     0.00489
-#> Vatnsdalsa.lag(15)   -0.01469   0.45000  -0.05783   0.02394    |     0.00256
-#> Precipitation.lag(1)  0.00454   0.61000  -0.01247   0.01995    |     0.00304
-#> Precipitation.lag(2)  0.00610   0.39000  -0.00868   0.02065    |     0.00169
-#> Precipitation.lag(3) -0.01181   0.08000  -0.02241   0.00063    |    -0.00388
-#> Precipitation.lag(4)  0.01906   0.01000   0.00486   0.02831    |     0.00517
-#> Temperature.lag(1)    0.01486   0.16000  -0.00342   0.03453    |    -0.00032
-#> Temperature.lag(2)   -0.03208   0.00001  -0.05369  -0.01316    |    -0.01122
+#> (Intercept)           3.69560   0.00001   2.98018   4.39992    |     0.83739
+#> Jokulsa.lag( 1)       0.84720   0.00001   0.76666   0.91397    |    -0.06368
+#> Vatnsdalsa.lag( 1)    0.20116   0.00100   0.09175   0.31504    |     1.16135
+#> Jokulsa.lag( 2)      -0.05039   0.04300  -0.09422  -0.00295    |     0.04984
+#> Vatnsdalsa.lag( 2)   -0.16587   0.00300  -0.30917  -0.05154    |    -0.29270
+#> Jokulsa.lag( 3)       0.00521   0.78600  -0.03570   0.04122    |    -0.02393
+#> Vatnsdalsa.lag( 3)    0.03169   0.35800  -0.03645   0.09987    |     0.02809
+#> Jokulsa.lag( 4)      -0.00064   0.96200  -0.04983   0.04809    |     0.01428
+#> Vatnsdalsa.lag( 4)    0.01109   0.77200  -0.07437   0.08655    |     0.00303
+#> Jokulsa.lag( 5)       0.00384   0.82900  -0.04932   0.06058    |     0.00646
+#> Vatnsdalsa.lag( 5)   -0.03961   0.24400  -0.10673   0.02963    |    -0.01736
+#> Jokulsa.lag( 6)       0.02202   0.40700  -0.02911   0.07478    |     0.00540
+#> Vatnsdalsa.lag( 6)   -0.02234   0.44700  -0.08212   0.03941    |     0.00045
+#> Jokulsa.lag( 7)      -0.00179   0.91600  -0.05056   0.04945    |    -0.00318
+#> Vatnsdalsa.lag( 7)    0.01697   0.54800  -0.03818   0.08045    |     0.00771
+#> Jokulsa.lag( 8)       0.00043   0.95000  -0.05184   0.05081    |    -0.00937
+#> Vatnsdalsa.lag( 8)   -0.00361   0.91500  -0.06207   0.05483    |     0.00693
+#> Jokulsa.lag( 9)      -0.01001   0.67500  -0.05747   0.03294    |     0.02031
+#> Vatnsdalsa.lag( 9)   -0.00739   0.78800  -0.07922   0.05888    |    -0.00166
+#> Jokulsa.lag(10)       0.02772   0.12500  -0.00789   0.06108    |    -0.01463
+#> Vatnsdalsa.lag(10)    0.02143   0.50300  -0.03550   0.09130    |     0.01848
+#> Jokulsa.lag(11)      -0.01398   0.32400  -0.04424   0.01303    |     0.00939
+#> Vatnsdalsa.lag(11)   -0.01607   0.58100  -0.07248   0.03928    |    -0.00641
+#> Jokulsa.lag(12)       0.00855   0.54700  -0.01915   0.03774    |    -0.00888
+#> Vatnsdalsa.lag(12)    0.01008   0.71300  -0.03969   0.06368    |    -0.00290
+#> Jokulsa.lag(13)      -0.01758   0.32500  -0.05142   0.01520    |     0.00279
+#> Vatnsdalsa.lag(13)   -0.01380   0.62100  -0.06571   0.04252    |    -0.01949
+#> Jokulsa.lag(14)       0.00467   0.70600  -0.02350   0.03128    |    -0.00509
+#> Vatnsdalsa.lag(14)    0.00570   0.85600  -0.04757   0.05935    |     0.03532
+#> Jokulsa.lag(15)       0.02157   0.16000  -0.00587   0.05033    |     0.00212
+#> Vatnsdalsa.lag(15)   -0.01242   0.55300  -0.05311   0.02665    |     0.00453
+#> Precipitation.lag(1)  0.00691   0.43400  -0.01040   0.02442    |     0.00538
+#> Precipitation.lag(2)  0.00605   0.33500  -0.00639   0.01899    |     0.00065
+#> Precipitation.lag(3) -0.01164   0.05000  -0.02188  -0.00024    |    -0.00369
+#> Precipitation.lag(4)  0.01864   0.00500   0.00528   0.03168    |     0.00421
+#> Temperature.lag(1)    0.02295   0.03100   0.00223   0.04606    |     0.00219
+#> Temperature.lag(2)   -0.03953   0.00001  -0.06059  -0.01768    |    -0.01169
 #>                       2(1-PD)  HDI.Lower HDI.Upper
-#> (Intercept)            0.00001   0.35476   1.08907
-#> Jokulsa.lag( 1)        0.00001  -0.08197  -0.01558
-#> Vatnsdalsa.lag( 1)     0.00001   1.07855   1.23991
-#> Jokulsa.lag( 2)        0.01000   0.01788   0.07691
-#> Vatnsdalsa.lag( 2)     0.00001  -0.41099  -0.21871
-#> Jokulsa.lag( 3)        0.04000  -0.04998   0.00027
-#> Vatnsdalsa.lag( 3)     0.10000  -0.01092   0.14469
-#> Jokulsa.lag( 4)        0.32000  -0.00934   0.03569
-#> Vatnsdalsa.lag( 4)     0.60000  -0.09424   0.03454
-#> Jokulsa.lag( 5)        0.63000  -0.01953   0.03350
-#> Vatnsdalsa.lag( 5)     0.85000  -0.04906   0.03102
-#> Jokulsa.lag( 6)        0.87000  -0.03392   0.02576
-#> Vatnsdalsa.lag( 6)     0.55000  -0.06162   0.03655
-#> Jokulsa.lag( 7)        0.88000  -0.02342   0.03698
-#> Vatnsdalsa.lag( 7)     0.46000  -0.02567   0.05422
-#> Jokulsa.lag( 8)        0.21000  -0.04069   0.00741
-#> Vatnsdalsa.lag( 8)     0.61000  -0.02406   0.04363
-#> Jokulsa.lag( 9)        0.10000  -0.00470   0.04799
-#> Vatnsdalsa.lag( 9)     0.99000  -0.03436   0.03887
-#> Jokulsa.lag(10)        0.13000  -0.03758   0.00561
-#> Vatnsdalsa.lag(10)     0.47000  -0.02332   0.05400
-#> Jokulsa.lag(11)        0.16000  -0.00265   0.03421
-#> Vatnsdalsa.lag(11)     0.87000  -0.03986   0.03128
-#> Jokulsa.lag(12)        0.21000  -0.03002   0.00835
-#> Vatnsdalsa.lag(12)     0.77000  -0.03976   0.02269
-#> Jokulsa.lag(13)        0.47000  -0.01056   0.02519
-#> Vatnsdalsa.lag(13)     0.26000  -0.05937   0.01634
-#> Jokulsa.lag(14)        0.33000  -0.02698   0.00493
-#> Vatnsdalsa.lag(14)     0.02000   0.00352   0.07542
-#> Jokulsa.lag(15)        0.57000  -0.00919   0.01785
-#> Vatnsdalsa.lag(15)     0.87000  -0.03224   0.02974
-#> Precipitation.lag(1)   0.58000  -0.00800   0.01300
-#> Precipitation.lag(2)   0.70000  -0.00570   0.01021
-#> Precipitation.lag(3)   0.34000  -0.01170   0.00369
-#> Precipitation.lag(4)   0.23000  -0.00283   0.01408
-#> Temperature.lag(1)     0.89000  -0.01299   0.01132
-#> Temperature.lag(2)     0.10000  -0.02618   0.00055
+#> (Intercept)            0.00001   0.43117   1.26161
+#> Jokulsa.lag( 1)        0.00001  -0.10491  -0.02608
+#> Vatnsdalsa.lag( 1)     0.00001   1.07086   1.23937
+#> Jokulsa.lag( 2)        0.00200   0.01625   0.08193
+#> Vatnsdalsa.lag( 2)     0.00001  -0.38038  -0.20798
+#> Jokulsa.lag( 3)        0.05700  -0.04835   0.00067
+#> Vatnsdalsa.lag( 3)     0.21500  -0.01284   0.08114
+#> Jokulsa.lag( 4)        0.29000  -0.01085   0.04147
+#> Vatnsdalsa.lag( 4)     0.89400  -0.04708   0.05549
+#> Jokulsa.lag( 5)        0.70400  -0.02139   0.04072
+#> Vatnsdalsa.lag( 5)     0.43400  -0.06571   0.02520
+#> Jokulsa.lag( 6)        0.71700  -0.02535   0.03412
+#> Vatnsdalsa.lag( 6)     0.96000  -0.04230   0.03777
+#> Jokulsa.lag( 7)        0.82000  -0.03261   0.02481
+#> Vatnsdalsa.lag( 7)     0.68700  -0.02875   0.04305
+#> Jokulsa.lag( 8)        0.45200  -0.03612   0.01526
+#> Vatnsdalsa.lag( 8)     0.72100  -0.03029   0.04421
+#> Jokulsa.lag( 9)        0.18800  -0.00895   0.05271
+#> Vatnsdalsa.lag( 9)     0.96700  -0.04392   0.03350
+#> Jokulsa.lag(10)        0.21200  -0.03852   0.00872
+#> Vatnsdalsa.lag(10)     0.38700  -0.02267   0.06079
+#> Jokulsa.lag(11)        0.31200  -0.00843   0.02862
+#> Vatnsdalsa.lag(11)     0.70400  -0.04376   0.03483
+#> Jokulsa.lag(12)        0.36100  -0.02994   0.00968
+#> Vatnsdalsa.lag(12)     0.87600  -0.03723   0.03117
+#> Jokulsa.lag(13)        0.77000  -0.01710   0.02238
+#> Vatnsdalsa.lag(13)     0.34800  -0.05848   0.01897
+#> Jokulsa.lag(14)        0.56800  -0.02425   0.01149
+#> Vatnsdalsa.lag(14)     0.04800  -0.00120   0.07314
+#> Jokulsa.lag(15)        0.75600  -0.01366   0.01595
+#> Vatnsdalsa.lag(15)     0.76000  -0.02367   0.03424
+#> Precipitation.lag(1)   0.33900  -0.00620   0.01607
+#> Precipitation.lag(2)   0.92000  -0.00832   0.00938
+#> Precipitation.lag(3)   0.32800  -0.01077   0.00468
+#> Precipitation.lag(4)   0.39300  -0.00583   0.01323
+#> Temperature.lag(1)     0.76900  -0.01179   0.01504
+#> Temperature.lag(2)     0.08400  -0.02465   0.00194
 #> 
 #> Scale parameter (Mean, HDI.Lower, HDI.Upper)
 #>            Jokulsa Vatnsdalsa      Jokulsa Vatnsdalsa      Jokulsa Vatnsdalsa
-#> Jokulsa    0.06432    0.01026    . 0.04639    0.00543    . 0.07974    0.01652
-#> Vatnsdalsa 0.01026    0.02713    . 0.00543    0.01977    . 0.01652    0.03566
+#> Jokulsa    0.06523    0.01115    . 0.04554    0.00555    . 0.08499    0.01727
+#> Vatnsdalsa 0.01115    0.02860    . 0.00555    0.01988    . 0.01727    0.03699
 #> 
 #> 
 #> Regime2:
 #> 
 #> Autoregressive coefficients
 #>                          Mean  2(1-PD)  HDI.Lower HDI.Upper             Mean
-#> (Intercept)          -0.23993   0.68000  -1.58132   1.14630    |     0.50471
-#> Jokulsa.lag( 1)       1.01924   0.00001   0.93464   1.08523    |    -0.00450
-#> Vatnsdalsa.lag( 1)    0.90531   0.00001   0.55197   1.29213    |     1.19336
-#> Jokulsa.lag( 2)      -0.15656   0.01000  -0.28493  -0.02682    |     0.01487
-#> Vatnsdalsa.lag( 2)   -0.46779   0.10000  -1.02082   0.07178    |    -0.32620
-#> Jokulsa.lag( 3)       0.00303   0.99000  -0.10316   0.10983    |    -0.01568
-#> Vatnsdalsa.lag( 3)    0.06685   0.77000  -0.56479   0.54546    |     0.16502
-#> Jokulsa.lag( 4)      -0.07349   0.07000  -0.14528   0.03519    |     0.00606
-#> Vatnsdalsa.lag( 4)   -0.16071   0.44000  -0.55856   0.18919    |    -0.08911
-#> Jokulsa.lag( 5)       0.03773   0.37000  -0.03096   0.11767    |    -0.00422
-#> Vatnsdalsa.lag( 5)    0.17123   0.44000  -0.29472   0.61673    |    -0.01669
-#> Jokulsa.lag( 6)      -0.04425   0.22000  -0.10553   0.01684    |     0.00438
-#> Vatnsdalsa.lag( 6)   -0.13900   0.54000  -0.57298   0.28754    |     0.04836
-#> Jokulsa.lag( 7)      -0.00332   0.94000  -0.05574   0.04108    |    -0.00596
-#> Vatnsdalsa.lag( 7)    0.18870   0.40000  -0.24263   0.56881    |    -0.04991
-#> Jokulsa.lag( 8)       0.02544   0.38000  -0.02157   0.07323    |     0.00383
-#> Vatnsdalsa.lag( 8)   -0.25924   0.11000  -0.59942   0.04537    |    -0.07401
-#> Jokulsa.lag( 9)       0.03581   0.23000  -0.03161   0.08976    |    -0.00325
-#> Vatnsdalsa.lag( 9)    0.12580   0.57000  -0.18042   0.47747    |     0.11770
-#> Jokulsa.lag(10)      -0.01793   0.64000  -0.09606   0.06502    |     0.00448
-#> Vatnsdalsa.lag(10)   -0.04251   0.81000  -0.45637   0.31315    |    -0.07082
-#> Jokulsa.lag(11)      -0.01510   0.72000  -0.09850   0.05960    |    -0.00749
-#> Vatnsdalsa.lag(11)    0.08872   0.73000  -0.40354   0.56917    |     0.06228
-#> Jokulsa.lag(12)       0.00576   0.87000  -0.06490   0.07046    |     0.01021
-#> Vatnsdalsa.lag(12)    0.02546   1.00000  -0.42031   0.54815    |    -0.06706
-#> Jokulsa.lag(13)       0.00097   0.98000  -0.07020   0.07278    |    -0.00686
-#> Vatnsdalsa.lag(13)    0.24192   0.40000  -0.26259   0.66652    |     0.14783
-#> Jokulsa.lag(14)      -0.01484   0.74000  -0.08408   0.06538    |    -0.00309
-#> Vatnsdalsa.lag(14)    0.24432   0.19000  -0.10216   0.60406    |    -0.03042
-#> Jokulsa.lag(15)       0.04947   0.04000   0.01419   0.10280    |     0.00269
-#> Vatnsdalsa.lag(15)   -0.43494   0.00001  -0.68557  -0.17922    |    -0.04312
-#> Precipitation.lag(1) -0.11670   0.00001  -0.18818  -0.03515    |    -0.00084
-#> Precipitation.lag(2)  0.01597   0.83000  -0.08666   0.14361    |    -0.00609
-#> Precipitation.lag(3)  0.04197   0.19000  -0.02346   0.11535    |     0.00547
-#> Precipitation.lag(4)  0.02537   0.51000  -0.03824   0.09861    |     0.00518
-#> Temperature.lag(1)    1.08361   0.00001   0.91657   1.30141    |     0.03373
-#> Temperature.lag(2)   -0.54855   0.00001  -0.71188  -0.33085    |    -0.04131
+#> (Intercept)          -0.25290   0.71200  -1.57573   1.09103    |     0.48827
+#> Jokulsa.lag( 1)       1.01556   0.00001   0.94908   1.08589    |    -0.00270
+#> Vatnsdalsa.lag( 1)    0.92345   0.00001   0.46453   1.41255    |     1.18331
+#> Jokulsa.lag( 2)      -0.17395   0.00600  -0.30894  -0.05417    |     0.00977
+#> Vatnsdalsa.lag( 2)   -0.40260   0.26500  -1.14055   0.30218    |    -0.34586
+#> Jokulsa.lag( 3)       0.01076   0.85900  -0.10485   0.12034    |    -0.01191
+#> Vatnsdalsa.lag( 3)    0.04449   0.85200  -0.65797   0.69584    |     0.19326
+#> Jokulsa.lag( 4)      -0.07331   0.07300  -0.16011   0.00852    |     0.00584
+#> Vatnsdalsa.lag( 4)   -0.17252   0.41800  -0.62730   0.28741    |    -0.08893
+#> Jokulsa.lag( 5)       0.03720   0.35000  -0.03544   0.11999    |    -0.00499
+#> Vatnsdalsa.lag( 5)    0.00339   0.94600  -0.61877   0.59624    |     0.01030
+#> Jokulsa.lag( 6)      -0.03854   0.23900  -0.10249   0.02454    |     0.00392
+#> Vatnsdalsa.lag( 6)    0.07641   0.84800  -0.47982   0.71571    |     0.02242
+#> Jokulsa.lag( 7)       0.00139   0.95200  -0.06250   0.05488    |    -0.00580
+#> Vatnsdalsa.lag( 7)    0.09790   0.66900  -0.34451   0.55166    |    -0.05504
+#> Jokulsa.lag( 8)       0.01443   0.62400  -0.03810   0.07858    |     0.00428
+#> Vatnsdalsa.lag( 8)   -0.22944   0.32900  -0.70427   0.19037    |    -0.04445
+#> Jokulsa.lag( 9)       0.03891   0.22700  -0.02632   0.09992    |    -0.00165
+#> Vatnsdalsa.lag( 9)    0.15417   0.49100  -0.33148   0.54694    |     0.08930
+#> Jokulsa.lag(10)      -0.01992   0.59800  -0.09376   0.06021    |     0.00305
+#> Vatnsdalsa.lag(10)   -0.00319   0.96900  -0.42513   0.38581    |    -0.07367
+#> Jokulsa.lag(11)      -0.00427   0.92200  -0.07970   0.07029    |    -0.00729
+#> Vatnsdalsa.lag(11)   -0.03278   0.83800  -0.54370   0.49346    |     0.08380
+#> Jokulsa.lag(12)      -0.00536   0.88700  -0.07365   0.07144    |     0.00955
+#> Vatnsdalsa.lag(12)    0.02751   0.91400  -0.43589   0.50858    |    -0.08312
+#> Jokulsa.lag(13)      -0.00375   0.89800  -0.07876   0.07859    |    -0.00639
+#> Vatnsdalsa.lag(13)    0.41587   0.10300  -0.05376   0.91860    |     0.14978
+#> Jokulsa.lag(14)      -0.00176   0.99700  -0.07784   0.08093    |    -0.00171
+#> Vatnsdalsa.lag(14)    0.10728   0.68200  -0.45140   0.63806    |    -0.05328
+#> Jokulsa.lag(15)       0.04564   0.04300   0.00483   0.09303    |     0.00119
+#> Vatnsdalsa.lag(15)   -0.42760   0.02000  -0.71867  -0.07456    |    -0.01858
+#> Precipitation.lag(1) -0.11737   0.00200  -0.19432  -0.04120    |    -0.00311
+#> Precipitation.lag(2)  0.03435   0.60000  -0.09787   0.16139    |    -0.00158
+#> Precipitation.lag(3)  0.05124   0.13800  -0.01797   0.11223    |     0.00546
+#> Precipitation.lag(4)  0.03007   0.34500  -0.03922   0.08933    |     0.00284
+#> Temperature.lag(1)    1.12372   0.00001   0.94547   1.32249    |     0.01994
+#> Temperature.lag(2)   -0.56339   0.00001  -0.77544  -0.37014    |    -0.02472
 #>                       2(1-PD)  HDI.Lower HDI.Upper
-#> (Intercept)            0.00001   0.35250   0.68442
-#> Jokulsa.lag( 1)        0.32000  -0.01204   0.00797
-#> Vatnsdalsa.lag( 1)     0.00001   1.12254   1.24689
-#> Jokulsa.lag( 2)        0.04000  -0.00034   0.02568
-#> Vatnsdalsa.lag( 2)     0.00001  -0.41398  -0.25311
-#> Jokulsa.lag( 3)        0.02000  -0.02807  -0.00294
-#> Vatnsdalsa.lag( 3)     0.00001   0.08229   0.25031
-#> Jokulsa.lag( 4)        0.30000  -0.00472   0.01629
-#> Vatnsdalsa.lag( 4)     0.06000  -0.16365  -0.02013
-#> Jokulsa.lag( 5)        0.41000  -0.01274   0.00689
-#> Vatnsdalsa.lag( 5)     0.71000  -0.09868   0.08093
-#> Jokulsa.lag( 6)        0.23000  -0.00399   0.01174
-#> Vatnsdalsa.lag( 6)     0.35000  -0.04999   0.12532
-#> Jokulsa.lag( 7)        0.14000  -0.01346   0.00135
-#> Vatnsdalsa.lag( 7)     0.16000  -0.11740   0.01166
-#> Jokulsa.lag( 8)        0.33000  -0.00344   0.00990
-#> Vatnsdalsa.lag( 8)     0.04000  -0.13630   0.00055
-#> Jokulsa.lag( 9)        0.47000  -0.01164   0.00442
-#> Vatnsdalsa.lag( 9)     0.00001   0.03978   0.18979
-#> Jokulsa.lag(10)        0.40000  -0.00779   0.01356
-#> Vatnsdalsa.lag(10)     0.07000  -0.12590   0.00220
-#> Jokulsa.lag(11)        0.15000  -0.01716   0.00373
-#> Vatnsdalsa.lag(11)     0.09000   0.01006   0.13181
-#> Jokulsa.lag(12)        0.05000  -0.00099   0.01837
-#> Vatnsdalsa.lag(12)     0.01000  -0.11930  -0.00677
-#> Jokulsa.lag(13)        0.17000  -0.01510   0.00220
-#> Vatnsdalsa.lag(13)     0.00001   0.07777   0.20435
-#> Jokulsa.lag(14)        0.49000  -0.01286   0.00471
-#> Vatnsdalsa.lag(14)     0.35000  -0.10950   0.02354
-#> Jokulsa.lag(15)        0.34000  -0.00395   0.00816
-#> Vatnsdalsa.lag(15)     0.14000  -0.09290   0.00480
-#> Precipitation.lag(1)   0.90000  -0.01102   0.01282
-#> Precipitation.lag(2)   0.37000  -0.02135   0.00911
-#> Precipitation.lag(3)   0.34000  -0.00469   0.01587
-#> Precipitation.lag(4)   0.20000  -0.00265   0.01363
-#> Temperature.lag(1)     0.04000   0.00265   0.06552
-#> Temperature.lag(2)     0.00001  -0.07188  -0.01092
+#> (Intercept)            0.00001   0.30689   0.67974
+#> Jokulsa.lag( 1)        0.45300  -0.00988   0.00477
+#> Vatnsdalsa.lag( 1)     0.00001   1.11868   1.25367
+#> Jokulsa.lag( 2)        0.11000  -0.00171   0.02222
+#> Vatnsdalsa.lag( 2)     0.00001  -0.44314  -0.23777
+#> Jokulsa.lag( 3)        0.04400  -0.02444  -0.00022
+#> Vatnsdalsa.lag( 3)     0.00100   0.09617   0.27473
+#> Jokulsa.lag( 4)        0.22500  -0.00281   0.01588
+#> Vatnsdalsa.lag( 4)     0.07600  -0.16451  -0.00088
+#> Jokulsa.lag( 5)        0.29700  -0.01454   0.00417
+#> Vatnsdalsa.lag( 5)     0.84500  -0.08379   0.10700
+#> Jokulsa.lag( 6)        0.34400  -0.00416   0.01215
+#> Vatnsdalsa.lag( 6)     0.67000  -0.07197   0.12205
+#> Jokulsa.lag( 7)        0.15100  -0.01359   0.00213
+#> Vatnsdalsa.lag( 7)     0.10600  -0.11590   0.01215
+#> Jokulsa.lag( 8)        0.25100  -0.00345   0.01142
+#> Vatnsdalsa.lag( 8)     0.16700  -0.10827   0.01768
+#> Jokulsa.lag( 9)        0.70400  -0.00921   0.00660
+#> Vatnsdalsa.lag( 9)     0.01500   0.02097   0.16035
+#> Jokulsa.lag(10)        0.54900  -0.00620   0.01235
+#> Vatnsdalsa.lag(10)     0.02500  -0.12550  -0.01202
+#> Jokulsa.lag(11)        0.11800  -0.01785   0.00072
+#> Vatnsdalsa.lag(11)     0.02800   0.01049   0.14675
+#> Jokulsa.lag(12)        0.02500   0.00146   0.01850
+#> Vatnsdalsa.lag(12)     0.00800  -0.13677  -0.02045
+#> Jokulsa.lag(13)        0.13600  -0.01439   0.00206
+#> Vatnsdalsa.lag(13)     0.00001   0.08434   0.21610
+#> Jokulsa.lag(14)        0.69500  -0.00992   0.00708
+#> Vatnsdalsa.lag(14)     0.17900  -0.12902   0.02437
+#> Jokulsa.lag(15)        0.69500  -0.00449   0.00666
+#> Vatnsdalsa.lag(15)     0.44800  -0.06599   0.02773
+#> Precipitation.lag(1)   0.53100  -0.01305   0.00719
+#> Precipitation.lag(2)   0.85200  -0.01547   0.01139
+#> Precipitation.lag(3)   0.30800  -0.00399   0.01627
+#> Precipitation.lag(4)   0.52200  -0.00572   0.01142
+#> Temperature.lag(1)     0.11800  -0.00409   0.04494
+#> Temperature.lag(2)     0.06100  -0.05080  -0.00002
 #> 
 #> Scale parameter (Mean, HDI.Lower, HDI.Upper)
 #>            Jokulsa Vatnsdalsa      Jokulsa Vatnsdalsa      Jokulsa Vatnsdalsa
-#> Jokulsa    1.41842    0.04830    . 1.01213    0.02588    . 1.90647    0.07318
-#> Vatnsdalsa 0.04830    0.02934    . 0.02588    0.01718    . 0.07318    0.03900
+#> Jokulsa    1.33899    0.04625    . 0.93550    0.02476    . 1.78562    0.07129
+#> Vatnsdalsa 0.04625    0.02293    . 0.02476    0.01599    . 0.07129    0.03078
 #> 
 #> 
 #> Extra parameter
 #>                         Mean  2(1-PD)  HDI.Lower HDI.Upper
-#> nu                   0.83577      .      0.75612   0.90766
+#> nu                    0.8145      .      0.73041   0.89419
 #> 
 #> 
 DIC(fit3)
 #>           DIC
-#> fit3 7486.119
+#> fit3 7469.542
 WAIC(fit3)
 #>          WAIC
-#> fit3 7691.645
+#> fit3 7635.115
 
 ###### Example 4: U.S. stock returns
 data(US.returns)
 fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=100,
-             n.sim=200, n.thin=2, dist="Student-t")
+             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
+             n.sim=2000, n.thin=2, dist="Student-t")
 summary(fit4)
 #> 
 #> 
-#> Sample size          :5317 time points (2005-01-10 to 2025-11-28)
+#> Sample size          : 5317 time points (2005-01-10 to 2025-11-28)
 #> 
-#> Output Series        :CCR
+#> Output Series        : CCR
 #> 
-#> Threshold Series (TS):dVIX with a estimated delay equal to 0
+#> Threshold Series (TS): dVIX with a estimated delay equal to 0
 #> 
-#> Error Distribution   :Student-t
+#> Error Distribution   : Student-t
 #> 
-#> Number of regimes    :2
+#> Number of regimes    : 2
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:3 in each regime
+#> Autoregressive orders: 3 in each regime
 #> 
-#> Maximum lags for TS  :3 in each regime
+#> Maximum lags for TS  : 3 in each regime
 #> 
 #> 
 #> 
 #> Thresholds (Mean, HDI.Lower, HDI.Upper)
-#>                                                      
-#> Regime 1 (-Inf,1.19593] (-Inf,1.15056] (-Inf,1.26059]
-#> Regime 2  (1.19593,Inf)  (1.15056,Inf)  (1.26059,Inf)
+#>                                                     
+#> Regime 1 (-Inf,3.3126] (-Inf,1.89575] (-Inf,3.82548]
+#> Regime 2  (3.3126,Inf)  (1.89575,Inf)  (3.82548,Inf)
 #> 
 #> 
 #> Regime1:
 #> 
 #> Autoregressive coefficients
 #>                 Mean  2(1-PD)  HDI.Lower HDI.Upper
-#> (Intercept)  0.09067   0.00001   0.06655   0.11184
-#> CCR.lag(1)  -0.04874   0.00001  -0.08055  -0.01802
-#> CCR.lag(2)  -0.03631   0.10000  -0.08224   0.00348
-#> CCR.lag(3)  -0.02223   0.30000  -0.07030   0.02284
-#> dVIX.lag(1) -0.03363   0.01000  -0.06036  -0.00783
-#> dVIX.lag(2) -0.02068   0.11000  -0.04622   0.00329
-#> dVIX.lag(3)  0.01715   0.05000  -0.00036   0.03080
+#> (Intercept)  0.09111   0.00001   0.06821   0.11136
+#> CCR.lag(1)  -0.04958   0.00001  -0.07271  -0.02384
+#> CCR.lag(2)  -0.02920   0.17800  -0.07079   0.01300
+#> CCR.lag(3)  -0.02687   0.20400  -0.07083   0.01213
+#> dVIX.lag(1) -0.02963   0.03200  -0.05552  -0.00095
+#> dVIX.lag(2) -0.02277   0.09900  -0.04983   0.00299
+#> dVIX.lag(3)  0.01813   0.02700   0.00239   0.03419
 #> 
 #> Scale parameter (Mean, HDI.Lower, HDI.Upper)
-#>         CCR          CCR          CCR
-#> CCR 0.34972    . 0.32421    . 0.37056
+#>        CCR          CCR          CCR
+#> CCR 0.3848    . 0.35352    . 0.41834
 #> 
 #> 
 #> Regime2:
 #> 
 #> Autoregressive coefficients
 #>                 Mean  2(1-PD)  HDI.Lower HDI.Upper
-#> (Intercept)  0.09657      0.26  -0.06366   0.23483
-#> CCR.lag(1)  -0.06781      0.17  -0.15716   0.03509
-#> CCR.lag(2)  -0.02496      0.72  -0.20190   0.11530
-#> CCR.lag(3)   0.04165      0.48  -0.07354   0.16204
-#> dVIX.lag(1) -0.01247      0.82  -0.10145   0.09630
-#> dVIX.lag(2)  0.00204      0.97  -0.07494   0.06685
-#> dVIX.lag(3)  0.03658      0.16  -0.00982   0.08053
+#> (Intercept) -0.67469     0.087  -1.38336   0.05009
+#> CCR.lag(1)  -0.37186     0.002  -0.57762  -0.09644
+#> CCR.lag(2)  -0.28233     0.215  -0.66467   0.14115
+#> CCR.lag(3)   0.54067     0.009   0.06682   0.90040
+#> dVIX.lag(1) -0.09158     0.435  -0.32428   0.13937
+#> dVIX.lag(2)  0.29346     0.029   0.01635   0.52339
+#> dVIX.lag(3)  0.04870     0.377  -0.06843   0.15332
 #> 
 #> Scale parameter (Mean, HDI.Lower, HDI.Upper)
 #>         CCR          CCR          CCR
-#> CCR 0.83209    . 0.70535    . 0.95972
+#> CCR 1.72145    . 0.89721    . 2.51039
 #> 
 #> 
 #> Extra parameter
 #>                Mean  2(1-PD)  HDI.Lower HDI.Upper
-#> nu           2.3994      .       2.2204    2.5439
+#> nu          2.48213      .       2.2793    2.7007
 #> 
 #> 
 DIC(fit4)
 #>           DIC
-#> fit4 14939.16
+#> fit4 14921.11
 WAIC(fit4)
-#>          WAIC
-#> fit4 14952.88
+#>         WAIC
+#> fit4 14952.7
 # }
 
 ```

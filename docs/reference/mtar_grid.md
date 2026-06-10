@@ -210,7 +210,7 @@ data(returns)
 fit1 <- mtar_grid(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
                   subset={Date<="2015-12-07"}, dist=c("Gaussian","Student-t",
                   "Slash","Laplace"), nregim.min=2, nregim.max=3, p.min=2,
-                  p.max=2, n.burnin=100, n.sim=200, n.thin=2,
+                  p.max=2, n.burnin=1000, n.sim=2000, n.thin=2,
                   plan_strategy="multisession")
 summary(fit1)
 #>               Length Class Mode
@@ -227,24 +227,24 @@ summary(fit1)
 data(riverflows)
 fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
                   row.names=Date, subset={Date<="2009-02-13"},dist="Laplace",
-                  nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=100,
-                  n.sim=200, n.thin=2, plan_strategy="multisession")
+                  nregim.min=2, nregim.max=3, p.min=1, p.max=3,n.burnin=1000,
+                  n.sim=2000, n.thin=2, plan_strategy="multisession")
 fit2
 #> 
 #> 
-#> Sample size          :1137 time points (2006-01-04 to 2009-02-13)
+#> Sample size          : 1137 time points (2006-01-04 to 2009-02-13)
 #> 
-#> Output Series        :Bedon    |    LaPlata
+#> Output Series        : Bedon    |    LaPlata
 #> 
-#> Threshold Series     :Rainfall with a estimated delay equal to 0
+#> Threshold Series     : Rainfall
 #> 
-#> Error Distribution   :Laplace
+#> Error Distribution   : Laplace
 #> 
-#> Number of regimes    :2 to 3
+#> Number of regimes    : 2 to 3
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:1 to 3
+#> Autoregressive order : 1 to 3
 
 ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 data(iceland.rf)
@@ -252,51 +252,53 @@ fit3 <- mtar_grid(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
                   data=iceland.rf,subset={Date<="1974-11-06"},row.names=Date,
                   dist=c("Slash","Student-t"), nregim.min=1, nregim.max=2,
                   p.min=15, p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,
-                  n.burnin=100, n.sim=200, n.thin=2,
+                  n.burnin=1000, n.sim=2000, n.thin=2,
                   plan_strategy="multisession")
 fit3
 #> 
 #> 
-#> Sample size          :1026 time points (1972-01-16 to 1974-11-06)
+#> Sample size          : 1026 time points (1972-01-16 to 1974-11-06)
 #> 
-#> Output Series        :Jokulsa    |    Vatnsdalsa
+#> Output Series        : Jokulsa    |    Vatnsdalsa
 #> 
-#> Exogenous Series (ES):Precipitation
+#> Exogenous Series (ES): Precipitation
 #> 
-#> Error Distribution   :Slash
+#> Error Distribution   : Slash, Student-t
 #> 
-#> Number of regimes    :1 to 2
+#> Number of regimes    : 1 to 2
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:15 to 15
+#> Autoregressive order : 15
 #> 
-#> Maximum lags for ES  :4 to 4
+#> Maximum lag for ES   : 4
+#> 
+#> Maximum lag for TS   : 0 to 2
 
 ###### Example 4: U.S. stock returns
 data(US.returns)
 fit4 <- mtar_grid(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
                   row.names=Date, dist=c("Laplace","Student-t","Slash"),
                   nregim.min=2, nregim.max=2, p.min=3, p.max=3, d.min=3,
-                  d.max=3, n.burnin=100, n.sim=200, n.thin=2,
+                  d.max=3, n.burnin=1000, n.sim=2000, n.thin=2,
                   plan_strategy="multisession")
 fit4
 #> 
 #> 
-#> Sample size          :5317 time points (2005-01-10 to 2025-11-28)
+#> Sample size          : 5317 time points (2005-01-10 to 2025-11-28)
 #> 
-#> Output Series        :CCR
+#> Output Series        : CCR
 #> 
-#> Threshold Series (TS):dVIX with a estimated delay equal to 0
+#> Threshold Series (TS): dVIX
 #> 
-#> Error Distribution   :Laplace
+#> Error Distribution   : Laplace, Slash, Student-t
 #> 
-#> Number of regimes    :2 to 2
+#> Number of regimes    : 2
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:3 to 3
+#> Autoregressive order : 3
 #> 
-#> Maximum lags for TS  :3 to 3
+#> Maximum lag for TS   : 3
 # }
 ```

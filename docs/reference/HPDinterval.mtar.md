@@ -38,7 +38,7 @@ HPDinterval(obj, prob = 0.95, ...)
 data(returns)
 fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
              subset={Date<="2015-12-07"}, dist="Student-t",
-             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=100, n.sim=200,
+             ars=ars(nregim=3,p=c(1,1,2)), n.burnin=1000, n.sim=2000,
              n.thin=2, ssvs=TRUE)
 coda::HPDinterval(fit1)
 #> 
@@ -46,339 +46,449 @@ coda::HPDinterval(fit1)
 #> 
 #> Thresholds:
 #>                  lower      upper
-#> Threshold.1 -0.0016244 -0.0012438
-#> Threshold.2  0.0045418  0.0046668
+#> Threshold.1 -0.0105420 -0.0049244
+#> Threshold.2  0.0095292  0.0110304
+#> 
+#> 
+#> Regime 1
 #> 
 #> 
 #> Autoregressive coefficients:
-#>                        Regime 1:lower Regime 1:upper Regime 2:lower
-#> COLCAP:(Intercept)         -0.0038301     -0.0022509    -0.00038381
-#> COLCAP:COLCAP.lag(1)        0.0428114      0.2431400    -0.00930639
-#> COLCAP:COLCAP.lag(2)                                               
-#> COLCAP:BOVESPA.lag(1)       0.0140646      0.1328157     0.03708749
-#> COLCAP:BOVESPA.lag(2)                                              
-#> BOVESPA:(Intercept)        -0.0085679     -0.0064163    -0.00084100
-#> BOVESPA:COLCAP.lag(1)      -0.0969727      0.1548475    -0.09450420
-#> BOVESPA:COLCAP.lag(2)                                              
-#> BOVESPA:BOVESPA.lag(1)     -0.0756523      0.0817256    -0.08680531
-#> BOVESPA:BOVESPA.lag(2)                                             
-#>                        Regime 2:upper Regime 3:lower Regime 3:upper
-#> COLCAP:(Intercept)         0.00083243      0.0026245      0.0040569
-#> COLCAP:COLCAP.lag(1)       0.14430244     -0.0368875      0.1478033
-#> COLCAP:COLCAP.lag(2)                      -0.0283047      0.1471497
-#> COLCAP:BOVESPA.lag(1)      0.13583069      0.0400391      0.1569754
-#> COLCAP:BOVESPA.lag(2)                     -0.1242541     -0.0059647
-#> BOVESPA:(Intercept)        0.00096980      0.0069095      0.0092296
-#> BOVESPA:COLCAP.lag(1)      0.12767120      0.0419791      0.3428645
-#> BOVESPA:COLCAP.lag(2)                     -0.1528390      0.1258414
-#> BOVESPA:BOVESPA.lag(1)     0.04339523     -0.1468148      0.0746957
-#> BOVESPA:BOVESPA.lag(2)                    -0.1939853     -0.0349060
+#>                             lower      upper
+#> COLCAP:(Intercept)     -0.0097865 -0.0046935
+#> BOVESPA:(Intercept)    -0.0175248 -0.0104906
+#> COLCAP:COLCAP.lag(1)    0.0714910  0.4955079
+#> BOVESPA:COLCAP.lag(1)  -0.3362183  0.1521801
+#> COLCAP:BOVESPA.lag(1)  -0.0064880  0.2706587
+#> BOVESPA:BOVESPA.lag(1) -0.0491111  0.3261144
 #> 
 #> 
 #> Scale parameter:
-#>                 Regime 1:lower Regime 1:upper Regime 2:lower Regime 2:upper
-#> COLCAP.COLCAP       5.1682e-05     7.1970e-05     3.3409e-05     4.5744e-05
-#> COLCAP.BOVESPA      2.2689e-05     4.3157e-05     5.3769e-06     1.5186e-05
-#> BOVESPA.BOVESPA     1.0709e-04     1.4737e-04     6.1744e-05     8.4321e-05
-#>                 Regime 3:lower Regime 3:upper
-#> COLCAP.COLCAP       4.2753e-05     5.9508e-05
-#> COLCAP.BOVESPA      1.5483e-05     3.3092e-05
-#> BOVESPA.BOVESPA     1.0495e-04     1.4555e-04
+#>                      lower      upper
+#> COLCAP.COLCAP   5.7862e-05 1.0095e-04
+#> COLCAP.BOVESPA  1.9654e-05 5.9056e-05
+#> BOVESPA.BOVESPA 1.0877e-04 1.8919e-04
+#> 
+#> 
+#> Regime 2
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                              lower      upper
+#> COLCAP:(Intercept)     -0.00033615 0.00060734
+#> BOVESPA:(Intercept)    -0.00106372 0.00047654
+#> COLCAP:COLCAP.lag(1)    0.00818074 0.11625723
+#> BOVESPA:COLCAP.lag(1)  -0.02070697 0.13605005
+#> COLCAP:BOVESPA.lag(1)   0.04220101 0.11025610
+#> BOVESPA:BOVESPA.lag(1) -0.09427521 0.01043800
+#> 
+#> 
+#> Scale parameter:
+#>                      lower      upper
+#> COLCAP.COLCAP   3.7111e-05 4.7470e-05
+#> COLCAP.BOVESPA  9.7003e-06 1.8399e-05
+#> BOVESPA.BOVESPA 8.0153e-05 1.0202e-04
+#> 
+#> 
+#> Regime 3
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                             lower      upper
+#> COLCAP:(Intercept)      0.0050632  0.0082017
+#> BOVESPA:(Intercept)     0.0127336  0.0177791
+#> COLCAP:COLCAP.lag(1)   -0.0704008  0.2227840
+#> BOVESPA:COLCAP.lag(1)  -0.0635717  0.3455599
+#> COLCAP:BOVESPA.lag(1)  -0.1371853  0.0996818
+#> BOVESPA:BOVESPA.lag(1) -0.3955939 -0.0604130
+#> COLCAP:COLCAP.lag(2)   -0.0755365  0.2143032
+#> BOVESPA:COLCAP.lag(2)  -0.2657331  0.1382123
+#> COLCAP:BOVESPA.lag(2)  -0.1589451  0.0413391
+#> BOVESPA:BOVESPA.lag(2) -0.2036336  0.1165574
+#> 
+#> 
+#> Scale parameter:
+#>                      lower      upper
+#> COLCAP.COLCAP   4.3426e-05 7.5928e-05
+#> COLCAP.BOVESPA  6.4743e-06 3.8754e-05
+#> BOVESPA.BOVESPA 9.7007e-05 1.6814e-04
 #> 
 #> 
 #> Extra parameter:
 #>     lower  upper
-#> nu 4.7391 6.5521
+#> nu 4.5431 7.3165
 
 ###### Example 2: Rainfall and two river flows in Colombia
 data(riverflows)
 fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
              subset={Date<="2009-02-13"}, dist="Laplace",
-             ars=ars(nregim=3,p=5), n.burnin=100, n.sim=200, n.thin=2)
+             ars=ars(nregim=3,p=5), n.burnin=1000, n.sim=2000, n.thin=2)
 coda::HPDinterval(fit2)
 #> 
 #> Probability = 0.95
 #> 
 #> Thresholds:
 #>               lower   upper
-#> Threshold.1  3.0555  3.4272
-#> Threshold.2 10.0114 10.0166
+#> Threshold.1  3.0287  3.8155
+#> Threshold.2 10.0000 10.0149
+#> 
+#> 
+#> Regime 1
 #> 
 #> 
 #> Autoregressive coefficients:
-#>                        Regime 1:lower Regime 1:upper Regime 2:lower
-#> Bedon:(Intercept)            1.089772      1.4998943      1.3259498
-#> Bedon:Bedon.lag(1)           0.482409      0.6441843      0.4774448
-#> Bedon:Bedon.lag(2)          -0.030082      0.1122147     -0.0268180
-#> Bedon:Bedon.lag(3)          -0.027407      0.0857252     -0.1532360
-#> Bedon:Bedon.lag(4)          -0.034059      0.0909020     -0.0143516
-#> Bedon:Bedon.lag(5)           0.021448      0.1348567     -0.0642091
-#> Bedon:LaPlata.lag(1)         0.020743      0.0714711     -0.0045662
-#> Bedon:LaPlata.lag(2)        -0.040640      0.0021742     -0.0560527
-#> Bedon:LaPlata.lag(3)        -0.017216      0.0220017     -0.0346755
-#> Bedon:LaPlata.lag(4)        -0.031534      0.0038988     -0.0203794
-#> Bedon:LaPlata.lag(5)        -0.020667      0.0080394     -0.0220366
-#> LaPlata:(Intercept)          2.736487      3.9127521      5.3889658
-#> LaPlata:Bedon.lag(1)        -0.051574      0.3491683     -0.1194771
-#> LaPlata:Bedon.lag(2)        -0.223885      0.1055845     -0.2117400
-#> LaPlata:Bedon.lag(3)        -0.131851      0.1840651     -0.2818465
-#> LaPlata:Bedon.lag(4)        -0.274890      0.0692383      0.0045357
-#> LaPlata:Bedon.lag(5)         0.015945      0.2879224     -0.4432197
-#> LaPlata:LaPlata.lag(1)       0.545524      0.7049934      0.4540068
-#> LaPlata:LaPlata.lag(2)      -0.125712     -0.0083714     -0.0504552
-#> LaPlata:LaPlata.lag(3)       0.010711      0.1139856     -0.0132595
-#> LaPlata:LaPlata.lag(4)      -0.044584      0.0629166     -0.1333765
-#> LaPlata:LaPlata.lag(5)      -0.019370      0.0767111      0.0409557
-#>                        Regime 2:upper Regime 3:lower Regime 3:upper
-#> Bedon:(Intercept)            2.964205      4.2351827       7.002973
-#> Bedon:Bedon.lag(1)           0.666455      0.3140666       0.616146
-#> Bedon:Bedon.lag(2)           0.224160     -0.0496686       0.224077
-#> Bedon:Bedon.lag(3)           0.055222     -0.2182411       0.027959
-#> Bedon:Bedon.lag(4)           0.181956     -0.1503842       0.139549
-#> Bedon:Bedon.lag(5)           0.101258      0.0587178       0.311492
-#> Bedon:LaPlata.lag(1)         0.052711      0.0125577       0.075942
-#> Bedon:LaPlata.lag(2)         0.015635     -0.0371351       0.027788
-#> Bedon:LaPlata.lag(3)         0.022886     -0.0072575       0.069416
-#> Bedon:LaPlata.lag(4)         0.041919     -0.0308975       0.049126
-#> Bedon:LaPlata.lag(5)         0.032213     -0.0462165       0.017075
-#> LaPlata:(Intercept)          9.400490     12.7723355      23.578433
-#> LaPlata:Bedon.lag(1)         0.303983      0.1307592       1.006624
-#> LaPlata:Bedon.lag(2)         0.264843     -0.9859781      -0.019594
-#> LaPlata:Bedon.lag(3)         0.149880     -1.0160003       0.060029
-#> LaPlata:Bedon.lag(4)         0.428757     -0.6210323       0.723032
-#> LaPlata:Bedon.lag(5)        -0.030082     -0.1696050       0.725721
-#> LaPlata:LaPlata.lag(1)       0.616669      0.2326526       0.461256
-#> LaPlata:LaPlata.lag(2)       0.101628     -0.0132510       0.228367
-#> LaPlata:LaPlata.lag(3)       0.118773      0.1482564       0.446112
-#> LaPlata:LaPlata.lag(4)       0.028702     -0.1512447       0.168490
-#> LaPlata:LaPlata.lag(5)       0.185263     -0.0318407       0.194895
+#>                            lower      upper
+#> Bedon:(Intercept)       1.108891 1.53216226
+#> LaPlata:(Intercept)     2.860044 4.04402149
+#> Bedon:Bedon.lag(1)      0.482920 0.63969522
+#> LaPlata:Bedon.lag(1)   -0.063305 0.34888959
+#> Bedon:LaPlata.lag(1)    0.016203 0.07358646
+#> LaPlata:LaPlata.lag(1)  0.554588 0.70845898
+#> Bedon:Bedon.lag(2)     -0.019105 0.11604248
+#> LaPlata:Bedon.lag(2)   -0.237660 0.13904147
+#> Bedon:LaPlata.lag(2)   -0.045098 0.00503449
+#> LaPlata:LaPlata.lag(2) -0.136166 0.00093774
+#> Bedon:Bedon.lag(3)     -0.032472 0.09042262
+#> LaPlata:Bedon.lag(3)   -0.139796 0.16376737
+#> Bedon:LaPlata.lag(3)   -0.017717 0.02469308
+#> LaPlata:LaPlata.lag(3)  0.012149 0.11990613
+#> Bedon:Bedon.lag(4)     -0.021334 0.10134620
+#> LaPlata:Bedon.lag(4)   -0.259139 0.05819055
+#> Bedon:LaPlata.lag(4)   -0.032318 0.00155077
+#> LaPlata:LaPlata.lag(4) -0.045775 0.05922443
+#> Bedon:Bedon.lag(5)      0.031486 0.13375885
+#> LaPlata:Bedon.lag(5)    0.027727 0.27832650
+#> Bedon:LaPlata.lag(5)   -0.019542 0.00777224
+#> LaPlata:LaPlata.lag(5) -0.017927 0.06704365
 #> 
 #> 
 #> Scale parameter:
-#>                 Regime 1:lower Regime 1:upper Regime 2:lower Regime 2:upper
-#> Bedon.Bedon            0.27354        0.39351         0.8665         1.3069
-#> Bedon.LaPlata          0.26386        0.48355         0.9740         1.6845
-#> LaPlata.LaPlata        1.82342        2.73758         5.3554         7.7358
-#>                 Regime 3:lower Regime 3:upper
-#> Bedon.Bedon             2.2844         3.2401
-#> Bedon.LaPlata           5.5933         8.7679
-#> LaPlata.LaPlata        33.4590        49.6618
+#>                   lower   upper
+#> Bedon.Bedon     0.26328 0.38948
+#> Bedon.LaPlata   0.25262 0.48966
+#> LaPlata.LaPlata 1.89676 2.77788
+#> 
+#> 
+#> Regime 2
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                             lower     upper
+#> Bedon:(Intercept)       1.3194596  2.916638
+#> LaPlata:(Intercept)     4.8508130  8.910132
+#> Bedon:Bedon.lag(1)      0.4953451  0.671637
+#> LaPlata:Bedon.lag(1)   -0.1002882  0.363021
+#> Bedon:LaPlata.lag(1)   -0.0077359  0.047793
+#> LaPlata:LaPlata.lag(1)  0.4452416  0.599067
+#> Bedon:Bedon.lag(2)     -0.0290426  0.213174
+#> LaPlata:Bedon.lag(2)   -0.2339122  0.253258
+#> Bedon:LaPlata.lag(2)   -0.0543574  0.014471
+#> LaPlata:LaPlata.lag(2) -0.0356174  0.108142
+#> Bedon:Bedon.lag(3)     -0.1465706  0.067465
+#> LaPlata:Bedon.lag(3)   -0.2800328  0.165803
+#> Bedon:LaPlata.lag(3)   -0.0396706  0.021091
+#> LaPlata:LaPlata.lag(3) -0.0282009  0.111385
+#> Bedon:Bedon.lag(4)     -0.0039448  0.221469
+#> LaPlata:Bedon.lag(4)   -0.0148561  0.490533
+#> Bedon:LaPlata.lag(4)   -0.0293677  0.040315
+#> LaPlata:LaPlata.lag(4) -0.1298770  0.038449
+#> Bedon:Bedon.lag(5)     -0.0629416  0.097919
+#> LaPlata:Bedon.lag(5)   -0.4876191 -0.092673
+#> Bedon:LaPlata.lag(5)   -0.0259730  0.031472
+#> LaPlata:LaPlata.lag(5)  0.0437830  0.197992
+#> 
+#> 
+#> Scale parameter:
+#>                   lower  upper
+#> Bedon.Bedon     0.87758 1.3019
+#> Bedon.LaPlata   0.97158 1.7093
+#> LaPlata.LaPlata 5.29540 7.8042
+#> 
+#> 
+#> Regime 3
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                             lower     upper
+#> Bedon:(Intercept)       3.9894134  7.294559
+#> LaPlata:(Intercept)    11.1902226 23.020733
+#> Bedon:Bedon.lag(1)      0.3082183  0.643302
+#> LaPlata:Bedon.lag(1)    0.0618211  1.074497
+#> Bedon:LaPlata.lag(1)    0.0093636  0.076327
+#> LaPlata:LaPlata.lag(1)  0.2114032  0.464734
+#> Bedon:Bedon.lag(2)     -0.0640751  0.223012
+#> LaPlata:Bedon.lag(2)   -1.1002530 -0.019625
+#> Bedon:LaPlata.lag(2)   -0.0375335  0.031024
+#> LaPlata:LaPlata.lag(2) -0.0098455  0.260123
+#> Bedon:Bedon.lag(3)     -0.2215945  0.040573
+#> LaPlata:Bedon.lag(3)   -1.0350627 -0.113238
+#> Bedon:LaPlata.lag(3)   -0.0021404  0.073491
+#> LaPlata:LaPlata.lag(3)  0.1369960  0.447739
+#> Bedon:Bedon.lag(4)     -0.1471890  0.137477
+#> LaPlata:Bedon.lag(4)   -0.5163643  0.626348
+#> Bedon:LaPlata.lag(4)   -0.0369771  0.046311
+#> LaPlata:LaPlata.lag(4) -0.1695370  0.140870
+#> Bedon:Bedon.lag(5)      0.0371031  0.309065
+#> LaPlata:Bedon.lag(5)   -0.1978915  0.788498
+#> Bedon:LaPlata.lag(5)   -0.0475675  0.022435
+#> LaPlata:LaPlata.lag(5) -0.0688179  0.196537
+#> 
+#> 
+#> Scale parameter:
+#>                   lower   upper
+#> Bedon.Bedon      2.2380  3.3653
+#> Bedon.LaPlata    5.3841  8.9079
+#> LaPlata.LaPlata 33.7646 52.2459
 
 ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 data(iceland.rf)
 fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
              data=iceland.rf, subset={Date<="1974-11-06"}, row.names=Date,
-             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=100, n.sim=200,
+             ars=ars(nregim=2,p=15,q=4,d=2), n.burnin=1000, n.sim=2000,
              n.thin=2, dist="Slash")
 coda::HPDinterval(fit3)
 #> 
 #> Probability = 0.95
 #> 
 #> Thresholds:
-#>             lower   upper
-#> threshold 0.41803 0.86655
+#>              lower  upper
+#> Threshold.1 1.1008 1.2955
+#> 
+#> 
+#> Regime 1
 #> 
 #> 
 #> Autoregressive coefficients:
-#>                                 Regime 1:lower Regime 1:upper Regime 2:lower
-#> Jokulsa:(Intercept)                  2.6352803     3.66254408     -1.4637157
-#> Jokulsa:Jokulsa.lag( 1)              0.8437907     0.92908005      0.9247668
-#> Jokulsa:Jokulsa.lag( 2)             -0.1171200    -0.01924717     -0.2729527
-#> Jokulsa:Jokulsa.lag( 3)             -0.0413166     0.03844913     -0.0845591
-#> Jokulsa:Jokulsa.lag( 4)             -0.0469307     0.06133525     -0.1705010
-#> Jokulsa:Jokulsa.lag( 5)             -0.0781850     0.04858185     -0.0556182
-#> Jokulsa:Jokulsa.lag( 6)             -0.0243633     0.08234490     -0.1112915
-#> Jokulsa:Jokulsa.lag( 7)             -0.0475424     0.06420384     -0.0429613
-#> Jokulsa:Jokulsa.lag( 8)             -0.0612018     0.03199144     -0.0416531
-#> Jokulsa:Jokulsa.lag( 9)             -0.0274422     0.05362413     -0.0407820
-#> Jokulsa:Jokulsa.lag(10)             -0.0116928     0.05011703     -0.0977940
-#> Jokulsa:Jokulsa.lag(11)             -0.0494385     0.00969262     -0.0803227
-#> Jokulsa:Jokulsa.lag(12)             -0.0226524     0.03457533     -0.0695737
-#> Jokulsa:Jokulsa.lag(13)             -0.0482260     0.02412159     -0.0772444
-#> Jokulsa:Jokulsa.lag(14)             -0.0287629     0.03105070     -0.0850382
-#> Jokulsa:Jokulsa.lag(15)             -0.0254946     0.03399619     -0.0020238
-#> Jokulsa:Vatnsdalsa.lag( 1)           0.1665282     0.39398311      0.5726819
-#> Jokulsa:Vatnsdalsa.lag( 2)          -0.3908305    -0.11848494     -0.9391427
-#> Jokulsa:Vatnsdalsa.lag( 3)          -0.0090923     0.16924670     -0.4796786
-#> Jokulsa:Vatnsdalsa.lag( 4)          -0.1048404     0.05623135     -0.5192297
-#> Jokulsa:Vatnsdalsa.lag( 5)          -0.1001824     0.02803130     -0.2822171
-#> Jokulsa:Vatnsdalsa.lag( 6)          -0.0888830     0.09212607     -0.4621238
-#> Jokulsa:Vatnsdalsa.lag( 7)          -0.0733733     0.08428558     -0.2222564
-#> Jokulsa:Vatnsdalsa.lag( 8)          -0.0599098     0.06025988     -0.6075366
-#> Jokulsa:Vatnsdalsa.lag( 9)          -0.0864107     0.03653510     -0.1577563
-#> Jokulsa:Vatnsdalsa.lag(10)          -0.0105143     0.11175174     -0.4211493
-#> Jokulsa:Vatnsdalsa.lag(11)          -0.0681296     0.03992450     -0.3725198
-#> Jokulsa:Vatnsdalsa.lag(12)          -0.0425968     0.05942225     -0.4250372
-#> Jokulsa:Vatnsdalsa.lag(13)          -0.0784026     0.03363987     -0.1404644
-#> Jokulsa:Vatnsdalsa.lag(14)          -0.0381498     0.06059892     -0.0822144
-#> Jokulsa:Vatnsdalsa.lag(15)          -0.0461124     0.02789297     -0.7287150
-#> Jokulsa:Precipitation.lag(1)        -0.0152452     0.01725471     -0.1658716
-#> Jokulsa:Precipitation.lag(2)        -0.0082416     0.02147151     -0.1021646
-#> Jokulsa:Precipitation.lag(3)        -0.0253451    -0.00390403     -0.0302333
-#> Jokulsa:Precipitation.lag(4)         0.0089095     0.03699413     -0.0265126
-#> Jokulsa:Temperature.lag(1)          -0.0046867     0.03373905      0.9100702
-#> Jokulsa:Temperature.lag(2)          -0.0478685    -0.01039604     -0.6999888
-#> Vatnsdalsa:(Intercept)               0.3379556     1.12586285      0.2940713
-#> Vatnsdalsa:Jokulsa.lag( 1)          -0.0903184    -0.01404886     -0.0122452
-#> Vatnsdalsa:Jokulsa.lag( 2)           0.0208662     0.08050007      0.0031973
-#> Vatnsdalsa:Jokulsa.lag( 3)          -0.0563779    -0.00755996     -0.0280840
-#> Vatnsdalsa:Jokulsa.lag( 4)          -0.0105903     0.03447163     -0.0047981
-#> Vatnsdalsa:Jokulsa.lag( 5)          -0.0230110     0.03593609     -0.0131507
-#> Vatnsdalsa:Jokulsa.lag( 6)          -0.0237673     0.03765377     -0.0038635
-#> Vatnsdalsa:Jokulsa.lag( 7)          -0.0298951     0.03352870     -0.0154112
-#> Vatnsdalsa:Jokulsa.lag( 8)          -0.0442377     0.00591719     -0.0049800
-#> Vatnsdalsa:Jokulsa.lag( 9)          -0.0035092     0.05344896     -0.0121555
-#> Vatnsdalsa:Jokulsa.lag(10)          -0.0425853    -0.00020858     -0.0062544
-#> Vatnsdalsa:Jokulsa.lag(11)          -0.0097757     0.02636419     -0.0177264
-#> Vatnsdalsa:Jokulsa.lag(12)          -0.0310775     0.01196345      0.0017130
-#> Vatnsdalsa:Jokulsa.lag(13)          -0.0135282     0.03222243     -0.0177952
-#> Vatnsdalsa:Jokulsa.lag(14)          -0.0256372     0.01167690     -0.0136469
-#> Vatnsdalsa:Jokulsa.lag(15)          -0.0097672     0.01618842     -0.0033411
-#> Vatnsdalsa:Vatnsdalsa.lag( 1)        1.0689326     1.25821080      1.1496467
-#> Vatnsdalsa:Vatnsdalsa.lag( 2)       -0.4277818    -0.21554767     -0.4633306
-#> Vatnsdalsa:Vatnsdalsa.lag( 3)       -0.0070751     0.14047505      0.0467195
-#> Vatnsdalsa:Vatnsdalsa.lag( 4)       -0.0736115     0.04423797     -0.1415051
-#> Vatnsdalsa:Vatnsdalsa.lag( 5)       -0.0558581     0.04017088     -0.1127569
-#> Vatnsdalsa:Vatnsdalsa.lag( 6)       -0.0580280     0.04183497     -0.0544863
-#> Vatnsdalsa:Vatnsdalsa.lag( 7)       -0.0239461     0.05162062     -0.0950839
-#> Vatnsdalsa:Vatnsdalsa.lag( 8)       -0.0273196     0.03857800     -0.1450165
-#> Vatnsdalsa:Vatnsdalsa.lag( 9)       -0.0501357     0.02830978      0.0574632
-#> Vatnsdalsa:Vatnsdalsa.lag(10)       -0.0252365     0.05247966     -0.1257649
-#> Vatnsdalsa:Vatnsdalsa.lag(11)       -0.0340026     0.03723716     -0.0159824
-#> Vatnsdalsa:Vatnsdalsa.lag(12)       -0.0423899     0.02643856     -0.1291236
-#> Vatnsdalsa:Vatnsdalsa.lag(13)       -0.0765034     0.00845364      0.0913001
-#> Vatnsdalsa:Vatnsdalsa.lag(14)        0.0016489     0.07722171     -0.0965910
-#> Vatnsdalsa:Vatnsdalsa.lag(15)       -0.0276669     0.02490403     -0.0850782
-#> Vatnsdalsa:Precipitation.lag(1)     -0.0067250     0.01585369     -0.0149386
-#> Vatnsdalsa:Precipitation.lag(2)     -0.0059698     0.01242473     -0.0209657
-#> Vatnsdalsa:Precipitation.lag(3)     -0.0114683     0.00394847     -0.0057700
-#> Vatnsdalsa:Precipitation.lag(4)     -0.0018192     0.01752300     -0.0048399
-#> Vatnsdalsa:Temperature.lag(1)       -0.0147280     0.01293785      0.0113871
-#> Vatnsdalsa:Temperature.lag(2)       -0.0225938     0.00728257     -0.0737167
-#>                                 Regime 2:upper
-#> Jokulsa:(Intercept)                 1.0598e+00
-#> Jokulsa:Jokulsa.lag( 1)             1.0597e+00
-#> Jokulsa:Jokulsa.lag( 2)            -2.6839e-02
-#> Jokulsa:Jokulsa.lag( 3)             1.2141e-01
-#> Jokulsa:Jokulsa.lag( 4)            -9.9932e-06
-#> Jokulsa:Jokulsa.lag( 5)             1.0232e-01
-#> Jokulsa:Jokulsa.lag( 6)             1.3155e-02
-#> Jokulsa:Jokulsa.lag( 7)             5.5940e-02
-#> Jokulsa:Jokulsa.lag( 8)             6.3851e-02
-#> Jokulsa:Jokulsa.lag( 9)             9.9867e-02
-#> Jokulsa:Jokulsa.lag(10)             6.9948e-02
-#> Jokulsa:Jokulsa.lag(11)             7.0507e-02
-#> Jokulsa:Jokulsa.lag(12)             7.0307e-02
-#> Jokulsa:Jokulsa.lag(13)             8.0591e-02
-#> Jokulsa:Jokulsa.lag(14)             7.8418e-02
-#> Jokulsa:Jokulsa.lag(15)             9.9372e-02
-#> Jokulsa:Vatnsdalsa.lag( 1)          1.3748e+00
-#> Jokulsa:Vatnsdalsa.lag( 2)          1.4256e-01
-#> Jokulsa:Vatnsdalsa.lag( 3)          6.4760e-01
-#> Jokulsa:Vatnsdalsa.lag( 4)          3.1479e-01
-#> Jokulsa:Vatnsdalsa.lag( 5)          7.0462e-01
-#> Jokulsa:Vatnsdalsa.lag( 6)          2.7482e-01
-#> Jokulsa:Vatnsdalsa.lag( 7)          4.6441e-01
-#> Jokulsa:Vatnsdalsa.lag( 8)          8.4844e-02
-#> Jokulsa:Vatnsdalsa.lag( 9)          6.6999e-01
-#> Jokulsa:Vatnsdalsa.lag(10)          2.4466e-01
-#> Jokulsa:Vatnsdalsa.lag(11)          5.2024e-01
-#> Jokulsa:Vatnsdalsa.lag(12)          3.4087e-01
-#> Jokulsa:Vatnsdalsa.lag(13)          7.7751e-01
-#> Jokulsa:Vatnsdalsa.lag(14)          6.5356e-01
-#> Jokulsa:Vatnsdalsa.lag(15)         -1.8925e-01
-#> Jokulsa:Precipitation.lag(1)       -1.9493e-02
-#> Jokulsa:Precipitation.lag(2)        1.1580e-01
-#> Jokulsa:Precipitation.lag(3)        9.6531e-02
-#> Jokulsa:Precipitation.lag(4)        1.0692e-01
-#> Jokulsa:Temperature.lag(1)          1.2490e+00
-#> Jokulsa:Temperature.lag(2)         -3.6949e-01
-#> Vatnsdalsa:(Intercept)              6.7064e-01
-#> Vatnsdalsa:Jokulsa.lag( 1)          1.8742e-03
-#> Vatnsdalsa:Jokulsa.lag( 2)          2.6314e-02
-#> Vatnsdalsa:Jokulsa.lag( 3)         -3.1653e-03
-#> Vatnsdalsa:Jokulsa.lag( 4)          1.5294e-02
-#> Vatnsdalsa:Jokulsa.lag( 5)          5.0599e-03
-#> Vatnsdalsa:Jokulsa.lag( 6)          1.1655e-02
-#> Vatnsdalsa:Jokulsa.lag( 7)          2.4264e-03
-#> Vatnsdalsa:Jokulsa.lag( 8)          1.3611e-02
-#> Vatnsdalsa:Jokulsa.lag( 9)          5.0010e-03
-#> Vatnsdalsa:Jokulsa.lag(10)          1.3624e-02
-#> Vatnsdalsa:Jokulsa.lag(11)          3.3468e-03
-#> Vatnsdalsa:Jokulsa.lag(12)          2.0761e-02
-#> Vatnsdalsa:Jokulsa.lag(13)          1.7539e-03
-#> Vatnsdalsa:Jokulsa.lag(14)          8.1031e-03
-#> Vatnsdalsa:Jokulsa.lag(15)          9.3300e-03
-#> Vatnsdalsa:Vatnsdalsa.lag( 1)       1.3050e+00
-#> Vatnsdalsa:Vatnsdalsa.lag( 2)      -2.3812e-01
-#> Vatnsdalsa:Vatnsdalsa.lag( 3)       2.4274e-01
-#> Vatnsdalsa:Vatnsdalsa.lag( 4)       5.0025e-03
-#> Vatnsdalsa:Vatnsdalsa.lag( 5)       8.8094e-02
-#> Vatnsdalsa:Vatnsdalsa.lag( 6)       1.2427e-01
-#> Vatnsdalsa:Vatnsdalsa.lag( 7)       3.5810e-02
-#> Vatnsdalsa:Vatnsdalsa.lag( 8)      -2.6445e-02
-#> Vatnsdalsa:Vatnsdalsa.lag( 9)       2.0275e-01
-#> Vatnsdalsa:Vatnsdalsa.lag(10)      -5.1197e-03
-#> Vatnsdalsa:Vatnsdalsa.lag(11)       1.1949e-01
-#> Vatnsdalsa:Vatnsdalsa.lag(12)       1.3726e-02
-#> Vatnsdalsa:Vatnsdalsa.lag(13)       2.1269e-01
-#> Vatnsdalsa:Vatnsdalsa.lag(14)       2.5396e-02
-#> Vatnsdalsa:Vatnsdalsa.lag(15)       7.3882e-03
-#> Vatnsdalsa:Precipitation.lag(1)     8.2376e-03
-#> Vatnsdalsa:Precipitation.lag(2)     1.0166e-02
-#> Vatnsdalsa:Precipitation.lag(3)     1.5404e-02
-#> Vatnsdalsa:Precipitation.lag(4)     1.2294e-02
-#> Vatnsdalsa:Temperature.lag(1)       6.5699e-02
-#> Vatnsdalsa:Temperature.lag(2)      -1.6367e-02
+#>                                       lower       upper
+#> Jokulsa:(Intercept)              3.01216112  4.44910666
+#> Vatnsdalsa:(Intercept)           0.44668018  1.22930933
+#> Jokulsa:Jokulsa.lag( 1)          0.77506393  0.91634416
+#> Vatnsdalsa:Jokulsa.lag( 1)      -0.10235444 -0.02407218
+#> Jokulsa:Vatnsdalsa.lag( 1)       0.09998825  0.32709513
+#> Vatnsdalsa:Vatnsdalsa.lag( 1)    1.08389466  1.24401168
+#> Jokulsa:Jokulsa.lag( 2)         -0.09951992 -0.00281991
+#> Vatnsdalsa:Jokulsa.lag( 2)       0.01689143  0.08022687
+#> Jokulsa:Vatnsdalsa.lag( 2)      -0.30479455 -0.04746716
+#> Vatnsdalsa:Vatnsdalsa.lag( 2)   -0.38602776 -0.21802254
+#> Jokulsa:Jokulsa.lag( 3)         -0.03149461  0.04139062
+#> Vatnsdalsa:Jokulsa.lag( 3)      -0.04881667 -0.00140318
+#> Jokulsa:Vatnsdalsa.lag( 3)      -0.03449313  0.09827377
+#> Vatnsdalsa:Vatnsdalsa.lag( 3)   -0.01611032  0.08225878
+#> Jokulsa:Jokulsa.lag( 4)         -0.04499217  0.04141711
+#> Vatnsdalsa:Jokulsa.lag( 4)      -0.01165285  0.04086384
+#> Jokulsa:Vatnsdalsa.lag( 4)      -0.06259357  0.08832019
+#> Vatnsdalsa:Vatnsdalsa.lag( 4)   -0.05280651  0.05646114
+#> Jokulsa:Jokulsa.lag( 5)         -0.05363857  0.04941220
+#> Vatnsdalsa:Jokulsa.lag( 5)      -0.02085180  0.03710989
+#> Jokulsa:Vatnsdalsa.lag( 5)      -0.10744124  0.02592505
+#> Vatnsdalsa:Vatnsdalsa.lag( 5)   -0.06351926  0.02606703
+#> Jokulsa:Jokulsa.lag( 6)         -0.02955569  0.07324768
+#> Vatnsdalsa:Jokulsa.lag( 6)      -0.02457565  0.03424973
+#> Jokulsa:Vatnsdalsa.lag( 6)      -0.07929339  0.04304337
+#> Vatnsdalsa:Vatnsdalsa.lag( 6)   -0.03622490  0.04064777
+#> Jokulsa:Jokulsa.lag( 7)         -0.04782558  0.05946626
+#> Vatnsdalsa:Jokulsa.lag( 7)      -0.03190665  0.02715151
+#> Jokulsa:Vatnsdalsa.lag( 7)      -0.04203596  0.07437360
+#> Vatnsdalsa:Vatnsdalsa.lag( 7)   -0.02836016  0.04507614
+#> Jokulsa:Jokulsa.lag( 8)         -0.05281753  0.05013904
+#> Vatnsdalsa:Jokulsa.lag( 8)      -0.03412357  0.01741990
+#> Jokulsa:Vatnsdalsa.lag( 8)      -0.06173290  0.05484411
+#> Vatnsdalsa:Vatnsdalsa.lag( 8)   -0.02826708  0.04573722
+#> Jokulsa:Jokulsa.lag( 9)         -0.05338480  0.03580947
+#> Vatnsdalsa:Jokulsa.lag( 9)      -0.00761687  0.05052029
+#> Jokulsa:Vatnsdalsa.lag( 9)      -0.07209249  0.05646874
+#> Vatnsdalsa:Vatnsdalsa.lag( 9)   -0.04564142  0.03617924
+#> Jokulsa:Jokulsa.lag(10)         -0.00742436  0.06156446
+#> Vatnsdalsa:Jokulsa.lag(10)      -0.03706139  0.00776789
+#> Jokulsa:Vatnsdalsa.lag(10)      -0.03125298  0.09160990
+#> Vatnsdalsa:Vatnsdalsa.lag(10)   -0.02026314  0.06519512
+#> Jokulsa:Jokulsa.lag(11)         -0.04241130  0.01764877
+#> Vatnsdalsa:Jokulsa.lag(11)      -0.01023831  0.02735578
+#> Jokulsa:Vatnsdalsa.lag(11)      -0.07431870  0.03723784
+#> Vatnsdalsa:Vatnsdalsa.lag(11)   -0.04663509  0.03196626
+#> Jokulsa:Jokulsa.lag(12)         -0.01950480  0.03958562
+#> Vatnsdalsa:Jokulsa.lag(12)      -0.02673506  0.01147259
+#> Jokulsa:Vatnsdalsa.lag(12)      -0.04277132  0.06048036
+#> Vatnsdalsa:Vatnsdalsa.lag(12)   -0.03745907  0.03180228
+#> Jokulsa:Jokulsa.lag(13)         -0.05358290  0.01440206
+#> Vatnsdalsa:Jokulsa.lag(13)      -0.01621208  0.02280159
+#> Jokulsa:Vatnsdalsa.lag(13)      -0.06514952  0.03727700
+#> Vatnsdalsa:Vatnsdalsa.lag(13)   -0.06104591  0.01884027
+#> Jokulsa:Jokulsa.lag(14)         -0.02202848  0.03331771
+#> Vatnsdalsa:Jokulsa.lag(14)      -0.02354132  0.01275104
+#> Jokulsa:Vatnsdalsa.lag(14)      -0.04550223  0.06128400
+#> Vatnsdalsa:Vatnsdalsa.lag(14)   -0.00351401  0.07006321
+#> Jokulsa:Jokulsa.lag(15)         -0.00781469  0.04756129
+#> Vatnsdalsa:Jokulsa.lag(15)      -0.01388953  0.01514017
+#> Jokulsa:Vatnsdalsa.lag(15)      -0.05336082  0.02749317
+#> Vatnsdalsa:Vatnsdalsa.lag(15)   -0.02156065  0.03381161
+#> Jokulsa:Precipitation.lag(1)    -0.01121017  0.02457475
+#> Vatnsdalsa:Precipitation.lag(1) -0.00525892  0.01730374
+#> Jokulsa:Precipitation.lag(2)    -0.00878198  0.01835785
+#> Vatnsdalsa:Precipitation.lag(2) -0.00888620  0.00843741
+#> Jokulsa:Precipitation.lag(3)    -0.02269249 -0.00078006
+#> Vatnsdalsa:Precipitation.lag(3) -0.01191608  0.00341215
+#> Jokulsa:Precipitation.lag(4)     0.00631820  0.03176934
+#> Vatnsdalsa:Precipitation.lag(4) -0.00493681  0.01360282
+#> Jokulsa:Temperature.lag(1)       0.00067557  0.04277496
+#> Vatnsdalsa:Temperature.lag(1)   -0.01051131  0.01609708
+#> Jokulsa:Temperature.lag(2)      -0.05885582 -0.01694403
+#> Vatnsdalsa:Temperature.lag(2)   -0.02557699  0.00072988
 #> 
 #> 
 #> Scale parameter:
-#>                       Regime 1:lower Regime 1:upper Regime 2:lower
-#> Jokulsa.Jokulsa            0.0441134       0.080208       0.856745
-#> Jokulsa.Vatnsdalsa         0.0041052       0.014284       0.018497
-#> Vatnsdalsa.Vatnsdalsa      0.0190521       0.033208       0.016256
-#>                       Regime 2:upper
-#> Jokulsa.Jokulsa             1.845408
-#> Jokulsa.Vatnsdalsa          0.077260
-#> Vatnsdalsa.Vatnsdalsa       0.042387
+#>                           lower    upper
+#> Jokulsa.Jokulsa       0.0487295 0.086925
+#> Jokulsa.Vatnsdalsa    0.0057223 0.016686
+#> Vatnsdalsa.Vatnsdalsa 0.0205724 0.036612
+#> 
+#> 
+#> Regime 2
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                                      lower       upper
+#> Jokulsa:(Intercept)             -1.5723999  1.17426201
+#> Vatnsdalsa:(Intercept)           0.3176978  0.68149696
+#> Jokulsa:Jokulsa.lag( 1)          0.9468790  1.08749796
+#> Vatnsdalsa:Jokulsa.lag( 1)      -0.0096881  0.00479818
+#> Jokulsa:Vatnsdalsa.lag( 1)       0.4146019  1.35134422
+#> Vatnsdalsa:Vatnsdalsa.lag( 1)    1.1046851  1.24589024
+#> Jokulsa:Jokulsa.lag( 2)         -0.3015312 -0.05110430
+#> Vatnsdalsa:Jokulsa.lag( 2)      -0.0023161  0.02199606
+#> Jokulsa:Vatnsdalsa.lag( 2)      -1.0766025  0.30767417
+#> Vatnsdalsa:Vatnsdalsa.lag( 2)   -0.4416007 -0.25139746
+#> Jokulsa:Jokulsa.lag( 3)         -0.0953003  0.12478641
+#> Vatnsdalsa:Jokulsa.lag( 3)      -0.0241543  0.00054486
+#> Jokulsa:Vatnsdalsa.lag( 3)      -0.6221723  0.68931177
+#> Vatnsdalsa:Vatnsdalsa.lag( 3)    0.1058766  0.27674337
+#> Jokulsa:Jokulsa.lag( 4)         -0.1603535  0.01032929
+#> Vatnsdalsa:Jokulsa.lag( 4)      -0.0037103  0.01476837
+#> Jokulsa:Vatnsdalsa.lag( 4)      -0.6506232  0.29530082
+#> Vatnsdalsa:Vatnsdalsa.lag( 4)   -0.1592454 -0.00126648
+#> Jokulsa:Jokulsa.lag( 5)         -0.0385360  0.11645162
+#> Vatnsdalsa:Jokulsa.lag( 5)      -0.0149819  0.00371398
+#> Jokulsa:Vatnsdalsa.lag( 5)      -0.6203686  0.62775905
+#> Vatnsdalsa:Vatnsdalsa.lag( 5)   -0.0857835  0.10574123
+#> Jokulsa:Jokulsa.lag( 6)         -0.1052252  0.01974520
+#> Vatnsdalsa:Jokulsa.lag( 6)      -0.0047613  0.01193621
+#> Jokulsa:Vatnsdalsa.lag( 6)      -0.4951375  0.71809928
+#> Vatnsdalsa:Vatnsdalsa.lag( 6)   -0.0707261  0.12346937
+#> Jokulsa:Jokulsa.lag( 7)         -0.0602005  0.05638895
+#> Vatnsdalsa:Jokulsa.lag( 7)      -0.0140332  0.00274295
+#> Jokulsa:Vatnsdalsa.lag( 7)      -0.3470259  0.54083718
+#> Vatnsdalsa:Vatnsdalsa.lag( 7)   -0.1184494  0.00963466
+#> Jokulsa:Jokulsa.lag( 8)         -0.0407069  0.07351912
+#> Vatnsdalsa:Jokulsa.lag( 8)      -0.0037274  0.01195866
+#> Jokulsa:Vatnsdalsa.lag( 8)      -0.6947072  0.21922124
+#> Vatnsdalsa:Vatnsdalsa.lag( 8)   -0.1042657  0.02067240
+#> Jokulsa:Jokulsa.lag( 9)         -0.0199993  0.10376144
+#> Vatnsdalsa:Jokulsa.lag( 9)      -0.0098786  0.00672259
+#> Jokulsa:Vatnsdalsa.lag( 9)      -0.2992893  0.55651690
+#> Vatnsdalsa:Vatnsdalsa.lag( 9)    0.0174975  0.16059199
+#> Jokulsa:Jokulsa.lag(10)         -0.0984319  0.05595441
+#> Vatnsdalsa:Jokulsa.lag(10)      -0.0060387  0.01295489
+#> Jokulsa:Vatnsdalsa.lag(10)      -0.4075627  0.36245157
+#> Vatnsdalsa:Vatnsdalsa.lag(10)   -0.1261248 -0.01086358
+#> Jokulsa:Jokulsa.lag(11)         -0.0790049  0.07680963
+#> Vatnsdalsa:Jokulsa.lag(11)      -0.0158582  0.00231287
+#> Jokulsa:Vatnsdalsa.lag(11)      -0.5615513  0.45983671
+#> Vatnsdalsa:Vatnsdalsa.lag(11)    0.0076393  0.14697657
+#> Jokulsa:Jokulsa.lag(12)         -0.0788102  0.06739931
+#> Vatnsdalsa:Jokulsa.lag(12)       0.0010255  0.01800121
+#> Jokulsa:Vatnsdalsa.lag(12)      -0.4693305  0.46357053
+#> Vatnsdalsa:Vatnsdalsa.lag(12)   -0.1430989 -0.02646569
+#> Jokulsa:Jokulsa.lag(13)         -0.0890793  0.07088979
+#> Vatnsdalsa:Jokulsa.lag(13)      -0.0143842  0.00160358
+#> Jokulsa:Vatnsdalsa.lag(13)      -0.0823032  0.90049477
+#> Vatnsdalsa:Vatnsdalsa.lag(13)    0.0725195  0.21115161
+#> Jokulsa:Jokulsa.lag(14)         -0.0856602  0.06853469
+#> Vatnsdalsa:Jokulsa.lag(14)      -0.0105884  0.00626477
+#> Jokulsa:Vatnsdalsa.lag(14)      -0.3887712  0.63335348
+#> Vatnsdalsa:Vatnsdalsa.lag(14)   -0.1308672  0.02422233
+#> Jokulsa:Jokulsa.lag(15)          0.0040650  0.09222334
+#> Vatnsdalsa:Jokulsa.lag(15)      -0.0045390  0.00647517
+#> Jokulsa:Vatnsdalsa.lag(15)      -0.7344939 -0.11163292
+#> Vatnsdalsa:Vatnsdalsa.lag(15)   -0.0644018  0.03515953
+#> Jokulsa:Precipitation.lag(1)    -0.1922928 -0.03924551
+#> Vatnsdalsa:Precipitation.lag(1) -0.0128229  0.00751237
+#> Jokulsa:Precipitation.lag(2)    -0.0992820  0.15022712
+#> Vatnsdalsa:Precipitation.lag(2) -0.0157662  0.01159919
+#> Jokulsa:Precipitation.lag(3)    -0.0162778  0.11219349
+#> Vatnsdalsa:Precipitation.lag(3) -0.0034313  0.01637317
+#> Jokulsa:Precipitation.lag(4)    -0.0394901  0.09785084
+#> Vatnsdalsa:Precipitation.lag(4) -0.0059753  0.01150767
+#> Jokulsa:Temperature.lag(1)       0.9292779  1.31060648
+#> Vatnsdalsa:Temperature.lag(1)   -0.0028265  0.04685542
+#> Jokulsa:Temperature.lag(2)      -0.7683949 -0.35371213
+#> Vatnsdalsa:Temperature.lag(2)   -0.0536449 -0.00166153
+#> 
+#> 
+#> Scale parameter:
+#>                          lower    upper
+#> Jokulsa.Jokulsa       0.959662 1.781023
+#> Jokulsa.Vatnsdalsa    0.024084 0.069135
+#> Vatnsdalsa.Vatnsdalsa 0.015911 0.030668
 #> 
 #> 
 #> Extra parameter:
 #>      lower   upper
-#> nu 0.74422 0.91488
+#> nu 0.72757 0.89162
 
 ###### Example 4: U.S. stock returns
 data(US.returns)
 fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
-             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=100,
-             n.sim=200, n.thin=2, dist="Student-t")
+             row.names=Date, ars=ars(nregim=2,p=3,d=3), n.burnin=1000,
+             n.sim=2000, n.thin=2, dist="Student-t")
 coda::HPDinterval(fit4)
 #> 
 #> Probability = 0.95
 #> 
 #> Thresholds:
-#>            lower  upper
-#> threshold 1.8713 2.1709
+#>              lower  upper
+#> Threshold.1 1.1487 2.2008
+#> 
+#> 
+#> Regime 1
 #> 
 #> 
 #> Autoregressive coefficients:
-#>                 Regime 1:lower Regime 1:upper Regime 2:lower Regime 2:upper
-#> CCR:(Intercept)      0.0668979      0.1127371     -0.4113077       0.157977
-#> CCR:CCR.lag(1)      -0.0743691     -0.0276331     -0.2999127      -0.028327
-#> CCR:CCR.lag(2)      -0.0726077     -0.0023142     -0.2478509       0.173860
-#> CCR:CCR.lag(3)      -0.0705618      0.0075159     -0.0316060       0.370194
-#> CCR:dVIX.lag(1)     -0.0549186     -0.0043995     -0.1778912       0.104887
-#> CCR:dVIX.lag(2)     -0.0520714     -0.0034718     -0.0321339       0.173310
-#> CCR:dVIX.lag(3)     -0.0025748      0.0277559     -0.0022731       0.137239
+#>                      lower       upper
+#> CCR:(Intercept)  0.0677208  0.11502896
+#> CCR:CCR.lag(1)  -0.0780972 -0.02240717
+#> CCR:CCR.lag(2)  -0.0826999  0.00020929
+#> CCR:CCR.lag(3)  -0.0664100  0.01755325
+#> CCR:dVIX.lag(1) -0.0627957 -0.00958405
+#> CCR:dVIX.lag(2) -0.0486701  0.00520388
+#> CCR:dVIX.lag(3) -0.0011461  0.03140187
 #> 
 #> 
 #> Scale parameter:
-#>         Regime 1:lower Regime 1:upper Regime 2:lower Regime 2:upper
-#> CCR.CCR         0.3385        0.39313         0.8436         1.3108
+#>           lower   upper
+#> CCR.CCR 0.33502 0.40059
+#> 
+#> 
+#> Regime 2
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                      lower     upper
+#> CCR:(Intercept) -0.4090450 0.2460139
+#> CCR:CCR.lag(1)  -0.3216915 0.0067886
+#> CCR:CCR.lag(2)  -0.2320086 0.1935572
+#> CCR:CCR.lag(3)  -0.0481479 0.3456160
+#> CCR:dVIX.lag(1) -0.1451481 0.1306261
+#> CCR:dVIX.lag(2) -0.0804351 0.1579721
+#> CCR:dVIX.lag(3) -0.0019516 0.1317174
+#> 
+#> 
+#> Scale parameter:
+#>           lower  upper
+#> CCR.CCR 0.73511 1.2924
 #> 
 #> 
 #> Extra parameter:
 #>     lower  upper
-#> nu 2.2695 2.6713
+#> nu 2.2401 2.6517
 # }
 ```

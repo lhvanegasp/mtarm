@@ -50,8 +50,8 @@
 <span>  <span class="va">newdata</span>,</span>
 <span>  n.ahead <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  credible <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  by.component <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  FUN <span class="op">=</span> <span class="va">mean</span>,</span>
+<span>  rolling <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -79,15 +79,14 @@ model), and the realized values of the output series.</p></dd>
 required prediction intervals. By default, <code>credible</code> is set to <code>0.95</code>.</p></dd>
 
 
-<dt id="arg-by-component">by.component<a class="anchor" aria-label="anchor" href="#arg-by-component"></a></dt>
-<dd><p>An optional logical argument. If <code>TRUE</code>, the predictive
-accuracy measures are computed separately for each component of the multivariate
-output series. By default, <code>by.component</code> is set to <code>TRUE</code>.</p></dd>
-
-
 <dt id="arg-fun">FUN<a class="anchor" aria-label="anchor" href="#arg-fun"></a></dt>
 <dd><p>An optional function used to summarize the <code>n.ahead</code> values computed
 for each predictive accuracy measure. By default, <code>FUN</code> is set to <code>mean</code>.</p></dd>
+
+
+<dt id="arg-rolling">rolling<a class="anchor" aria-label="anchor" href="#arg-rolling"></a></dt>
+<dd><p>An optional positive integer specifying the rolling-window size used for forecasting.
+By default, <code>rolling = NULL</code>, indicating that rolling-window forecasting is not performed.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -103,69 +102,62 @@ for each predictive accuracy measure. By default, <code>FUN</code> is set to <co
 <span class="r-in"><span><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="mtar_grid.html">mtar_grid</a></span><span class="op">(</span><span class="op">~</span> <span class="va">COLCAP</span> <span class="op">+</span> <span class="va">BOVESPA</span> <span class="op">|</span> <span class="va">SP500</span>, data<span class="op">=</span><span class="va">returns</span>, row.names<span class="op">=</span><span class="va">Date</span>,</span></span>
 <span class="r-in"><span>                  subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2015-12-07"</span><span class="op">}</span>, dist<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gaussian"</span>,<span class="st">"Student-t"</span>,</span></span>
 <span class="r-in"><span>                  <span class="st">"Slash"</span>,<span class="st">"Laplace"</span><span class="op">)</span>, nregim.min<span class="op">=</span><span class="fl">2</span>, nregim.max<span class="op">=</span><span class="fl">3</span>, p.min<span class="op">=</span><span class="fl">2</span>,</span></span>
-<span class="r-in"><span>                  p.max<span class="op">=</span><span class="fl">2</span>, n.burnin<span class="op">=</span><span class="fl">100</span>, n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                  p.max<span class="op">=</span><span class="fl">2</span>, n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">oos1</span> <span class="op">&lt;-</span> <span class="fu"><a href="out_of_sample.html">out_of_sample</a></span><span class="op">(</span><span class="va">fit1</span>, newdata<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">returns</span>, <span class="va">Date</span><span class="op">&gt;</span><span class="st">"2015-12-07"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                      n.ahead<span class="op">=</span><span class="fl">75</span>, by.component<span class="op">=</span><span class="cn">TRUE</span>, FUN<span class="op">=</span><span class="va">median</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                      n.ahead<span class="op">=</span><span class="fl">75</span>, FUN<span class="op">=</span><span class="va">median</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">oos1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               Log.Score Energy.Score   COLCAP.AE  BOVESPA.AE COLCAP.APE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.2.2  -6.144724   0.01500257 0.007099054 0.010977199   96.07562</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.3.2  -6.057795   0.01586821 0.007174719 0.010421627  100.75109</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2   -5.687330   0.01403703 0.007263663 0.009850417   92.66917</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2   -5.637864   0.01698696 0.007202498 0.007539652   89.80717</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.2     -6.038833   0.01524134 0.007792288 0.009588171   95.50496</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.3.2     -5.880469   0.01669986 0.007373231 0.009580830   93.76963</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.2 -6.091524   0.01367888 0.007593864 0.008250313   91.98190</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.3.2 -5.866601   0.01566589 0.007976754 0.007967491   93.20596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.2.2  -6.130904   0.01496001 0.007919267 0.010505789   97.80278</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.3.2  -6.074644   0.01556491 0.007192457 0.010703096   98.52329</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2   -5.878923   0.01444653 0.007764034 0.010482989   92.83335</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2   -5.634518   0.01570581 0.007168346 0.008288826   92.92772</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.2     -6.069461   0.01510325 0.007964202 0.010521440   95.31498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.3.2     -5.903969   0.01530790 0.007443842 0.010730346  100.99083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.2 -6.112259   0.01413215 0.007299921 0.008806815   91.91274</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.3.2 -5.949522   0.01552589 0.006565879 0.009718477   96.94343</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               BOVESPA.APE    COLCAP.SE   BOVESPA.SE COLCAP.Width BOVESPA.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.2.2     89.25378 5.039656e-05 1.204989e-04   0.03328825    0.04839611</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.3.2     98.27430 5.147660e-05 1.086103e-04   0.03459825    0.04852131</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2      88.10522 5.276080e-05 9.703072e-05   0.03805928    0.05535933</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2      90.89060 5.187598e-05 5.684636e-05   0.03677038    0.05363171</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.2        90.69596 6.071975e-05 9.193302e-05   0.03245197    0.05038909</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.3.2        99.47798 5.436453e-05 9.179230e-05   0.03445020    0.05062111</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.2    83.06730 5.766677e-05 6.806766e-05   0.03384250    0.04970844</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.3.2    99.46147 6.362860e-05 6.348091e-05   0.03426644    0.05146244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               COLCAP.CoverageRate BOVESPA.CoverageRate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.2.2                    1                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.3.2                    1                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2                     1                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2                     1                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.2                       1                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.3.2                       1                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.2                   1                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.3.2                   1                    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.2.2     88.97881 6.271478e-05 1.103716e-04   0.03375326    0.04977947</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.3.2     99.56912 5.173144e-05 1.145563e-04   0.03185595    0.04477661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2      86.32928 6.028022e-05 1.098931e-04   0.03808041    0.05841364</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2     100.07927 5.138519e-05 6.870464e-05   0.03855147    0.06100154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.2        91.02511 6.342851e-05 1.107007e-04   0.03367588    0.05144276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.3.2        99.27615 5.541079e-05 1.151403e-04   0.03414189    0.05208692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.2    81.32959 5.328884e-05 7.756000e-05   0.03448157    0.05213710</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.3.2    91.57282 4.311076e-05 9.444879e-05   0.03495580    0.05120236</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               COLCAP.CR BOVESPA.CR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.2.2          1          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Gaussian.3.2          1          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2           1          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2           1          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.2             1          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.3.2             1          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.2         1          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.3.2         1          1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 2: Rainfall and two river flows in Colombia</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">riverflows</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="mtar_grid.html">mtar_grid</a></span><span class="op">(</span><span class="op">~</span> <span class="va">Bedon</span> <span class="op">+</span> <span class="va">LaPlata</span> <span class="op">|</span> <span class="va">Rainfall</span>, data<span class="op">=</span><span class="va">riverflows</span>,</span></span>
 <span class="r-in"><span>                  row.names<span class="op">=</span><span class="va">Date</span>, subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2009-02-13"</span><span class="op">}</span>,dist<span class="op">=</span><span class="st">"Laplace"</span>,</span></span>
-<span class="r-in"><span>                  nregim.min<span class="op">=</span><span class="fl">2</span>, nregim.max<span class="op">=</span><span class="fl">3</span>, p.min<span class="op">=</span><span class="fl">1</span>, p.max<span class="op">=</span><span class="fl">3</span>,n.burnin<span class="op">=</span><span class="fl">100</span>,</span></span>
-<span class="r-in"><span>                  n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>, plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                  nregim.min<span class="op">=</span><span class="fl">2</span>, nregim.max<span class="op">=</span><span class="fl">3</span>, p.min<span class="op">=</span><span class="fl">1</span>, p.max<span class="op">=</span><span class="fl">3</span>,n.burnin<span class="op">=</span><span class="fl">1000</span>,</span></span>
+<span class="r-in"><span>                  n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>, plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">oos2</span> <span class="op">&lt;-</span> <span class="fu"><a href="out_of_sample.html">out_of_sample</a></span><span class="op">(</span><span class="va">fit2</span>, newdata<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">riverflows</span>, <span class="va">Date</span><span class="op">&gt;</span><span class="st">"2009-02-13"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                      n.ahead<span class="op">=</span><span class="fl">60</span>, by.component<span class="op">=</span><span class="cn">TRUE</span>, FUN<span class="op">=</span><span class="va">median</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                      n.ahead<span class="op">=</span><span class="fl">60</span>, FUN<span class="op">=</span><span class="va">median</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">oos2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Log.Score Energy.Score Bedon.AE LaPlata.AE Bedon.APE LaPlata.APE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.1  5.636534     7.790953 1.541297   3.695852  13.78920    14.76937</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2  5.555660     7.976212 1.422329   3.811800  12.61733    15.51428</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.3  5.550029     7.370440 1.328475   3.771786  11.39065    15.66264</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.1  5.839746     7.242761 1.629533   4.113777  15.36016    13.81733</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2  5.687286     7.127679 1.631979   3.225435  14.67574    12.63648</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.3  5.618677     6.793661 1.596158   3.748288  13.73050    12.58661</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Bedon.SE LaPlata.SE Bedon.Width LaPlata.Width Bedon.CoverageRate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.1 2.378089   13.68220    17.32064      44.63692                  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2 2.026536   14.53442    18.90253      51.54226                  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.3 1.764871   14.28082    16.29107      43.12204                  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.1 2.655459   16.93987    17.31454      39.39744                  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2 2.663523   10.40468    16.37719      40.04661                  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.3 2.548405   14.05141    15.50693      38.67365                  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             LaPlata.CoverageRate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.1                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.3                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.1                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.3                    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.1  5.608438     7.739133 1.385735   3.504505  12.04234    14.59884</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2  5.571232     7.564504 1.149434   3.515063  11.78286    13.52207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.3  5.521728     7.349536 1.226071   3.736939  11.13603    14.78138</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.1  5.775721     7.062338 1.672790   3.778881  15.59865    13.87415</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2  5.736751     7.039516 1.625449   3.742622  15.01475    12.27413</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.3  5.677089     6.876153 1.590267   3.687293  13.94798    13.89481</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Bedon.SE LaPlata.SE Bedon.Width LaPlata.Width Bedon.CR LaPlata.CR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.1 1.920465   12.31697    18.96394      47.00470        1          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.2 1.321237   12.36404    17.81186      46.39140        1          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.3 1.503563   14.03610    17.21209      43.54787        1          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.1 2.799055   14.40297    17.54845      41.77266        1          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.2 2.642367   14.03502    17.23354      43.22075        1          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.3.3 2.529923   13.59662    16.65226      41.32513        1          1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 3: Temperature, precipitation, and two river flows in Iceland</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iceland.rf</span><span class="op">)</span></span></span>
@@ -173,50 +165,45 @@ for each predictive accuracy measure. By default, <code>FUN</code> is set to <co
 <span class="r-in"><span>                  data<span class="op">=</span><span class="va">iceland.rf</span>,subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"1974-11-06"</span><span class="op">}</span>,row.names<span class="op">=</span><span class="va">Date</span>,</span></span>
 <span class="r-in"><span>                  dist<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Slash"</span>,<span class="st">"Student-t"</span><span class="op">)</span>, nregim.min<span class="op">=</span><span class="fl">1</span>, nregim.max<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  p.min<span class="op">=</span><span class="fl">15</span>, p.max<span class="op">=</span><span class="fl">15</span>, q.min<span class="op">=</span><span class="fl">4</span>, q.max<span class="op">=</span><span class="fl">4</span>, d.min<span class="op">=</span><span class="fl">2</span>, d.max<span class="op">=</span><span class="fl">2</span>,</span></span>
-<span class="r-in"><span>                  n.burnin<span class="op">=</span><span class="fl">100</span>, n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                  n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">oos3</span> <span class="op">&lt;-</span> <span class="fu"><a href="out_of_sample.html">out_of_sample</a></span><span class="op">(</span><span class="va">fit3</span>, newdata<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">iceland.rf</span>, <span class="va">Date</span><span class="op">&gt;</span><span class="st">"1974-11-06"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                      n.ahead<span class="op">=</span><span class="fl">55</span>, by.component<span class="op">=</span><span class="cn">TRUE</span>, FUN<span class="op">=</span><span class="va">median</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                      n.ahead<span class="op">=</span><span class="fl">55</span>, FUN<span class="op">=</span><span class="va">median</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">oos3</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    Log.Score Energy.Score  Jokulsa.AE Vatnsdalsa.AE Jokulsa.APE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.1.15.4.2      6.796742   821.400430 602.7580114   879.0364044 2450.235819</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.15.4.2      4.710491    29.174435   7.7443467    11.9587534   31.481084</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.1.15.4.2  5.134296     7.278743   0.5953246     0.9862852    2.316438</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.15.4.2  3.298918     2.097893   0.8306326     1.1998839    3.271454</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.1.15.4.2      6.785082   496.798458 288.2535467    61.9712917 1143.863281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.15.4.2      4.656451    74.266954  34.9573021    18.9198753  130.926225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.1.15.4.2  5.211732     7.914245   0.8534684     0.9519004    3.367734</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.15.4.2  3.269521     2.047613   0.7079423     1.0549056    2.651469</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    Vatnsdalsa.APE   Jokulsa.SE Vatnsdalsa.SE Jokulsa.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.1.15.4.2        17035.58923 3.633172e+05  7.727050e+05   2758.054047</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.15.4.2          231.75879 5.997491e+01  1.430118e+02    187.435548</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.1.15.4.2       18.74762 3.544114e-01  9.727585e-01     54.913110</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.15.4.2       23.25356 6.899505e-01  1.439721e+00      9.516353</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    Vatnsdalsa.Width Jokulsa.CoverageRate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.1.15.4.2           571.044467                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.15.4.2           187.107918                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.1.15.4.2        11.092956                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.15.4.2         8.119159                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    Vatnsdalsa.CoverageRate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.1.15.4.2                           1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.15.4.2                           1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.1.15.4.2                       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.15.4.2                       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.1.15.4.2         1244.71393 8.309011e+04  3840.4410011    1755.93727</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.15.4.2          397.21835 1.222013e+03   357.9616806     240.61380</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.1.15.4.2       18.44768 7.284084e-01     0.9061143      64.95589</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.15.4.2       20.18537 5.011823e-01     1.1128257       9.51069</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    Vatnsdalsa.Width Jokulsa.CR Vatnsdalsa.CR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.1.15.4.2           394.356786          1             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.15.4.2           285.418884          1             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.1.15.4.2        11.916161          1             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.15.4.2         8.392408          1             1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 4: U.S. stock returns</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">US.returns</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="mtar_grid.html">mtar_grid</a></span><span class="op">(</span><span class="op">~</span> <span class="va">CCR</span> <span class="op">|</span> <span class="va">dVIX</span>, data<span class="op">=</span><span class="va">US.returns</span>, subset<span class="op">=</span><span class="op">{</span><span class="va">Date</span><span class="op">&lt;=</span><span class="st">"2025-11-28"</span><span class="op">}</span>,</span></span>
 <span class="r-in"><span>                  row.names<span class="op">=</span><span class="va">Date</span>, dist<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Laplace"</span>,<span class="st">"Student-t"</span>,<span class="st">"Slash"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                  nregim.min<span class="op">=</span><span class="fl">2</span>, nregim.max<span class="op">=</span><span class="fl">2</span>, p.min<span class="op">=</span><span class="fl">3</span>, p.max<span class="op">=</span><span class="fl">3</span>, d.min<span class="op">=</span><span class="fl">3</span>,</span></span>
-<span class="r-in"><span>                  d.max<span class="op">=</span><span class="fl">3</span>, n.burnin<span class="op">=</span><span class="fl">100</span>, n.sim<span class="op">=</span><span class="fl">200</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                  d.max<span class="op">=</span><span class="fl">3</span>, n.burnin<span class="op">=</span><span class="fl">1000</span>, n.sim<span class="op">=</span><span class="fl">2000</span>, n.thin<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  plan_strategy<span class="op">=</span><span class="st">"multisession"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">oos4</span> <span class="op">&lt;-</span> <span class="fu"><a href="out_of_sample.html">out_of_sample</a></span><span class="op">(</span><span class="va">fit4</span>, newdata<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">US.returns</span>, <span class="va">Date</span><span class="op">&gt;</span><span class="st">"2025-11-28"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                      n.ahead<span class="op">=</span><span class="fl">100</span>, by.component<span class="op">=</span><span class="cn">TRUE</span>, FUN<span class="op">=</span><span class="va">median</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                      n.ahead<span class="op">=</span><span class="fl">100</span>, FUN<span class="op">=</span><span class="va">median</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">oos4</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Log.Score Energy.Score    CCR.AE  CCR.APE    CCR.SE CCR.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.3.3   1.1051268    0.6430635 0.5076177 100.6576 0.2576781  4.036863</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.3.3     0.9685931    0.6381611 0.4909076 100.2932 0.2409913  4.193680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.3.3 1.0131798    0.6080117 0.5037952 100.8075 0.2538387  3.986395</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 CCR.CoverageRate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.3.3                  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.3.3                    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.3.3                1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.3.3   1.1091060    0.6201486 0.5045414 101.9969 0.2548327  4.224899</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.3.3     0.9749196    0.6376509 0.5188161 103.3436 0.2694498  4.333001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.3.3 1.0024922    0.6292736 0.5360405 100.1831 0.2873423  4.306529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 CCR.CR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Laplace.2.3.3        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slash.2.3.3          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Student-t.2.3.3      1</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>

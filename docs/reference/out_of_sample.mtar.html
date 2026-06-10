@@ -50,8 +50,8 @@
 <span>  <span class="va">newdata</span>,</span>
 <span>  n.ahead <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  credible <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  by.component <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  FUN <span class="op">=</span> <span class="va">mean</span></span>
+<span>  FUN <span class="op">=</span> <span class="va">mean</span>,</span>
+<span>  rolling <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -78,15 +78,14 @@ model), and the realized values of the output series.</p></dd>
 required prediction intervals. By default, <code>credible</code> is set to <code>0.95</code>.</p></dd>
 
 
-<dt id="arg-by-component">by.component<a class="anchor" aria-label="anchor" href="#arg-by-component"></a></dt>
-<dd><p>An optional logical argument. If <code>TRUE</code>, the predictive
-accuracy measures are computed separately for each component of the multivariate
-output series. By default, <code>by.component</code> is set to <code>TRUE</code>.</p></dd>
-
-
 <dt id="arg-fun">FUN<a class="anchor" aria-label="anchor" href="#arg-fun"></a></dt>
 <dd><p>An optional function used to summarize the <code>n.ahead</code> values computed
 for each predictive accuracy measure. By default, <code>FUN</code> is set to <code>mean</code>.</p></dd>
+
+
+<dt id="arg-rolling">rolling<a class="anchor" aria-label="anchor" href="#arg-rolling"></a></dt>
+<dd><p>An optional positive integer specifying the rolling-window size used for forecasting.
+By default, <code>rolling = NULL</code>, indicating that rolling-window forecasting is not performed.</p></dd>
 
 </dl></div>
 
