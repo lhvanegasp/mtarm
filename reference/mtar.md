@@ -218,19 +218,19 @@ fit1 <- mtar(~ COLCAP + BOVESPA | SP500, data=returns, row.names=Date,
 summary(fit1)
 #> 
 #> 
-#> Sample size          :1427 time points (2010-02-04 to 2015-12-07)
+#> Sample size          : 1427 time points (2010-02-04 to 2015-12-07)
 #> 
-#> Output Series        :COLCAP    |    BOVESPA
+#> Output Series        : COLCAP    |    BOVESPA
 #> 
-#> Threshold Series     :SP500 with a estimated delay equal to 0
+#> Threshold Series     : SP500 with a estimated delay equal to 0
 #> 
-#> Error Distribution   :Student-t
+#> Error Distribution   : Student-t
 #> 
-#> Number of regimes    :3
+#> Number of regimes    : 3
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:1, 1, 2
+#> Autoregressive orders: 1, 1, 2
 #> 
 #> 
 #> 
@@ -319,19 +319,19 @@ fit2 <- mtar(~ Bedon + LaPlata | Rainfall, data=riverflows, row.names=Date,
 summary(fit2)
 #> 
 #> 
-#> Sample size          :1135 time points (2006-01-06 to 2009-02-13)
+#> Sample size          : 1135 time points (2006-01-06 to 2009-02-13)
 #> 
-#> Output Series        :Bedon    |    LaPlata
+#> Output Series        : Bedon    |    LaPlata
 #> 
-#> Threshold Series     :Rainfall with a estimated delay equal to 0
+#> Threshold Series     : Rainfall with a estimated delay equal to 0
 #> 
-#> Error Distribution   :Laplace
+#> Error Distribution   : Laplace
 #> 
-#> Number of regimes    :3
+#> Number of regimes    : 3
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:5 in each regime
+#> Autoregressive orders: 5 in each regime
 #> 
 #> 
 #> 
@@ -460,25 +460,25 @@ fit3 <- mtar(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
 summary(fit3)
 #> 
 #> 
-#> Sample size          :1026 time points (1972-01-16 to 1974-11-06)
+#> Sample size          : 1026 time points (1972-01-16 to 1974-11-06)
 #> 
-#> Output Series        :Jokulsa    |    Vatnsdalsa
+#> Output Series        : Jokulsa    |    Vatnsdalsa
 #> 
-#> Threshold Series (TS):Temperature with a estimated delay equal to 0
+#> Threshold Series (TS): Temperature with a estimated delay equal to 0
 #> 
-#> Exogenous Series (ES):Precipitation
+#> Exogenous Series (ES): Precipitation
 #> 
-#> Error Distribution   :Slash
+#> Error Distribution   : Slash
 #> 
-#> Number of regimes    :2
+#> Number of regimes    : 2
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:15 in each regime
+#> Autoregressive orders: 15 in each regime
 #> 
-#> Maximum lags for ES  :4 in each regime
+#> Maximum lags for ES  : 4 in each regime
 #> 
-#> Maximum lags for TS  :2 in each regime
+#> Maximum lags for TS  : 2 in each regime
 #> 
 #> 
 #> 
@@ -680,21 +680,21 @@ fit4 <- mtar(~ CCR | dVIX, data=US.returns, subset={Date<="2025-11-28"},
 summary(fit4)
 #> 
 #> 
-#> Sample size          :5317 time points (2005-01-10 to 2025-11-28)
+#> Sample size          : 5317 time points (2005-01-10 to 2025-11-28)
 #> 
-#> Output Series        :CCR
+#> Output Series        : CCR
 #> 
-#> Threshold Series (TS):dVIX with a estimated delay equal to 0
+#> Threshold Series (TS): dVIX with a estimated delay equal to 0
 #> 
-#> Error Distribution   :Student-t
+#> Error Distribution   : Student-t
 #> 
-#> Number of regimes    :2
+#> Number of regimes    : 2
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:3 in each regime
+#> Autoregressive orders: 3 in each regime
 #> 
-#> Maximum lags for TS  :3 in each regime
+#> Maximum lags for TS  : 3 in each regime
 #> 
 #> 
 #> 

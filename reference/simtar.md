@@ -223,19 +223,19 @@ fit1 <- mtar(~ Y1 + Y2 + Y3 | Z, data=out1, ars=myars, dist=dist,
 summary(fit1)
 #> 
 #> 
-#> Sample size          :1999 time points
+#> Sample size          : 1999 time points
 #> 
-#> Output Series        :Y1    |    Y2    |    Y3
+#> Output Series        : Y1    |    Y2    |    Y3
 #> 
-#> Threshold Series     :Z with a estimated delay equal to 0
+#> Threshold Series     : Z with a estimated delay equal to 0
 #> 
-#> Error Distribution   :Student-t
+#> Error Distribution   : Student-t
 #> 
-#> Number of regimes    :2
+#> Number of regimes    : 2
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:1, 2
+#> Autoregressive orders: 1, 2
 #> 
 #> 
 #> 
@@ -365,17 +365,17 @@ fit2 <- mtar(~ Y1 + Y2 + Y3, data=out2, ars=myars, dist=dist,
 summary(fit2)
 #> 
 #> 
-#> Sample size          :2000 time points
+#> Sample size          : 2000 time points
 #> 
-#> Output Series        :Y1    |    Y2    |    Y3
+#> Output Series        : Y1    |    Y2    |    Y3
 #> 
-#> Error Distribution   :Slash
+#> Error Distribution   : Slash
 #> 
-#> Number of regimes    :1
+#> Number of regimes    : 1
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:2 in each regime
+#> Autoregressive orders: 2 in each regime
 #> 
 #> 
 #> 
@@ -497,19 +497,19 @@ fit3 <- mtar(~ Y1 + Y2 + Y3, data=out3, ars=myars, dist=dist,
 summary(fit3)
 #> 
 #> 
-#> Sample size          :4999 time points
+#> Sample size          : 4999 time points
 #> 
-#> Output Series        :Y1    |    Y2    |    Y3
+#> Output Series        : Y1    |    Y2    |    Y3
 #> 
-#> Threshold Series     :Y2 with a estimated delay equal to 2
+#> Threshold Series     : Y2 with a estimated delay equal to 2
 #> 
-#> Error Distribution   :Laplace
+#> Error Distribution   : Laplace
 #> 
-#> Number of regimes    :2
+#> Number of regimes    : 2
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:1, 2
+#> Autoregressive orders: 1, 2
 #> 
 #> 
 #> 

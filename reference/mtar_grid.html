@@ -268,19 +268,19 @@ model specification considered in the grid.</p>
 <span class="r-in"><span><span class="va">fit2</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Sample size          :1137 time points (2006-01-04 to 2009-02-13)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Sample size          : 1137 time points (2006-01-04 to 2009-02-13)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Output Series        :Bedon    |    LaPlata</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Output Series        : Bedon    |    LaPlata</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Threshold Series     :Rainfall with a estimated delay equal to 0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Threshold Series     : Rainfall</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Error Distribution   :Laplace</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Error Distribution   : Laplace</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of regimes    :2 to 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of regimes    : 2 to 3</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Deterministics       :Intercept  </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Deterministics       : Intercept  </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive orders:1 to 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive order : 1 to 3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 3: Temperature, precipitation, and two river flows in Iceland</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iceland.rf</span><span class="op">)</span></span></span>
@@ -293,21 +293,23 @@ model specification considered in the grid.</p>
 <span class="r-in"><span><span class="va">fit3</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Sample size          :1026 time points (1972-01-16 to 1974-11-06)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Sample size          : 1026 time points (1972-01-16 to 1974-11-06)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Output Series        :Jokulsa    |    Vatnsdalsa</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Output Series        : Jokulsa    |    Vatnsdalsa</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exogenous Series (ES):Precipitation</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exogenous Series (ES): Precipitation</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Error Distribution   :Slash</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Error Distribution   : Slash, Student-t</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of regimes    :1 to 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of regimes    : 1 to 2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Deterministics       :Intercept  </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Deterministics       : Intercept  </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive orders:15 to 15</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Autoregressive order : 15</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Maximum lags for ES  :4 to 4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Maximum lag for ES   : 4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Maximum lag for TS   : 0 to 2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">###### Example 4: U.S. stock returns</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">US.returns</span><span class="op">)</span></span></span>

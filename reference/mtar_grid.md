@@ -232,19 +232,19 @@ fit2 <- mtar_grid(~ Bedon + LaPlata | Rainfall, data=riverflows,
 fit2
 #> 
 #> 
-#> Sample size          :1137 time points (2006-01-04 to 2009-02-13)
+#> Sample size          : 1137 time points (2006-01-04 to 2009-02-13)
 #> 
-#> Output Series        :Bedon    |    LaPlata
+#> Output Series        : Bedon    |    LaPlata
 #> 
-#> Threshold Series     :Rainfall with a estimated delay equal to 0
+#> Threshold Series     : Rainfall
 #> 
-#> Error Distribution   :Laplace
+#> Error Distribution   : Laplace
 #> 
-#> Number of regimes    :2 to 3
+#> Number of regimes    : 2 to 3
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:1 to 3
+#> Autoregressive order : 1 to 3
 
 ###### Example 3: Temperature, precipitation, and two river flows in Iceland
 data(iceland.rf)
@@ -257,21 +257,23 @@ fit3 <- mtar_grid(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
 fit3
 #> 
 #> 
-#> Sample size          :1026 time points (1972-01-16 to 1974-11-06)
+#> Sample size          : 1026 time points (1972-01-16 to 1974-11-06)
 #> 
-#> Output Series        :Jokulsa    |    Vatnsdalsa
+#> Output Series        : Jokulsa    |    Vatnsdalsa
 #> 
-#> Exogenous Series (ES):Precipitation
+#> Exogenous Series (ES): Precipitation
 #> 
-#> Error Distribution   :Slash
+#> Error Distribution   : Slash, Student-t
 #> 
-#> Number of regimes    :1 to 2
+#> Number of regimes    : 1 to 2
 #> 
-#> Deterministics       :Intercept  
+#> Deterministics       : Intercept  
 #> 
-#> Autoregressive orders:15 to 15
+#> Autoregressive order : 15
 #> 
-#> Maximum lags for ES  :4 to 4
+#> Maximum lag for ES   : 4
+#> 
+#> Maximum lag for TS   : 0 to 2
 
 ###### Example 4: U.S. stock returns
 data(US.returns)
