@@ -549,8 +549,8 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
                                                               var <- Ais2/usi[x]
                                                               ind <- TRUE
                                                               indc <- 1
-                                                              while(ind & indc<=30){
-                                                                    temp <- crossprod(Ais3/sqrt(usi[x]),matrix(rnorm(k*50),k,50))
+                                                              while(ind & indc<=50){
+                                                                    temp <- crossprod(Ais3/sqrt(usi[x]),matrix(rnorm(k*100),k,100))
                                                                     temp2 <- colSums(mu + temp > 0)==k
                                                                     indc <- indc + 1
                                                                     ind <- !any(temp2)
@@ -558,7 +558,7 @@ mtar <- function(formula, data, subset, Intercept=TRUE, trend=c("none","linear",
                                                               if(ind){
                                                                  myfout <- vector()
                                                                  for(indc in 1:k) myfout <- c(myfout,tn1(mu=mu[indc],var=var[indc,indc]))
-                                                              }else myfout <- (mu + temp)[,min(c(1:50)[temp2])]
+                                                              }else myfout <- (mu + temp)[,min(c(1:100)[temp2])]
                                                               myfout
                                                               })),n,k,byrow=TRUE)
              zs[places,] <- zsi

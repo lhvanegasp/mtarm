@@ -69,19 +69,31 @@ plot(ts(as.matrix(iceland.rf[,-5])), main="Iceland")
 
 Following [@T98], the series are modeled using a $\mathrm{TAR}(2; p=(15,15), q=(4,4), d=(2,2))$ specification given by
 
-\$\$Y_t=\\sum\\limits\_{j=1}\^2 I(Z\_{t-h}\\in(c\_{j-1},c_j])\\Big(\\!{\\phi}\_0\^{\^{(j)}}+\\sum\\limits\_{i=1}\^{15}\\boldsymbol{\\phi}\_i\^{\^{(j)}}Y\_{t-i}+\\sum\\limits\_{i=1}\^{4}\\boldsymbol{\\beta}\_i\^{\^{(j)}}\\!X\_{t-i}+\\sum\\limits\_{i=1}\^{2}{\\delta}\_i\^{\^{(j)}}\\!Z\_{t-i}+\\epsilon_t\^{\^{(j)}}\\!\\Big),\$\$
+$$
+Y_t=
+\sum_{j=1}^{2}
+I\!\left(Z_{t-h}\in(c_{j-1},c_j]\right)
+\left(\!
+\phi_0^{^{(j)}}
++\sum_{i=1}^{15}\boldsymbol{\phi}_i^{^{(j)}}Y_{t-i}
++\sum_{i=1}^{4}\boldsymbol{\beta}_i^{^{(j)}}X_{t-i}
++\sum_{i=1}^{2}\delta_i^{^{(j)}}Z_{t-i}
++\epsilon_t^{^{(j)}}
+\!\right)
+$$
 
-where $\epsilon_t^{^{(j)}}$ is the error term. The last 55 observations (from November 7 to December 31, 1974), corresponding to $5\%$ of the sample, are excluded from the estimation stage and reserved for out-of-sample forecast evaluation. The following code requests the estimation for the $\mathrm{TAR}(2; p=(15,15), q=(4,4), d=(2,2))$ specification under Gaussian, Hyperbolic, Student-$t$, and Laplace error distributions.
+where $\epsilon_t^{^{(j)}}$ is the error term. The last 55 observations (from November 7 to December 31, 1974), corresponding to $5\%$ of the sample, are excluded from the estimation stage and reserved for out-of-sample forecast evaluation. The following code requests the estimation for the $\mathrm{TAR}(2; p=(15,15), q=(4,4), d=(2,2))$ specification under Gaussian, Student-$t$, and Laplace error distributions.
 
 ### Parameter estimation
 
 ```{r}
+set.seed(09102)
 fits <- mtar_grid(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
                   data=iceland.rf, subset={Date<="1974-11-06"}, 					      
                   row.names=Date, nregim.min=2, nregim.max=2, p.min=15,  				
                   p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,  					      
-                  n.burnin=2000, n.sim=3000, n.thin=2, ssvs=TRUE,
-                  dist=c("Gaussian","Hyperbolic","Student-t","Laplace"),
+                  n.burnin=3000, n.sim=3000, n.thin=2, ssvs=TRUE,
+                  dist=c("Gaussian","Student-t","Laplace"),
                   plan_strategy="multisession")
 
 fits
@@ -99,20 +111,35 @@ DIC(fits)
 WAIC(fits)
 ```
 
-#### Out-of-sample
+#### Out-of-sample with standard $h$-step-ahead forecasting
 
 In addition, the following code provides the median of the log-score [@Good1952], the Energy Score (ES) [@GneitingEtAl2008TEST]—a multivariate extension of the Continuous Ranked Probability Score (CRPS)[@MathesonWinkler1976; @GrimitGneitingBerrocalJohnson2006]—and the Absolute Percentage Error (APE), all computed from the observed and forecasted values for the last 55 observations.
 
 ```{r}
 newdata <- subset(iceland.rf, Date>"1974-11-06") 
+set.seed(09102)
+
 oos <- out_of_sample(fits, newdata=newdata, n.ahead=nrow(newdata), FUN=median) 
 oos[,c(1,2,5,6)]
+```
+
+#### Out-of-sample with rolling-origin forecasting and fixed parameters
+
+```{r}
+set.seed(09102)
+oos2 <- out_of_sample(fits, newdata=newdata, n.ahead=nrow(newdata), 
+                      rolling=5, FUN=median) 
+
+for(i in 1:length(oos2)){                   
+   cat("\n",i,"-step-ahead\n")   
+   print(oos2[[i]][,c(1,2,5,6)]) 
+}                            
 ```
 
 ### Residuals
 
 ```{r fig.width=9, fig.height=5}
-res <- residuals(fits$`Student-t.2.15.4.2`)  
+res <- residuals(fits$`Laplace.2.15.4.2`)  
 ```
 
 ```{r fig.width=9, fig.height=5}
@@ -132,34 +159,17 @@ pacf(res$full, col="blue", main="")
 ### Forecasting
 
 ```{r}
-pred <- predict(fits$`Student-t.2.15.4.2`, newdata=newdata, n.ahead=nrow(newdata),
+pred <- predict(fits$`Laplace.2.15.4.2`, newdata=newdata, n.ahead=nrow(newdata),
                 row.names=Date, credible=0.8)
 
 head(pred$summary)
 tail(pred$summary)
 ```
-### Forecasting with out-of-sample measures
-
-```{r}
-pred.oos <- predict(fits$`Student-t.2.15.4.2`, newdata=newdata, n.ahead=nrow(newdata),
-                    credible=0.8, out.of.sample=TRUE)
-
-pred.oos
-```
-
-### Rolling-origin forecasting with fixed parameters
-
-```{r}
-pred.oos2 <- predict(fits$`Student-t.2.15.4.2`, newdata=newdata, n.ahead=nrow(newdata),
-                     row.names=Date, credible=0.8, out.of.sample=TRUE, rolling=5)
-
-pred.oos2
-```
 
 ### Summary statistics
 
 ```{r}
-fitmcmc <- coda::as.mcmc(fits$`Student-t.2.15.4.2`)
+fitmcmc <- coda::as.mcmc(fits$`Laplace.2.15.4.2`)
 summary(fitmcmc)
 ```
 
@@ -168,12 +178,12 @@ summary(fitmcmc)
 #### Geweke statistic
 
 ```{r}
-geweke_diagTAR(fits$`Student-t.2.15.4.2`)
+geweke_diagTAR(fits$`Laplace.2.15.4.2`)
 
 ```
 
 #### Effective sample size
 
 ```{r}
-effectiveSize_TAR(fits$`Student-t.2.15.4.2`) 
+effectiveSize_TAR(fits$`Laplace.2.15.4.2`) 
 ```

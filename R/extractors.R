@@ -260,30 +260,30 @@ summary.mtar <- function(object, credible=0.95,...){
 #' @export
 print.summary_mtar <- function(x, digits=max(3, getOption("digits") - 2),...){
   # Print sample size and optional row names
-  message("\n\nSample size          :",paste0(x$sample.size," time points",ifelse(is.null(x$row.names),"",x$row.names)))
+  message("\n\nSample size          : ",paste0(x$sample.size," time points",ifelse(is.null(x$row.names),"",x$row.names)))
   # Print sample size and optional row names
-  message(ifelse(x$ssvs,"\nOutput Series (OS)   :","\nOutput Series        :"),x$output.series)
+  message(ifelse(x$ssvs,"\nOutput Series (OS)   : ","\nOutput Series        : "),x$output.series)
   # Print threshold series when more than one regime exists
-  if(x$ars$nregim > 1) message(ifelse(max(x$ars$d)>0,"\nThreshold Series (TS):","\nThreshold Series     :"),x$threshold.series)
+  if(x$ars$nregim > 1) message(ifelse(max(x$ars$d)>0,"\nThreshold Series (TS): ","\nThreshold Series     : "),x$threshold.series)
   # Print exogenous series if present
-  if(max(x$ars$q)>0) message("\nExogenous Series (ES):",x$exogenous.series)
+  if(max(x$ars$q)>0) message("\nExogenous Series (ES): ",x$exogenous.series)
   # Print error distribution and number of regimes
-  message("\nError Distribution   :",x$dist)
-  message("\nNumber of regimes    :",x$ars$nregim)
+  message("\nError Distribution   : ",x$dist)
+  message("\nNumber of regimes    : ",x$ars$nregim)
   # Print deterministic components
-  message("\nDeterministics       :",x$deterministics)
+  message("\nDeterministics       : ",x$deterministics)
   # Print autoregressive lag orders for each regime
-  if(min(x$ars$p)==max(x$ars$p)) message("\nAutoregressive orders:",paste0(x$ars$p[1]," in each regime"))
-  else message("\nAutoregressive orders:",paste(x$ars$p,collapse=", "))
+  if(min(x$ars$p)==max(x$ars$p)) message("\nAutoregressive orders: ",paste0(x$ars$p[1]," in each regime"))
+  else message("\nAutoregressive orders: ",paste(x$ars$p,collapse=", "))
   # Print maximum lags for exogenous variables if present
   if(max(x$ars$q)>0){
-     if(min(x$ars$q)==max(x$ars$q)) message("\nMaximum lags for ES  :",paste0(x$ars$q[1]," in each regime"))
-     else message("\nMaximum lags for ES  :",paste(x$ars$q,collapse=", "))
+     if(min(x$ars$q)==max(x$ars$q)) message("\nMaximum lags for ES  : ",paste0(x$ars$q[1]," in each regime"))
+     else message("\nMaximum lags for ES  : ",paste(x$ars$q,collapse=", "))
   }
   # Print maximum lags for threshold variable if present
   if(max(x$ars$d)>0){
-     if(min(x$ars$d)==max(x$ars$d)) message("\nMaximum lags for TS  :",paste0(x$ars$d[1]," in each regime"))
-     else message("\nMaximum lags for TS  :",paste(x$ars$d,collapse=", "))
+     if(min(x$ars$d)==max(x$ars$d)) message("\nMaximum lags for TS  : ",paste0(x$ars$d[1]," in each regime"))
+     else message("\nMaximum lags for TS  : ",paste(x$ars$d,collapse=", "))
   }
   message("\n\n")
   # If multiple regimes, print the threshold intervals (Mean, HDI.Lower, HDI.Upper)
@@ -469,32 +469,36 @@ print.listmtar <- function(x,...){
   # Build a string with the names of the exogenous series, if present
   if(min(x2$ars$q)>0) exogenous.series <- ifelse(length(colnames(x2$exogenous.series))==1,colnames(x2$exogenous.series),paste(colnames(x2$exogenous.series),collapse="    |    "))
   # Print the sample size and optional row names information
-  message("\n\nSample size          :",paste0(nrow(x2$data[[1]]$X)," time points",ifelse(is.null(x2$row.names),"",x2$row.names)))
+  message("\n\nSample size          : ",paste0(nrow(x2$data[[1]]$X)," time points",ifelse(is.null(x2$row.names),"",x2$row.names)))
   # Print the output series names
-  message("\nOutput Series        :",output.series)
+  message("\nOutput Series        : ",output.series)
   # If there is more than one regime, print the threshold series information
-  if(x2$ars$nregim > 1) message(ifelse(max(x2$ars$d)>0,"\nThreshold Series (TS):","\nThreshold Series     :"),x2$ts)
+  rs <- range(lapply(x,function(x) x$ars$nregim))
+  ds <- range(lapply(x,function(x) x$ars$d))
+  if(min(rs) > 1) message(ifelse(max(ds)>0,"\nThreshold Series (TS): ","\nThreshold Series     : "),colnames(x2$threshold.series))
   # If exogenous variables are included, print their names
-  if(max(x2$ars$q)>0) message("\nExogenous Series (ES):",exogenous.series)
+  qs <- range(lapply(x,function(x) x$ars$q))
+  if(max(qs)>0) message("\nExogenous Series (ES): ",exogenous.series)
   # Print the noise process distribution
-  message("\nError Distribution   :",paste0(x2$dist,collapse=", "))
+  message("\nError Distribution   : ",paste0(unique(lapply(x,function(x) x$dist)),collapse=", "))
   # Print the range of the number of regimes across models in the list
-  message("\nNumber of regimes    :",paste0(c(x[[1]]$ars$nregim,x[[length(x)]]$ars$nregim),collapse=" to "))
+  message("\nNumber of regimes    : ",ifelse(sd(rs)==0,rs[1],paste0(rs,collapse=" to ")))
   # Identify the deterministic components in the model: intercept, trend, and seasonality
   a <- ifelse(x2$Intercept,"Intercept","")
   b <- ifelse(x2$trend=="none","",paste0(ifelse(a=="","a ","+ a "),x2$trend," time trend"))
   c <- ifelse(is.null(x2$nseason),"",paste0("+ ",x2$nseason," seasonal periods"))
   # Print the deterministic terms included in the model
-  message("\nDeterministics       :",paste(a,b,c))
+  message("\nDeterministics       : ",paste(a,b,c))
   # Print the range of autoregressive orders p across models
-  message("\nAutoregressive orders:",paste0(c(x[[1]]$ars$p[1],x[[length(x)]]$ars$p[1]),collapse=" to "))
+  ps <- range(lapply(x,function(x) x$ars$p))
+  message("\nAutoregressive order : ",ifelse(sd(ps)==0,ps[1],paste0(ps,collapse=" to ")))
   # If exogenous variables are included, print the maximum lag orders q
-  if(max(x2$ars$q)>0){
-     message("\nMaximum lags for ES  :",paste0(c(x[[1]]$ars$q[1],x[[length(x)]]$ars$q[1]),collapse=" to "))
+  if(max(qs)>0){
+     message("\nMaximum lag for ES   : ",ifelse(sd(qs)==0,qs[1],paste0(qs,collapse=" to ")))
   }
   # If threshold effects are included, print the maximum lag orders d
-  if(max(x2$ars$d)>0){
-     message("\nMaximum lags for TS  :",paste0(c(x[[1]]$ars$d[1],x[[length(x)]]$ars$d[1]),collapse=" to "))
+  if(max(ds)>0){
+     message("\nMaximum lag for TS   : ",ifelse(sd(ds)==0,ds[1],paste0(ds,collapse=" to ")))
   }
 }
 #' @method print mtar
@@ -506,35 +510,35 @@ print.mtar <- function(x,...){
     # Build a string with the names of the exogenous series, if present
     if(min(x$ars$q)>0) exogenous.series <- ifelse(length(colnames(x$exogenous.series))==1,colnames(x$exogenous.series),paste(colnames(x$exogenous.series),collapse="    |    "))
     # Print the sample size and optional row names information
-    message("\n\nSample size          :",paste0(nrow(x$data[[1]]$X)," time points",ifelse(is.null(x$row.names),"",x$row.names)))
+    message("\n\nSample size          : ",paste0(nrow(x$data[[1]]$X)," time points",ifelse(is.null(x$row.names),"",x$row.names)))
     # Print the output series names
-    message("\nOutput Series        :",output.series)
+    message("\nOutput Series        : ",output.series)
     # If there is more than one regime, print the threshold series information
     if(x$ars$nregim > 1) message(ifelse(max(x$ars$d)>0,"\nThreshold Series (TS):","\nThreshold Series     :"),x$ts)
     # If exogenous variables are included in the model, print their names
-    if(max(x$ars$q)>0) message("\nExogenous Series (ES):",exogenous.series)
+    if(max(x$ars$q)>0) message("\nExogenous Series (ES): ",exogenous.series)
     # Print the noise process distribution
-    message("\nError Distribution   :",x$dist)
+    message("\nError Distribution   : ",x$dist)
     # Print the number of regimes in the model
-    message("\nNumber of regimes    :",x$regim)
+    message("\nNumber of regimes    : ",x$regim)
     # Identify the deterministic components in the model: intercept, trend, and seasonality
     a <- ifelse(x$Intercept,"Intercept","")
     b <- ifelse(x$trend=="none","",paste0(ifelse(a=="","a ","+ a "),x$trend," time trend"))
     c <- ifelse(is.null(x$nseason),"",paste0("+ ",x$nseason," seasonal periods"))
     # Print the deterministic terms included in the model
-    message("\nDeterministics       :",paste(a,b,c))
+    message("\nDeterministics       : ",paste(a,b,c))
     # Print the autoregressive orders p by regime
-    if(min(x$ars$p)==max(x$ars$p)) message("\nAutoregressive orders:",paste0(x$ars$p[1]," in each regime"))
-    else message("\nAutoregressive orders:",paste(x$ars$p,collapse=", "))
+    if(min(x$ars$p)==max(x$ars$p)) message("\nAutoregressive orders: ",paste0(x$ars$p[1]," in each regime"))
+    else message("\nAutoregressive order : ",paste(x$ars$p,collapse=", "))
     # If exogenous variables are included, print the maximum lag orders q by regime
     if(max(x$ars$q)>0){
-       if(min(x$ars$q)==max(x$ars$q)) message("\nMaximum lags for ES  :",paste0(x$ars$q[1]," in each regime"))
-       else message("\nMaximum lags for ES  :",paste(x$ars$q,collapse=", "))
+       if(min(x$ars$q)==max(x$ars$q)) message("\nMaximum lags for ES  : ",paste0(x$ars$q[1]," in each regime"))
+       else message("\nMaximum lag for ES   : ",paste(x$ars$q,collapse=", "))
     }
     # If threshold effects are included, print the maximum lag orders d by regime
     if(max(x$ars$d)>0){
-       if(min(x$ars$d)==max(x$ars$d)) message("\nMaximum lags for TS  :",paste0(x$ars$d[1]," in each regime"))
-       else message("\nMaximum lags for TS  :",paste(x$ars$d,collapse=", "))
+       if(min(x$ars$d)==max(x$ars$d)) message("\nMaximum lags for TS  : ",paste0(x$ars$d[1]," in each regime"))
+       else message("\nMaximum lag for TS   : ",paste(x$ars$d,collapse=", "))
     }
 }
 #'
