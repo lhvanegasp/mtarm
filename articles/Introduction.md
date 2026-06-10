@@ -117,7 +117,7 @@ fits <- mtar_grid(~ Jokulsa + Vatnsdalsa | Temperature | Precipitation,
                   data=iceland.rf, subset={Date<="1974-11-06"},                           
                   row.names=Date, nregim.min=2, nregim.max=2, p.min=15,                 
                   p.max=15, q.min=4, q.max=4, d.min=2, d.max=2,                           
-                  n.burnin=3000, n.sim=3000, n.thin=2, ssvs=TRUE,
+                  n.burnin=5000, n.sim=4000, n.thin=2, ssvs=TRUE,
                   dist=c("Gaussian","Student-t","Laplace"),
                   plan_strategy="multisession")
 
@@ -157,15 +157,15 @@ Criterion (WAIC) (Watanabe 2010) values.
 
 DIC(fits)
 #>                          DIC
-#> Gaussian.2.15.4.2  10091.728
-#> Laplace.2.15.4.2    6870.422
-#> Student-t.2.15.4.2  7566.796
+#> Gaussian.2.15.4.2  10060.438
+#> Laplace.2.15.4.2    6947.448
+#> Student-t.2.15.4.2  7532.597
 
 WAIC(fits)
 #>                         WAIC
-#> Gaussian.2.15.4.2  10398.890
-#> Laplace.2.15.4.2    8289.334
-#> Student-t.2.15.4.2  7618.343
+#> Gaussian.2.15.4.2  10404.091
+#> Laplace.2.15.4.2    8188.797
+#> Student-t.2.15.4.2  7642.630
 ```
 
 ##### Out-of-sample with standard $`h`$-step-ahead forecasting
@@ -185,9 +185,9 @@ set.seed(09102)
 oos <- out_of_sample(fits, newdata=newdata, n.ahead=nrow(newdata), FUN=median) 
 oos[,c(1,2,5,6)]
 #>                    Log.Score Energy.Score Jokulsa.APE Vatnsdalsa.APE
-#> Gaussian.2.15.4.2   3.809826     2.818781    5.464108       32.20760
-#> Laplace.2.15.4.2    3.263099     1.845109    3.932707       17.06734
-#> Student-t.2.15.4.2  3.560311     2.394057    3.552284       21.29055
+#> Gaussian.2.15.4.2   3.797904     2.811035    5.652454       32.49836
+#> Laplace.2.15.4.2    3.259450     1.820050    3.738226       15.60301
+#> Student-t.2.15.4.2  3.545381     2.456398    3.676001       20.90241
 ```
 
 ##### Out-of-sample with rolling-origin forecasting and fixed parameters
@@ -205,157 +205,259 @@ for(i in 1:length(oos2)){
 #> 
 #>  1 -step-ahead
 #>                    Log.Score Energy.Score Jokulsa.APE Vatnsdalsa.APE
-#> Gaussian.2.15.4.2  2.5848801    1.2858163    1.473978       7.141664
-#> Laplace.2.15.4.2   1.3291750    0.7867373    0.942096       4.513561
-#> Student-t.2.15.4.2 0.9990159    0.7453130    1.026292       5.487411
+#> Gaussian.2.15.4.2   2.584186    1.2773363   1.5798016       7.274053
+#> Laplace.2.15.4.2    1.290926    0.7556162   0.8853437       4.733333
+#> Student-t.2.15.4.2  1.020333    0.7762098   0.9009402       5.917259
 #> 
 #>  2 -step-ahead
 #>                    Log.Score Energy.Score Jokulsa.APE Vatnsdalsa.APE
-#> Gaussian.2.15.4.2   3.037145     1.631372    2.334850      11.463158
-#> Laplace.2.15.4.2    2.126701     1.132147    1.539121       5.434709
-#> Student-t.2.15.4.2  1.937540     1.171560    1.412842       6.953775
+#> Gaussian.2.15.4.2   3.032747     1.639617    2.301814      11.871226
+#> Laplace.2.15.4.2    2.094174     1.082328    1.478344       5.500908
+#> Student-t.2.15.4.2  1.968642     1.213108    1.447799       6.566068
 #> 
 #>  3 -step-ahead
 #>                    Log.Score Energy.Score Jokulsa.APE Vatnsdalsa.APE
-#> Gaussian.2.15.4.2   3.214346     1.846055    2.816591      15.107053
-#> Laplace.2.15.4.2    2.411231     1.275624    2.020383       6.556706
-#> Student-t.2.15.4.2  2.246767     1.411644    1.932489       7.722336
+#> Gaussian.2.15.4.2   3.223748     1.850762    2.926733      14.934488
+#> Laplace.2.15.4.2    2.365237     1.235656    1.965210       6.654542
+#> Student-t.2.15.4.2  2.305891     1.466251    1.926638       8.003508
 #> 
 #>  4 -step-ahead
 #>                    Log.Score Energy.Score Jokulsa.APE Vatnsdalsa.APE
-#> Gaussian.2.15.4.2   3.355270     1.968928    3.409630      17.605848
-#> Laplace.2.15.4.2    2.615647     1.401618    2.371651       6.702571
-#> Student-t.2.15.4.2  2.564320     1.622701    2.452800       7.260001
+#> Gaussian.2.15.4.2   3.333167     1.968623    3.509917      17.344735
+#> Laplace.2.15.4.2    2.559574     1.355290    2.262832       6.319183
+#> Student-t.2.15.4.2  2.616427     1.691429    2.414252       7.173568
 #> 
 #>  5 -step-ahead
 #>                    Log.Score Energy.Score Jokulsa.APE Vatnsdalsa.APE
-#> Gaussian.2.15.4.2   3.419370     2.083328    3.764518      19.203017
-#> Laplace.2.15.4.2    2.752003     1.481746    2.681036       7.042845
-#> Student-t.2.15.4.2  2.763560     1.791679    2.783440       9.773941
+#> Gaussian.2.15.4.2   3.405086     2.079208    3.701430      19.487190
+#> Laplace.2.15.4.2    2.695588     1.451628    2.543371       6.805743
+#> Student-t.2.15.4.2  2.828487     1.838202    2.802228       9.591203
+```
+
+#### Summary of the best model
+
+``` r
+
+summary(fits[["Laplace.2.15.4.2"]])
+#> 
+#> 
+#> Sample size          : 1026 time points (1972-01-16 to 1974-11-06)
+#> 
+#> Output Series (OS)   : Jokulsa    |    Vatnsdalsa
+#> 
+#> Threshold Series (TS): Temperature with a estimated delay equal to 0
+#> 
+#> Exogenous Series (ES): Precipitation
+#> 
+#> Error Distribution   : Laplace
+#> 
+#> Number of regimes    : 2
+#> 
+#> Deterministics       : Intercept
+#> 
+#> Autoregressive orders: 15 in each regime
+#> 
+#> Maximum lags for ES  : 4 in each regime
+#> 
+#> Maximum lags for TS  : 2 in each regime
+#> 
+#> 
+#> Thresholds (Mean, HDI.Lower, HDI.Upper)
+#>                                                         
+#> Regime 1 (-Inf,-0.44861] (-Inf,-0.49439] (-Inf,-0.40095]
+#> Regime 2  (-0.44861,Inf)  (-0.49439,Inf)  (-0.40095,Inf)
+#> 
+#> 
+#> Regime1:
+#>      OS.lag(1) OS.lag(2) OS.lag(3) OS.lag(4) OS.lag(5) OS.lag(6) OS.lag(7)
+#> SSVS         1         1      0.03      0.25      0.02      0.49         0
+#>      OS.lag(8) OS.lag(9) OS.lag(10) OS.lag(11) OS.lag(12) OS.lag(13) OS.lag(14)
+#> SSVS         0      0.01       0.19       0.02          0       0.01       0.21
+#>      OS.lag(15) ES.lag(1) ES.lag(2) ES.lag(3) ES.lag(4) TS.lag(1) TS.lag(2)
+#> SSVS       0.14         0         0         0         0      0.03      0.05
+#> 
+#> Autoregressive coefficients
+#>                        Mean  2(1-PD)  HDI.Lower HDI.Upper             Mean
+#> (Intercept)         4.51022   0.00001   3.51623   5.55975    |     1.20744
+#> Jokulsa.lag( 1)     0.77192   0.00001   0.66024   0.87739    |    -0.08292
+#> Vatnsdalsa.lag( 1)  0.29604   0.00001   0.17797   0.40980    |     1.08540
+#> Jokulsa.lag( 2)    -0.00399   0.88800  -0.06452   0.05557    |     0.04298
+#> Vatnsdalsa.lag( 2) -0.24571   0.00250  -0.36565  -0.12194    |    -0.21631
+#>                     2(1-PD)  HDI.Lower HDI.Upper
+#> (Intercept)          0.00100   0.73286   1.66171
+#> Jokulsa.lag( 1)      0.00150  -0.12750  -0.03556
+#> Vatnsdalsa.lag( 1)   0.00001   0.98026   1.18596
+#> Jokulsa.lag( 2)      0.01350   0.00917   0.07567
+#> Vatnsdalsa.lag( 2)   0.00001  -0.30002  -0.13651
+#> 
+#> Scale parameter (Mean, HDI.Lower, HDI.Upper)
+#>            Jokulsa Vatnsdalsa      Jokulsa Vatnsdalsa      Jokulsa Vatnsdalsa
+#> Jokulsa    0.15953    0.02508    . 0.12522    0.01152    . 0.19860    0.03786
+#> Vatnsdalsa 0.02508    0.06131    . 0.01152    0.04601    . 0.03786    0.07630
+#> 
+#> 
+#> Regime2:
+#>      OS.lag(1) OS.lag(2) OS.lag(3) OS.lag(4) OS.lag(5) OS.lag(6) OS.lag(7)
+#> SSVS         1         1      0.66         0         0         0         0
+#>      OS.lag(8) OS.lag(9) OS.lag(10) OS.lag(11) OS.lag(12) OS.lag(13) OS.lag(14)
+#> SSVS         0         0          0          0          0          0          0
+#>      OS.lag(15) ES.lag(1) ES.lag(2) ES.lag(3) ES.lag(4) TS.lag(1) TS.lag(2)
+#> SSVS          0      0.01         0         0         0         1         1
+#> 
+#> Autoregressive coefficients
+#>                        Mean  2(1-PD)  HDI.Lower HDI.Upper             Mean
+#> (Intercept)         1.60340   0.00300   0.67618   2.58337    |     0.57062
+#> Jokulsa.lag( 1)     1.07939   0.00001   1.00745   1.15019    |    -0.00020
+#> Vatnsdalsa.lag( 1)  0.57907   0.00001   0.33550   0.80825    |     1.16138
+#> Jokulsa.lag( 2)    -0.20936   0.00001  -0.29926  -0.10615    |     0.00338
+#> Vatnsdalsa.lag( 2) -0.51604   0.02050  -0.99910  -0.05121    |    -0.34293
+#> Jokulsa.lag( 3)    -0.01124   0.66450  -0.05945   0.05532    |    -0.00957
+#> Vatnsdalsa.lag( 3)  0.34318   0.00150   0.15838   0.61810    |     0.16731
+#> Temperature.lag(1)  1.11871   0.00001   0.90525   1.34358    |     0.04985
+#> Temperature.lag(2) -0.65944   0.00001  -0.86104  -0.45911    |    -0.05381
+#>                     2(1-PD)  HDI.Lower HDI.Upper
+#> (Intercept)          0.00001   0.34706   0.80298
+#> Jokulsa.lag( 1)      0.98400  -0.01246   0.01362
+#> Vatnsdalsa.lag( 1)   0.00001   1.09343   1.23995
+#> Jokulsa.lag( 2)      0.72000  -0.01463   0.02066
+#> Vatnsdalsa.lag( 2)   0.00001  -0.50808  -0.15643
+#> Jokulsa.lag( 3)      0.08350  -0.01986   0.00213
+#> Vatnsdalsa.lag( 3)   0.00001   0.07848   0.24376
+#> Temperature.lag(1)   0.01700   0.01048   0.09288
+#> Temperature.lag(2)   0.00350  -0.09380  -0.01668
+#> 
+#> Scale parameter (Mean, HDI.Lower, HDI.Upper)
+#>            Jokulsa Vatnsdalsa      Jokulsa Vatnsdalsa      Jokulsa Vatnsdalsa
+#> Jokulsa    5.55803    0.32444    . 4.58451    0.19699    . 6.47017    0.44727
+#> Vatnsdalsa 0.32444    0.31074    . 0.19699    0.26144    . 0.44727    0.36344
+#> 
 ```
 
 #### Residuals
 
 ``` r
 
-res <- residuals(fits$`Laplace.2.15.4.2`)  
+res <- residuals(fits[["Laplace.2.15.4.2"]])  
 ```
 
 ``` r
 
 par(mfrow=c(1,2)) 
-qqnorm(res$full, pch=20, col="blue", main="") 
+qqnorm(res[["full"]], pch=20, col="blue", main="") 
 abline(0, 1, lty=3) 
-hist(res$full, freq=FALSE, xlab="Quantile-type residual", ylab="Density", main="") 
+hist(res[["full"]], freq=FALSE, xlab="Quantile-type residual",
+     ylab="Density", main="") 
 curve(dnorm(x), col="blue", add=TRUE)
 ```
 
-![](Introduction_files/figure-html/unnamed-chunk-11-1.png)
+![](Introduction_files/figure-html/unnamed-chunk-12-1.png)
 
 ``` r
 
 par(mfrow=c(1,2))  
-acf(res$full, col="blue", main="")
-pacf(res$full, col="blue", main="")
+acf(res[["full"]], col="blue", main="")
+pacf(res[["full"]], col="blue", main="")
 ```
 
-![](Introduction_files/figure-html/unnamed-chunk-12-1.png)
+![](Introduction_files/figure-html/unnamed-chunk-13-1.png)
 
 #### Forecasting
 
 ``` r
 
-pred <- predict(fits$`Laplace.2.15.4.2`, newdata=newdata, n.ahead=nrow(newdata),
-                row.names=Date, credible=0.8)
+pred <- predict(fits[["Laplace.2.15.4.2"]], newdata=newdata,
+                n.ahead=nrow(newdata), row.names=Date, credible=0.8)
 
 head(pred$summary)
 #>            Jokulsa.Mean Jokulsa.Lower Jokulsa.Upper Vatnsdalsa.Mean
-#> 1974-11-07     20.91140      12.80920      28.17211        6.836796
-#> 1974-11-08     21.29486      10.76801      31.23515        7.040683
-#> 1974-11-09     22.95505      14.42491      30.70915        7.334842
-#> 1974-11-10     24.01130      17.16736      30.07457        7.387014
-#> 1974-11-11     24.96303      19.75744      30.42388        7.447525
-#> 1974-11-12     25.14406      20.90753      30.00710        7.275621
+#> 1974-11-07     20.91971     12.998507      28.48418        6.831882
+#> 1974-11-08     21.07059      9.854483      34.18948        6.930446
+#> 1974-11-09     22.69401     13.828063      33.19841        7.201419
+#> 1974-11-10     23.77734     16.454986      31.46623        7.294273
+#> 1974-11-11     24.91550     19.094075      31.44331        7.459327
+#> 1974-11-12     25.15039     19.950096      30.15927        7.285324
 #>            Vatnsdalsa.Lower Vatnsdalsa.Upper
-#> 1974-11-07         4.834481         8.544910
-#> 1974-11-08         4.204605         9.600125
-#> 1974-11-09         4.673395         9.982111
-#> 1974-11-10         4.792595         9.827108
-#> 1974-11-11         4.909666         9.923223
-#> 1974-11-12         4.763787         9.632388
+#> 1974-11-07         5.013865         8.629133
+#> 1974-11-08         4.062349         9.861865
+#> 1974-11-09         4.190661        10.007641
+#> 1974-11-10         4.351045        10.004888
+#> 1974-11-11         4.906541        10.388467
+#> 1974-11-12         4.789389         9.982423
 tail(pred$summary)
 #>            Jokulsa.Mean Jokulsa.Lower Jokulsa.Upper Vatnsdalsa.Mean
-#> 1974-12-26     25.63590      23.02109      28.31537        5.893641
-#> 1974-12-27     25.64585      22.83112      28.17814        5.883682
-#> 1974-12-28     25.64959      22.88285      28.28398        5.878568
-#> 1974-12-29     25.62580      23.01030      28.36634        5.895742
-#> 1974-12-30     25.63322      23.01880      28.37717        5.894161
-#> 1974-12-31     25.57800      23.06069      28.35969        5.883065
+#> 1974-12-26     25.57357      22.91257      28.17266        5.858379
+#> 1974-12-27     25.55148      22.94310      28.11072        5.856209
+#> 1974-12-28     25.55698      23.01863      28.23271        5.851434
+#> 1974-12-29     25.57947      22.96083      28.13575        5.860805
+#> 1974-12-30     25.58244      23.05838      28.18952        5.862454
+#> 1974-12-31     25.60320      23.02459      28.21749        5.838581
 #>            Vatnsdalsa.Lower Vatnsdalsa.Upper
-#> 1974-12-26         3.815598         8.070009
-#> 1974-12-27         3.690674         7.966998
-#> 1974-12-28         3.771796         8.062414
-#> 1974-12-29         3.840831         8.146696
-#> 1974-12-30         3.914749         8.263871
-#> 1974-12-31         3.866102         8.156226
+#> 1974-12-26         3.904534         8.226304
+#> 1974-12-27         3.806981         8.188070
+#> 1974-12-28         3.670857         8.015315
+#> 1974-12-29         3.657310         8.013217
+#> 1974-12-30         3.649083         7.993898
+#> 1974-12-31         3.671365         7.958239
 ```
 
 #### Summary statistics
 
 ``` r
 
-fitmcmc <- coda::as.mcmc(fits$`Laplace.2.15.4.2`)
+fitmcmc <- coda::as.mcmc(fits[["Laplace.2.15.4.2"]])
 summary(fitmcmc)
 #> 
 #> 
-#>  Iterations = 3001:8999
+#>  Iterations = 5001:12999
 #> 
 #>  Thinning interval = 2
 #> 
-#>  Sample size per chain = 3000
+#>  Sample size per chain = 4000
 #> 
 #> Thresholds:
-#>                 Mean      Sd Sd(Mean)     2.5%     25%      50%    75%   97.5%
-#> Threshold.1 -0.26807 0.28762   0.1895 -0.49291 -0.4613 -0.42827 0.1127 0.29606
+#>                 Mean       Sd Sd(Mean)     2.5%      25%      50%      75%
+#> Threshold.1 -0.44861 0.029812 0.001418 -0.49674 -0.47409 -0.44867 -0.42508
+#>                97.5%
+#> Threshold.1 -0.40262
 #> 
 #> 
 #> Regime 1
 #> 
 #> 
 #> Autoregressive coefficients:
-#>                                     Mean       Sd  Sd(Mean)      2.5%       25%
-#> Jokulsa:(Intercept)            4.6808246 0.658957 0.1291049  3.639842  4.212007
-#> Vatnsdalsa:(Intercept)         1.3118271 0.300288 0.0578317  0.774932  1.099911
-#> Jokulsa:Jokulsa.lag( 1)        0.7629627 0.063672 0.0091609  0.632143  0.720872
-#> Vatnsdalsa:Jokulsa.lag( 1)    -0.0858687 0.025331 0.0023472 -0.135550 -0.103154
-#> Jokulsa:Vatnsdalsa.lag( 1)     0.3002716 0.064406 0.0045659  0.171115  0.261286
-#> Vatnsdalsa:Vatnsdalsa.lag( 1)  1.0630063 0.063540 0.0099084  0.920381  1.025682
-#> Jokulsa:Jokulsa.lag( 2)       -0.0038116 0.031617 0.0016285 -0.065825 -0.024490
-#> Vatnsdalsa:Jokulsa.lag( 2)     0.0444125 0.017465 0.0010745  0.010548  0.032779
-#> Jokulsa:Vatnsdalsa.lag( 2)    -0.2428660 0.065413 0.0054429 -0.365016 -0.288654
-#> Vatnsdalsa:Vatnsdalsa.lag( 2) -0.2075183 0.045937 0.0035199 -0.294643 -0.236304
-#>                                      50%       75%     97.5%
-#> Jokulsa:(Intercept)            4.5662684  5.066312  6.107967
-#> Vatnsdalsa:(Intercept)         1.2859815  1.501912  1.947414
-#> Jokulsa:Jokulsa.lag( 1)        0.7680902  0.808427  0.874458
-#> Vatnsdalsa:Jokulsa.lag( 1)    -0.0856541 -0.068605 -0.037718
-#> Jokulsa:Vatnsdalsa.lag( 1)     0.3013330  0.342037  0.423870
-#> Vatnsdalsa:Vatnsdalsa.lag( 1)  1.0686021  1.106575  1.171048
-#> Jokulsa:Jokulsa.lag( 2)       -0.0043538  0.016069  0.056809
-#> Vatnsdalsa:Jokulsa.lag( 2)     0.0446529  0.056312  0.078089
-#> Jokulsa:Vatnsdalsa.lag( 2)    -0.2442959 -0.199370 -0.115274
-#> Vatnsdalsa:Vatnsdalsa.lag( 2) -0.2096967 -0.180682 -0.105762
+#>                                     Mean       Sd   Sd(Mean)       2.5%
+#> Jokulsa:(Intercept)            4.5102218 0.534520 0.03409796  3.6060170
+#> Vatnsdalsa:(Intercept)         1.2074420 0.239405 0.00891309  0.7415424
+#> Jokulsa:Jokulsa.lag( 1)        0.7719192 0.055806 0.00304895  0.6531006
+#> Vatnsdalsa:Jokulsa.lag( 1)    -0.0829247 0.023913 0.00075693 -0.1317158
+#> Jokulsa:Vatnsdalsa.lag( 1)     0.2960421 0.059840 0.00136688  0.1793622
+#> Vatnsdalsa:Vatnsdalsa.lag( 1)  1.0853963 0.053551 0.00253133  0.9684591
+#> Jokulsa:Jokulsa.lag( 2)       -0.0039901 0.031554 0.00075534 -0.0634880
+#> Vatnsdalsa:Jokulsa.lag( 2)     0.0429814 0.017365 0.00044635  0.0095678
+#> Jokulsa:Vatnsdalsa.lag( 2)    -0.2457081 0.062965 0.00284445 -0.3644982
+#> Vatnsdalsa:Vatnsdalsa.lag( 2) -0.2163096 0.041716 0.00223530 -0.2972959
+#>                                     25%        50%       75%     97.5%
+#> Jokulsa:(Intercept)            4.149320  4.4584277  4.799475  5.698828
+#> Vatnsdalsa:(Intercept)         1.054056  1.2015667  1.361217  1.671933
+#> Jokulsa:Jokulsa.lag( 1)        0.739759  0.7762183  0.808222  0.871677
+#> Vatnsdalsa:Jokulsa.lag( 1)    -0.099021 -0.0825921 -0.066972 -0.037643
+#> Jokulsa:Vatnsdalsa.lag( 1)     0.257829  0.2958491  0.334797  0.412050
+#> Vatnsdalsa:Vatnsdalsa.lag( 1)  1.053663  1.0888152  1.121721  1.179062
+#> Jokulsa:Jokulsa.lag( 2)       -0.023896 -0.0046787  0.015606  0.057527
+#> Vatnsdalsa:Jokulsa.lag( 2)     0.031728  0.0431360  0.054231  0.076261
+#> Jokulsa:Vatnsdalsa.lag( 2)    -0.287198 -0.2467676 -0.204981 -0.120428
+#> Vatnsdalsa:Vatnsdalsa.lag( 2) -0.243547 -0.2162690 -0.189318 -0.132625
 #> 
 #> 
 #> Scale parameter:
-#>                          Mean       Sd  Sd(Mean)     2.5%      25%      50%
-#> Jokulsa.Jokulsa       0.18382 0.043839 0.0180089 0.127405 0.153957 0.168919
-#> Jokulsa.Vatnsdalsa    0.03069 0.011277 0.0032732 0.014508 0.022732 0.028326
-#> Vatnsdalsa.Vatnsdalsa 0.06837 0.013612 0.0044437 0.047568 0.059037 0.065245
+#>                           Mean        Sd   Sd(Mean)     2.5%      25%      50%
+#> Jokulsa.Jokulsa       0.159529 0.0191898 0.00057256 0.121543 0.148746 0.159735
+#> Jokulsa.Vatnsdalsa    0.025085 0.0067243 0.00019294 0.012679 0.020544 0.024914
+#> Vatnsdalsa.Vatnsdalsa 0.061309 0.0079579 0.00032040 0.044432 0.056812 0.061497
 #>                            75%    97.5%
-#> Jokulsa.Jokulsa       0.210458 0.281575
-#> Jokulsa.Vatnsdalsa    0.036888 0.058298
-#> Vatnsdalsa.Vatnsdalsa 0.076762 0.099438
+#> Jokulsa.Jokulsa       0.171274 0.195793
+#> Jokulsa.Vatnsdalsa    0.029201 0.039346
+#> Vatnsdalsa.Vatnsdalsa 0.066044 0.076010
 #> 
 #> 
 #> Regime 2
@@ -363,55 +465,55 @@ summary(fitmcmc)
 #> 
 #> 
 #> Autoregressive coefficients:
-#>                                     Mean        Sd   Sd(Mean)       2.5%
-#> Jokulsa:(Intercept)            1.5281362 0.5168835 0.04418385  0.4532091
-#> Vatnsdalsa:(Intercept)         0.5433903 0.1341078 0.01399387  0.2925832
-#> Jokulsa:Jokulsa.lag( 1)        1.0798086 0.0371404 0.00119443  1.0135299
-#> Vatnsdalsa:Jokulsa.lag( 1)    -0.0012335 0.0072211 0.00074398 -0.0153351
-#> Jokulsa:Vatnsdalsa.lag( 1)     0.5896772 0.1302774 0.00449465  0.3335543
-#> Vatnsdalsa:Vatnsdalsa.lag( 1)  1.1917907 0.0646773 0.01861489  1.1053604
-#> Jokulsa:Jokulsa.lag( 2)       -0.2109753 0.0458756 0.00144610 -0.3075803
-#> Vatnsdalsa:Jokulsa.lag( 2)     0.0034427 0.0085415 0.00027266 -0.0128431
-#> Jokulsa:Vatnsdalsa.lag( 2)    -0.4916813 0.2767540 0.06194954 -1.0007906
-#> Vatnsdalsa:Vatnsdalsa.lag( 2) -0.3548694 0.0918406 0.01456995 -0.5156868
-#> Jokulsa:Jokulsa.lag( 3)       -0.0118103 0.0272395 0.00399632 -0.0676460
-#> Vatnsdalsa:Jokulsa.lag( 3)    -0.0095950 0.0061699 0.00112238 -0.0202678
-#> Jokulsa:Vatnsdalsa.lag( 3)     0.3783795 0.1200705 0.01426297  0.1584724
-#> Vatnsdalsa:Vatnsdalsa.lag( 3)  0.1634618 0.0467303 0.00910015  0.0958836
-#> Jokulsa:Temperature.lag(1)     1.1416817 0.1129518 0.00697565  0.9093445
-#> Vatnsdalsa:Temperature.lag(1)  0.0492981 0.0205556 0.00055516  0.0080734
-#> Jokulsa:Temperature.lag(2)    -0.6763926 0.1069777 0.00690553 -0.8822961
-#> Vatnsdalsa:Temperature.lag(2) -0.0542592 0.0200831 0.00055057 -0.0937323
-#>                                      25%        50%        75%      97.5%
-#> Jokulsa:(Intercept)            1.2061600  1.5448521  1.8664917  2.5195412
-#> Vatnsdalsa:(Intercept)         0.4565581  0.5421615  0.6277940  0.7932286
-#> Jokulsa:Jokulsa.lag( 1)        1.0533589  1.0773869  1.1032631  1.1564953
-#> Vatnsdalsa:Jokulsa.lag( 1)    -0.0059899 -0.0011776  0.0036425  0.0126003
-#> Jokulsa:Vatnsdalsa.lag( 1)     0.5021599  0.5927170  0.6780890  0.8496727
-#> Vatnsdalsa:Vatnsdalsa.lag( 1)  1.1451238  1.1760497  1.2229807  1.3544113
-#> Jokulsa:Jokulsa.lag( 2)       -0.2383652 -0.2109524 -0.1834071 -0.1187178
-#> Vatnsdalsa:Jokulsa.lag( 2)    -0.0019253  0.0029078  0.0084281  0.0219362
-#> Jokulsa:Vatnsdalsa.lag( 2)    -0.7017220 -0.5102216 -0.2625981 -0.0179990
-#> Vatnsdalsa:Vatnsdalsa.lag( 2) -0.4214391 -0.3680277 -0.2831826 -0.1797927
-#> Jokulsa:Jokulsa.lag( 3)       -0.0262279 -0.0190080  0.0096407  0.0373081
-#> Vatnsdalsa:Jokulsa.lag( 3)    -0.0147908 -0.0104029 -0.0040885  0.0017226
-#> Jokulsa:Vatnsdalsa.lag( 3)     0.3173357  0.3802099  0.4566453  0.6022998
-#> Vatnsdalsa:Vatnsdalsa.lag( 3)  0.1380112  0.1560011  0.1968263  0.2584063
-#> Jokulsa:Temperature.lag(1)     1.0674440  1.1441608  1.2213619  1.3512223
-#> Vatnsdalsa:Temperature.lag(1)  0.0358429  0.0495348  0.0632154  0.0881845
-#> Jokulsa:Temperature.lag(2)    -0.7473684 -0.6799000 -0.6055185 -0.4633394
-#> Vatnsdalsa:Temperature.lag(2) -0.0676340 -0.0542198 -0.0403236 -0.0159961
+#>                                      Mean        Sd   Sd(Mean)       2.5%
+#> Jokulsa:(Intercept)            1.60339658 0.4890429 0.01423964  0.6260731
+#> Vatnsdalsa:(Intercept)         0.57062457 0.1212179 0.00289634  0.3451470
+#> Jokulsa:Jokulsa.lag( 1)        1.07939250 0.0374968 0.00110953  1.0126063
+#> Vatnsdalsa:Jokulsa.lag( 1)    -0.00019603 0.0067557 0.00027445 -0.0134527
+#> Jokulsa:Vatnsdalsa.lag( 1)     0.57907317 0.1237303 0.00721973  0.3416857
+#> Vatnsdalsa:Vatnsdalsa.lag( 1)  1.16138063 0.0388670 0.00105907  1.0967711
+#> Jokulsa:Jokulsa.lag( 2)       -0.20936327 0.0473847 0.00131541 -0.3114707
+#> Vatnsdalsa:Jokulsa.lag( 2)     0.00337644 0.0088083 0.00025503 -0.0132875
+#> Jokulsa:Vatnsdalsa.lag( 2)    -0.51603943 0.2730926 0.04775118 -1.0055666
+#> Vatnsdalsa:Vatnsdalsa.lag( 2) -0.34293091 0.1068423 0.01864966 -0.5158337
+#> Jokulsa:Jokulsa.lag( 3)       -0.01124060 0.0276923 0.00235538 -0.0674154
+#> Vatnsdalsa:Jokulsa.lag( 3)    -0.00957124 0.0055113 0.00038129 -0.0201729
+#> Jokulsa:Vatnsdalsa.lag( 3)     0.34318213 0.1278375 0.01304974  0.1544022
+#> Vatnsdalsa:Vatnsdalsa.lag( 3)  0.16730979 0.0450545 0.00611474  0.0784787
+#> Jokulsa:Temperature.lag(1)     1.11871144 0.1108850 0.00328141  0.8872519
+#> Vatnsdalsa:Temperature.lag(1)  0.04985426 0.0213989 0.00070956  0.0077191
+#> Jokulsa:Temperature.lag(2)    -0.65943712 0.1031411 0.00300062 -0.8567005
+#> Vatnsdalsa:Temperature.lag(2) -0.05380931 0.0200379 0.00045629 -0.0928631
+#>                                      25%         50%        75%      97.5%
+#> Jokulsa:(Intercept)            1.2901341  1.61329172  1.9333393  2.5352557
+#> Vatnsdalsa:(Intercept)         0.4911475  0.57003372  0.6461053  0.8022851
+#> Jokulsa:Jokulsa.lag( 1)        1.0527326  1.07709132  1.1028616  1.1593511
+#> Vatnsdalsa:Jokulsa.lag( 1)    -0.0046056 -0.00015726  0.0043772  0.0128283
+#> Jokulsa:Vatnsdalsa.lag( 1)     0.4950894  0.58087983  0.6636092  0.8187980
+#> Vatnsdalsa:Vatnsdalsa.lag( 1)  1.1336745  1.15740074  1.1851982  1.2476101
+#> Jokulsa:Jokulsa.lag( 2)       -0.2378724 -0.20838030 -0.1806047 -0.1170028
+#> Vatnsdalsa:Jokulsa.lag( 2)    -0.0023192  0.00280805  0.0088047  0.0221291
+#> Jokulsa:Vatnsdalsa.lag( 2)    -0.7248176 -0.54675584 -0.2694615 -0.0529197
+#> Vatnsdalsa:Vatnsdalsa.lag( 2) -0.4232903 -0.37191150 -0.2327442 -0.1613482
+#> Jokulsa:Jokulsa.lag( 3)       -0.0289305 -0.01061222  0.0076187  0.0553151
+#> Vatnsdalsa:Jokulsa.lag( 3)    -0.0137969 -0.01013921 -0.0060768  0.0018903
+#> Jokulsa:Vatnsdalsa.lag( 3)     0.2448703  0.32165246  0.4254141  0.6151253
+#> Vatnsdalsa:Vatnsdalsa.lag( 3)  0.1311494  0.16248768  0.1994007  0.2587269
+#> Jokulsa:Temperature.lag(1)     1.0450945  1.12104696  1.1952131  1.3269553
+#> Vatnsdalsa:Temperature.lag(1)  0.0352252  0.05009129  0.0646509  0.0907672
+#> Jokulsa:Temperature.lag(2)    -0.7287037 -0.66234627 -0.5907562 -0.4515826
+#> Vatnsdalsa:Temperature.lag(2) -0.0674301 -0.05359240 -0.0400064 -0.0153877
 #> 
 #> 
 #> Scale parameter:
 #>                          Mean       Sd  Sd(Mean)    2.5%     25%     50%
-#> Jokulsa.Jokulsa       5.61616 0.506019 0.0254867 4.65332 5.28288 5.60880
-#> Jokulsa.Vatnsdalsa    0.31196 0.065002 0.0026105 0.18728 0.26881 0.31013
-#> Vatnsdalsa.Vatnsdalsa 0.30304 0.026140 0.0015971 0.25437 0.28510 0.30206
+#> Jokulsa.Jokulsa       5.55803 0.489304 0.0137534 4.65404 5.22076 5.54408
+#> Jokulsa.Vatnsdalsa    0.32444 0.064641 0.0023937 0.20668 0.27960 0.32224
+#> Vatnsdalsa.Vatnsdalsa 0.31074 0.026844 0.0011395 0.26321 0.29159 0.30938
 #>                           75%   97.5%
-#> Jokulsa.Jokulsa       5.95399 6.61387
-#> Jokulsa.Vatnsdalsa    0.35485 0.44285
-#> Vatnsdalsa.Vatnsdalsa 0.32012 0.35739
+#> Jokulsa.Jokulsa       5.87990 6.55334
+#> Jokulsa.Vatnsdalsa    0.36631 0.45827
+#> Vatnsdalsa.Vatnsdalsa 0.32808 0.36665
 ```
 
 #### Convergence diagnostics
@@ -420,83 +522,32 @@ summary(fitmcmc)
 
 ``` r
 
-geweke_diagTAR(fits$`Laplace.2.15.4.2`)
+geweke_diagTAR(fits[["Laplace.2.15.4.2"]])
 #> 
 #> Fraction in 1st window = 0.1
 #> 
 #> Fraction in 2nd window = 0.5
 #> Thresholds:
 #> Threshold.1 
-#>      36.927
+#>    -0.95597
 #> 
 #> 
 #> Regime 1
 #> 
 #> 
 #> Autoregressive coefficients:
-#>                    Jokulsa Vatnsdalsa
-#> (Intercept)         0.5708    6.98895
-#> Jokulsa.lag( 1)     4.4295    1.99673
-#> Vatnsdalsa.lag( 1)  6.9359  -14.45981
-#> Jokulsa.lag( 2)    -5.4249    0.87996
-#> Vatnsdalsa.lag( 2) -3.3493    7.60875
+#>                     Jokulsa Vatnsdalsa
+#> (Intercept)        -0.74522   -0.38132
+#> Jokulsa.lag( 1)     0.16554    0.37658
+#> Vatnsdalsa.lag( 1) -0.70050    1.13135
+#> Jokulsa.lag( 2)     0.44737   -1.00722
+#> Vatnsdalsa.lag( 2)  0.97931   -0.12380
 #> 
 #> 
 #> Scale parameter:
 #>            Jokulsa Vatnsdalsa
-#> Jokulsa     54.447     41.605
-#> Vatnsdalsa  41.605     30.340
-#> 
-#> 
-#> Regime 2
-#> 
-#> 
-#> 
-#> Autoregressive coefficients:
-#>                    Jokulsa Vatnsdalsa
-#> (Intercept)        -8.7876  -14.15374
-#> Jokulsa.lag( 1)     1.6798  -16.36745
-#> Vatnsdalsa.lag( 1) -0.5173   28.43093
-#> Jokulsa.lag( 2)    -4.4888   -4.29973
-#> Vatnsdalsa.lag( 2)  8.9888    3.37201
-#> Jokulsa.lag( 3)    33.2376   26.64616
-#> Vatnsdalsa.lag( 3) -2.9253  -27.31831
-#> Temperature.lag(1)  9.4932    1.92462
-#> Temperature.lag(2) -8.9037   -0.13241
-#> 
-#> 
-#> Scale parameter:
-#>            Jokulsa Vatnsdalsa
-#> Jokulsa     8.4993    -8.3598
-#> Vatnsdalsa -8.3598   -10.0820
-```
-
-##### Effective sample size
-
-``` r
-
-effectiveSize_TAR(fits$`Laplace.2.15.4.2`) 
-#> Thresholds:
-#> Threshold.1 
-#>      2.3036
-#> 
-#> 
-#> Regime 1
-#> 
-#> 
-#> Autoregressive coefficients:
-#>                    Jokulsa Vatnsdalsa
-#> (Intercept)         26.051     26.962
-#> Jokulsa.lag( 1)     48.309    116.472
-#> Vatnsdalsa.lag( 1) 198.980     41.124
-#> Jokulsa.lag( 2)    376.949    264.179
-#> Vatnsdalsa.lag( 2) 144.435    170.319
-#> 
-#> 
-#> Scale parameter:
-#>            Jokulsa Vatnsdalsa
-#> Jokulsa     5.9257     11.871
-#> Vatnsdalsa 11.8707      9.383
+#> Jokulsa    0.54772     1.3713
+#> Vatnsdalsa 1.37129     1.4518
 #> 
 #> 
 #> Regime 2
@@ -505,21 +556,72 @@ effectiveSize_TAR(fits$`Laplace.2.15.4.2`)
 #> 
 #> Autoregressive coefficients:
 #>                     Jokulsa Vatnsdalsa
-#> (Intercept)         136.854     91.840
-#> Jokulsa.lag( 1)     966.883     94.207
-#> Vatnsdalsa.lag( 1)  840.130     12.072
-#> Jokulsa.lag( 2)    1006.389    981.342
-#> Vatnsdalsa.lag( 2)   19.958     39.733
-#> Jokulsa.lag( 3)      46.460     30.219
-#> Vatnsdalsa.lag( 3)   70.868     26.369
-#> Temperature.lag(1)  262.191   1370.953
-#> Temperature.lag(2)  239.990   1330.544
+#> (Intercept)         2.74837    1.74580
+#> Jokulsa.lag( 1)    -2.21948    2.72829
+#> Vatnsdalsa.lag( 1)  4.04017    2.09354
+#> Jokulsa.lag( 2)     4.22479    2.94856
+#> Vatnsdalsa.lag( 2) -3.34257   -3.42107
+#> Jokulsa.lag( 3)    -2.87746    0.51965
+#> Vatnsdalsa.lag( 3)  2.29641    3.22916
+#> Temperature.lag(1)  0.93546   -1.82315
+#> Temperature.lag(2)  0.59017    1.45305
 #> 
 #> 
 #> Scale parameter:
 #>            Jokulsa Vatnsdalsa
-#> Jokulsa     394.19     620.00
-#> Vatnsdalsa  620.00     267.87
+#> Jokulsa    -0.5118    -1.8562
+#> Vatnsdalsa -1.8562    -2.0724
+```
+
+##### Effective sample size
+
+``` r
+
+effectiveSize_TAR(fits[["Laplace.2.15.4.2"]]) 
+#> Thresholds:
+#> Threshold.1 
+#>      442.02
+#> 
+#> 
+#> Regime 1
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                    Jokulsa Vatnsdalsa
+#> (Intercept)         245.74     721.45
+#> Jokulsa.lag( 1)     335.01     998.06
+#> Vatnsdalsa.lag( 1) 1916.56     447.55
+#> Jokulsa.lag( 2)    1745.14    1513.67
+#> Vatnsdalsa.lag( 2)  490.00     348.29
+#> 
+#> 
+#> Scale parameter:
+#>            Jokulsa Vatnsdalsa
+#> Jokulsa     1123.3    1214.64
+#> Vatnsdalsa  1214.6     616.91
+#> 
+#> 
+#> Regime 2
+#> 
+#> 
+#> 
+#> Autoregressive coefficients:
+#>                     Jokulsa Vatnsdalsa
+#> (Intercept)        1179.494    1751.60
+#> Jokulsa.lag( 1)    1142.106     605.93
+#> Vatnsdalsa.lag( 1)  293.704    1346.82
+#> Jokulsa.lag( 2)    1297.631    1192.90
+#> Vatnsdalsa.lag( 2)   32.708      32.82
+#> Jokulsa.lag( 3)     138.227     208.93
+#> Vatnsdalsa.lag( 3)   95.965      54.29
+#> Temperature.lag(1) 1141.893     909.52
+#> Temperature.lag(2) 1181.524    1928.50
+#> 
+#> 
+#> Scale parameter:
+#>            Jokulsa Vatnsdalsa
+#> Jokulsa    1265.72     729.25
+#> Vatnsdalsa  729.25     554.98
 ```
 
 Gneiting, Tilmann, Laura I. Stanberry, Eric P. Grimit, Leonhard Held,
